@@ -36,12 +36,12 @@
         let portfolio = [];
 
         const trains = [
-            { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622' },
-            { id: 61, image: 'https://i.imgur.com/ELbeAkI.png', description: 'Train 61' },
-            { id: 1038, image: 'https://i.imgur.com/Ll9Fa7s.png', description: 'Train 1038' },
-            { id: 1795, image: 'https://i.imgur.com/IPL5P9P.png', description: 'Train 1795' },
-            { id: 'southern_express', image: 'https://i.imgur.com/XbzFNiC.png', description: 'Southern Express' },
-             ];
+            { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622', basePrice: 2000 },
+            { id: 61, image: 'https://i.imgur.com/ELbeAkI.png', description: 'Train 61', basePrice: 1500 },
+            { id: 1038, image: 'https://i.imgur.com/Ll9Fa7s.png', description: 'Train 1038', basePrice: 2500 },
+            { id: 1795, image: 'https://i.imgur.com/IPL5P9P.png', description: 'Train 1795', basePrice: 3000 },
+            { id: 9999, image: 'https://i.imgur.com/XbzFNiC.png', description: 'Southern Express', basePrice: 5000 }
+        ];
 
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
@@ -49,22 +49,9 @@
                 id: randomTrain.id,
                 image: randomTrain.image,
                 description: randomTrain.description,
-                price: Math.floor(Math.random() * 5000) + 1000,
+                price: Math.floor(randomTrain.basePrice * (Math.random() * 0.1 + 0.95)), // Cena o 5-10% vyšší
             };
             return train;
-        }
-
-        function generateRandomOffer() {
-            const buyerCompany = getRandomEuropeanTransportCompany();
-            const trainIndex = Math.floor(Math.random() * portfolio.length);
-            const train = portfolio[trainIndex];
-            const offerPrice = Math.floor(train.price * (Math.random() * 0.1 + 1.05)); // Nabídka za alespoň 105% původní ceny
-            return { buyerCompany, train, offerPrice };
-        }
-
-        function getRandomEuropeanTransportCompany() {
-            const europeanCompanies = ['EuroRail', 'TransEuropa', 'RailLink Europe', 'ExpressConnect'];
-            return europeanCompanies[Math.floor(Math.random() * europeanCompanies.length)];
         }
 
         function displayTrains() {
@@ -77,23 +64,48 @@
                     <img src="${train.image}" alt="${train.description}">
                     <p>${train.description}</p>
                     <p>Price: $${train.price}</p>
-                    <button onclick="buyTrain(${i})">Buy</button>
+                    <button onclick="buyTrain(${train.id})">Buy</button>
                 `;
                 trainMarketElement.appendChild(trainElement);
             }
         }
 
-        function buyTrain(index) {
-            const train = generateRandomTrain();
-            if (money >= train.price) {
-                money -= train.price;
-                portfolio.push(train);
+        function buyTrain(trainId) {
+            const selectedTrain = trains.find(train => train.id === trainId);
+            if (money >= selectedTrain.basePrice) {
+                money -= selectedTrain.basePrice;
+                portfolio.push(selectedTrain);
                 displayPortfolio();
                 displayTrains();
                 updateTotalMoney();
             } else {
                 alert('Not enough money to buy this train!');
             }
+        }
+
+        function generateSaleOffer() {
+            if (portfolio.length > 0) {
+                const randomTrainIndex = Math.floor(Math.random() * portfolio.length);
+                const train = portfolio[randomTrainIndex];
+                const offerPrice = Math.floor(train.basePrice * (Math.random() * 0.1 + 1.05)); // Cena o 5-10% vyšší
+                const companyName = generateRandomCompanyName();
+                const confirmation = confirm(`Company ${companyName} wants to buy your train (${train.description}) for $${offerPrice}. Do you want to sell this train?`);
+                if (confirmation) {
+                    sellTrain(randomTrainIndex, offerPrice);
+                }
+            }
+        }
+
+        function generateRandomCompanyName() {
+            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy', 'Leo Expres', 'Student Agency', 'Deutsche Bahn', 'FlixTrain', 'Trenitalia', 'Trilexx', 'Waldbahn'];
+            return companies[Math.floor(Math.random() * companies.length)];
+        }
+
+        function sellTrain(index, offerPrice) {
+            money += offerPrice;
+            portfolio.splice(index, 1);
+            displayPortfolio();
+            updateTotalMoney();
         }
 
         function displayPortfolio() {
@@ -103,7 +115,7 @@
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
                     <p>${train.description}</p>
-                    <p>Price: $${train.price}</p>
+                    <p>Price: $${train.basePrice}</p>
                 `;
                 portfolioElement.appendChild(li);
             });
@@ -113,34 +125,20 @@
             totalMoneyElement.textContent = money;
         }
 
-        function displayOfferPopup(offer) {
-            const sell = confirm(`The company ${offer.buyerCompany} wants to buy your train (${offer.train.description}) for $${offer.offerPrice}. Do you want to sell this train?`);
-            if (sell) {
-                const trainIndex = portfolio.findIndex(t => t.id === offer.train.id);
-                if (trainIndex !== -1) {
-                    money += offer.offerPrice;
-                    portfolio.splice(trainIndex, 1);
-                    displayPortfolio();
-                    updateTotalMoney();
-                }
-            }
-        }
-
         // Spustit hru
         displayTrains();
         displayPortfolio();
         updateTotalMoney();
 
-        // Každou minutu zkontrolovat nabídku na odprodej
-        setInterval(() => {
-            const offer = generateRandomOffer();
-            displayOfferPopup(offer);
-        }, 60000);
-
         // Každých 20 vteřin obnovit nabídky na trhu
         setInterval(() => {
             displayTrains();
         }, 20000);
+
+        // Každou minutu generovat nabídku na prodej vlaku z hráčova portfolia
+        setInterval(() => {
+            generateSaleOffer();
+        }, 60000);
     </script>
 
 </body>
