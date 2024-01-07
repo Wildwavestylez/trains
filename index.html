@@ -43,6 +43,16 @@
             { id: 9999, image: 'https://i.imgur.com/XbzFNiC.png', description: 'Southern Express', basePrice: 5000 },
             { id: 1, image: 'https://i.imgur.com/U3EmWzR.png', description: 'SNCF B 82500 (BiBi) TER Poitou Charentes', basePrice: 6000 },
             { id: 2, image: 'https://i.imgur.com/FHJVLeg.png', description: 'SNCF B 83500', basePrice: 6800 },
+            { id: 3, image: 'https://i.imgur.com/vWdHlcn.png', description: 'FS E424.200 XMPR', basePrice: 4200 },
+            { id: 4, image: 'https://i.imgur.com/amzzO2P.png', description: 'SNCF RIO Metrolor', basePrice: 3500 },
+            { id: 5, image: 'https://i.imgur.com/FQtW76Q.png', description: 'SNCF X 2800 rénové', basePrice: 1750 },
+            { id: 6, image: 'https://i.imgur.com/nRxNrof.png', description: 'Southern Class 377/1-4', basePrice: 9200 },
+            { id: 7, image: 'https://i.imgur.com/tScXMwO.png', description: 'FS MDVC nB XMPR', basePrice: 500 },
+            { id: 8, image: 'https://i.imgur.com/3w7kBqh.png', description: 'SNCF Corail VTU B9½tu Carmillon', basePrice: 500 },
+            { id: 9, image: 'https://i.imgur.com/GcAWhm6.png', description: 'SNCF X 74500', basePrice: 4000 },
+            { id: 10, image: 'https://i.imgur.com/98FnBRe.png', description: 'DB BR 481.5', basePrice: 15000 },
+            { id: 11, image: 'https://i.imgur.com/HpD2M1w.png', description: 'SNCF CIC Haute Normandie Corail VTU A10', basePrice: 500 },
+            { id: 12, image: 'https://i.imgur.com/tssoP6W.png', description: 'Siemens Vectron', basePrice: 50000 },
         ];
 
         function generateRandomTrain() {
@@ -99,7 +109,9 @@
         }
 
         function generateRandomCompanyName() {
-            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy', 'Leo Expres', 'Student Agency', 'Deutsche Bahn', 'FlixTrain', 'Trenitalia', 'Trilexx', 'Waldbahn'];
+            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy', 'Leo Expres', 'Student Agency', 
+                               'Deutsche Bahn', 'FlixTrain', 'Trenitalia', 'Trilexx', 'Waldbahn', 'SNCF', 'SNCB', 'ŽSSR', 'Arriva' ];
+                               
             return companies[Math.floor(Math.random() * companies.length)];
         }
 
