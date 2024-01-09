@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train Exchange</title>
     <style>
+        /* Styl pro mobilní zařízení */
+        @media screen and (max-width: 600px) {
+            #container {
+                flex-direction: column;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -92,6 +100,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1>Train Exchange</h1>
@@ -109,6 +118,12 @@
     <div id="garage">
         <h2>Your Garage</h2>
         <ul id="garageList" class="portfolio"></ul>
+        <!-- Přidání nabídky questů -->
+        <div id="questOffer">
+            <h2>Quest Offer</h2>
+            <p id="questInfo"></p>
+            <button onclick="fulfillQuest()">Fulfill Quest</button>
+        </div>
     </div>
 
     <script>
@@ -116,12 +131,14 @@
         const portfolioElement = document.getElementById('portfolio');
         const totalMoneyElement = document.getElementById('totalMoney');
         const garageElement = document.getElementById('garageList');
+        const questInfoElement = document.getElementById('questInfo');
 
         let money = 1000;
         let portfolio = [];
         let garage = [];
+        let activeQuest = null;
 
-       const trains = [
+             const trains = [
             { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622', basePrice: 2000 },
             { id: 61, image: 'https://i.imgur.com/ELbeAkI.png', description: 'Train 61', basePrice: 1500 },
             { id: 1038, image: 'https://i.imgur.com/Ll9Fa7s.png', description: 'Train 1038', basePrice: 2500 },
@@ -239,6 +256,7 @@
             
         ];
 
+
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
             const train = {
@@ -287,6 +305,7 @@
                 portfolio.push(train);
             }
             displayPortfolio();
+            checkQuestCompletion(train);
         }
 
         function generateSaleOffer() {
@@ -314,13 +333,12 @@
             updateTotalMoney();
         }
 
-        function generateRandomCompanyName() {
+       function generateRandomCompanyName() {
             const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy (CZ)', 'DSB (DK)', 'DB AG (DE)', 'DB Cargo (DE)', 'RailJet (CZ)', 'Leo Expres (CZ)',
                                'FlixTrain (DE)', 'SŽ (SLO)', 'ČD Cargo (CZ)', 'ŽSSK (SK)', 'HŽ (HR)', 'SNCF (FR)', 'ÖBB (AT)', 'SNCB (BE)', 'CFL (LX)',
                                'NS (NL)', 'Metronom (DE)'];
             return companies[Math.floor(Math.random() * companies.length)];
         }
-
         function displayPortfolio() {
             portfolioElement.innerHTML = '';
             portfolio.forEach((train, index) => {
@@ -336,26 +354,35 @@
             });
         }
 
-        function moveTrainToGarage(index) {
-            const train = portfolio[index];
-            if (train.count > 1) {
-                train.count -= 1;
-            } else {
-                portfolio.splice(index, 1);
-            }
-            addToGarage(train);
-            displayPortfolio();
-            displayGarage();
-        }
-
         function addToGarage(train) {
             const existingTrain = garage.find(item => item.id === train.id);
             if (existingTrain) {
                 existingTrain.count += 1;
             } else {
-                train.count = 1;
-                garage.push(train);
+                const newTrain = { ...train, count: 1 }; // Vytvořit nový objekt s počátečním počtem 1
+                garage.push(newTrain);
             }
+        }
+
+        function moveTrainToGarage(index) {
+            const train = portfolio[index];
+            const existingTrain = garage.find(item => item.id === train.id);
+
+            if (existingTrain) {
+                existingTrain.count += 1;
+            } else {
+                const newTrain = { ...train, count: 1 }; // Vytvořit nový objekt s počátečním počtem 1
+                garage.push(newTrain);
+            }
+
+            if (train.count > 1) {
+                train.count -= 1;
+            } else {
+                portfolio.splice(index, 1);
+            }
+
+            displayPortfolio();
+            displayGarage();
         }
 
         function displayGarage() {
@@ -371,6 +398,9 @@
                 `;
                 garageElement.appendChild(li);
             });
+
+            // Zkontroluj, zda lze splnit aktivní quest
+            checkQuestCompletion();
         }
 
         function moveTrainToPortfolio(index) {
@@ -407,23 +437,63 @@
         // Každých 5 minut generovat nový quest
         setInterval(() => {
             generateQuest();
-        }, 9900000000); // 5 minut v milisekundách
+        }, 20000); // 5 minut v milisekundách
 
         function generateQuest() {
-            const questTrain = generateRandomTrain();
-            const questQuantity = Math.floor(Math.random() * (50 - 5 + 1) + 5); // Náhodný počet 5 až 50
-            const questPrice = Math.floor(questTrain.basePrice * questQuantity * (Math.random() * 0.1 + 1.05)); // Cena o 5-10% vyšší
-            const companyName = generateRandomCompanyName();
-            const confirmation = confirm(`Company ${companyName} is looking for ${questQuantity} trains (${questTrain.description}). The offer price is $${questPrice}. Do you want to accept this quest?`);
-            if (confirmation) {
-                displayQuest(questTrain, questQuantity, questPrice, companyName);
+            if (!activeQuest) {
+                const questTrain = generateRandomTrain();
+                const questQuantity = Math.floor(Math.random() * (50 - 5 + 1) + 5); // Náhodný počet 5 až 50
+                const questPrice = Math.floor(questTrain.price * questQuantity * (Math.random() * 0.1 + 1.05));
+                const companyName = generateRandomCompanyName();
+                const confirmation = confirm(`Company ${companyName} is looking for ${questQuantity} trains (${questTrain.description}). The offer price is $${questPrice}. Do you want to accept this quest?`);
+                if (confirmation) {
+                    activeQuest = { train: questTrain, quantity: questQuantity, price: questPrice, companyName: companyName };
+                    displayQuestOffer();
+                }
             }
         }
 
-        function displayQuest(questTrain, quantity, price, companyName) {
-            alert(`Quest Accepted!\nCompany ${companyName} is looking for ${quantity} trains (${questTrain.description}) for $${price}.`);
+        function displayQuestOffer() {
+            questInfoElement.innerHTML = `
+                <p>Company ${activeQuest.companyName} is looking for ${activeQuest.quantity} trains (${activeQuest.train.description}). The offer price is $${activeQuest.price}.</p>
+                <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
+            `;
+        }
+
+        function checkQuestCompletion(train) {
+            if (activeQuest && train && train.id === activeQuest.train.id) {
+                activeQuest.quantity -= 1;
+                if (activeQuest.quantity === 0) {
+                    alert(`Quest Completed!\nYou fulfilled the quest from Company ${activeQuest.companyName}. You earned $${activeQuest.price}.`);
+                    money += activeQuest.price;
+                    activeQuest = null;
+                    displayQuestOffer();
+                }
+            }
+        }
+
+        function fulfillQuest() {
+            if (activeQuest && garage.length >= activeQuest.quantity) {
+                const totalPrice = activeQuest.price;
+                for (let i = 0; i < activeQuest.quantity; i++) {
+                    const train = garage[i];
+                    totalPrice += train.basePrice;
+                    moveTrainToPortfolio(0); // Přesuň první vlak z garáže do portfolia
+                }
+                alert(`Quest Fulfilled!\nYou earned $${totalPrice} from fulfilling the quest.`);
+                money += totalPrice;
+                activeQuest = null;
+                if (activeQuest) {
+                    displayQuestOffer();
+                } else {
+                    questInfoElement.textContent = ''; // Odstraníme text z nabídky, protože quest byl ukončen
+                }
+            } else {
+                alert('You do not have enough trains to fulfill the quest.');
+            }
         }
     </script>
 
 </body>
+
 </html>
