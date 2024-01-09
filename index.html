@@ -5,38 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train Exchange</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         #container {
+            width: 80%;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
+            justify-content: space-between;
         }
-        #totalMoney {
-            margin-bottom: 10px;
+
+        p {
+            color: #333;
         }
-        #trainMarket {
-            display: flex;
-            flex-direction: column; /* Zobrazení vlaků pod sebou */
-            align-items: center;
-        }
+
         .train {
             border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
             padding: 10px;
+            background-color: #fff;
             text-align: center;
-            margin-bottom: 10px; /* Oddělení vlaků */
         }
-        .portfolio {
+
+        .train img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #garage {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
         }
-        .portfolio li {
-            flex: 0 0 48%; /* Omezení šířky na 48% pro lepší uspořádání na malých obrazovkách */
-            margin-bottom: 10px;
+
+        li {
+            margin: 0 10px 10px 0;
         }
-        @media (max-width: 768px) {
-            .portfolio li {
-                flex: 0 0 100%; /* Na malých obrazovkách zobrazit jeden pod druhým */
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .train-info {
+            font-weight: bold;
+        }
+
+        .train-count {
+            font-size: 14px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 600px) {
+            #container {
+                flex-direction: column;
             }
         }
     </style>
@@ -44,24 +95,33 @@
 <body>
 
     <h1>Train Exchange</h1>
+
     <div id="container">
         <p>Total Money: $<span id="totalMoney">1000</span></p>
         <div id="trainMarket"></div>
+        <div>
+            <h2>Your Portfolio</h2>
+            <ul id="portfolio" class="portfolio"></ul>
+        </div>
     </div>
-    <div>
-        <h2>Your Portfolio</h2>
-        <ul id="portfolio" class="portfolio"></ul>
+
+    <!-- Přidání bloku pro garáž pod portfoliem -->
+    <div id="garage">
+        <h2>Your Garage</h2>
+        <ul id="garageList" class="portfolio"></ul>
     </div>
 
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
         const totalMoneyElement = document.getElementById('totalMoney');
+        const garageElement = document.getElementById('garageList');
 
         let money = 1000;
         let portfolio = [];
+        let garage = [];
 
-      const trains = [
+       onst trains = [
             { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622', basePrice: 2000 },
             { id: 61, image: 'https://i.imgur.com/ELbeAkI.png', description: 'Train 61', basePrice: 1500 },
             { id: 1038, image: 'https://i.imgur.com/Ll9Fa7s.png', description: 'Train 1038', basePrice: 2500 },
@@ -168,6 +228,11 @@
             { id: 100, image: 'https://i.imgur.com/0baP5SB.png', description: 'SNCF TGV PSE Ligne de Coeur', basePrice: 93500 },
             { id: 101, image: 'https://i.imgur.com/oLKDNQz.png', description: 'NS 1100 botsneus', basePrice: 13500 },
             { id: 102, image: 'https://i.imgur.com/jrJV6b8.png', description: 'SNCF Roos 54.6', basePrice: 1750 },
+            { id: 103, image: 'https://i.imgur.com/5VigyjC.png', description: 'SNCF Plat S63', basePrice: 980 },
+            { id: 104, image: 'https://i.imgur.com/UuAN7Vv.png', description: 'SNCF S53', basePrice: 1250 },
+            { id: 105, image: 'https://i.imgur.com/3LPSrVr.png', description: 'NS Fcs', basePrice: 1150 },
+            { id: 106, image: 'https://i.imgur.com/pzqXfca.png', description: 'NS Cargo Shimmns', basePrice: 1050 },
+            { id: 107, image: 'https://i.imgur.com/pTQgbVU.png', description: 'DB BR 189 ex-MRCE', basePrice: 61550 },
         
         
         
@@ -193,7 +258,7 @@
                 trainElement.classList.add('train');
                 trainElement.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
-                    <p>${train.description}</p>
+                    <p class="train-info">${train.description}</p>
                     <p>Price: $${train.price}</p>
                     <button onclick="buyTrain(${train.id})">Buy</button>
                 `;
@@ -205,13 +270,23 @@
             const selectedTrain = trains.find(train => train.id === trainId);
             if (money >= selectedTrain.basePrice) {
                 money -= selectedTrain.basePrice;
-                portfolio.push(selectedTrain);
-                displayPortfolio();
+                addToPortfolio(selectedTrain);
                 displayTrains();
                 updateTotalMoney();
             } else {
                 alert('Not enough money to buy this train!');
             }
+        }
+
+        function addToPortfolio(train) {
+            const existingTrain = portfolio.find(item => item.id === train.id);
+            if (existingTrain) {
+                existingTrain.count += 1;
+            } else {
+                train.count = 1;
+                portfolio.push(train);
+            }
+            displayPortfolio();
         }
 
         function generateSaleOffer() {
@@ -227,16 +302,23 @@
             }
         }
 
-        function generateRandomCompanyName() {
-            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect'];
-            return companies[Math.floor(Math.random() * companies.length)];
-        }
-
         function sellTrain(index, offerPrice) {
             money += offerPrice;
-            portfolio.splice(index, 1);
+            const train = portfolio[index];
+            if (train.count > 1) {
+                train.count -= 1;
+            } else {
+                portfolio.splice(index, 1);
+            }
             displayPortfolio();
             updateTotalMoney();
+        }
+
+        function generateRandomCompanyName() {
+            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy (CZ)', 'DSB (DK)', 'DB AG (DE)', 'DB Cargo (DE)', 'RailJet (CZ)', 'Leo Expres (CZ)',
+                               'FlixTrain (DE)', 'SŽ (SLO)', 'ČD Cargo (CZ)', 'ŽSSK (SK)', 'HŽ (HR)', 'SNCF (FR)', 'ÖBB (AT)', 'SNCB (BE)', 'CFL (LX)',
+                               'NS (NL)', 'Metronom (DE)'];
+            return companies[Math.floor(Math.random() * companies.length)];
         }
 
         function displayPortfolio() {
@@ -245,11 +327,62 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
-                    <p>${train.description}</p>
+                    <p class="train-info">${train.description}</p>
                     <p>Price: $${train.basePrice}</p>
+                    <p class="train-count">Count: ${train.count}</p>
+                    <button onclick="moveTrainToGarage(${index})">Move to Garage</button>
                 `;
                 portfolioElement.appendChild(li);
             });
+        }
+
+        function moveTrainToGarage(index) {
+            const train = portfolio[index];
+            if (train.count > 1) {
+                train.count -= 1;
+            } else {
+                portfolio.splice(index, 1);
+            }
+            addToGarage(train);
+            displayPortfolio();
+            displayGarage();
+        }
+
+        function addToGarage(train) {
+            const existingTrain = garage.find(item => item.id === train.id);
+            if (existingTrain) {
+                existingTrain.count += 1;
+            } else {
+                train.count = 1;
+                garage.push(train);
+            }
+        }
+
+        function displayGarage() {
+            garageElement.innerHTML = '';
+            garage.forEach((train, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <img src="${train.image}" alt="${train.description}">
+                    <p class="train-info">${train.description}</p>
+                    <p>Price: $${train.basePrice}</p>
+                    <p class="train-count">Count: ${train.count}</p>
+                    <button onclick="moveTrainToPortfolio(${index})">Move to Portfolio</button>
+                `;
+                garageElement.appendChild(li);
+            });
+        }
+
+        function moveTrainToPortfolio(index) {
+            const train = garage[index];
+            if (train.count > 1) {
+                train.count -= 1;
+            } else {
+                garage.splice(index, 1);
+            }
+            addToPortfolio(train);
+            displayGarage();
+            displayPortfolio();
         }
 
         function updateTotalMoney() {
@@ -264,12 +397,32 @@
         // Každých 20 vteřin obnovit nabídky na trhu
         setInterval(() => {
             displayTrains();
-        }, 120000);
+        }, 11000);
 
         // Každou minutu generovat nabídku na prodej vlaku z hráčova portfolia
         setInterval(() => {
             generateSaleOffer();
-        }, 18000);
+        }, 15000);
+
+        // Každých 5 minut generovat nový quest
+        setInterval(() => {
+            generateQuest();
+        }, 9900000000); // 5 minut v milisekundách
+
+        function generateQuest() {
+            const questTrain = generateRandomTrain();
+            const questQuantity = Math.floor(Math.random() * (50 - 5 + 1) + 5); // Náhodný počet 5 až 50
+            const questPrice = Math.floor(questTrain.basePrice * questQuantity * (Math.random() * 0.1 + 1.05)); // Cena o 5-10% vyšší
+            const companyName = generateRandomCompanyName();
+            const confirmation = confirm(`Company ${companyName} is looking for ${questQuantity} trains (${questTrain.description}). The offer price is $${questPrice}. Do you want to accept this quest?`);
+            if (confirmation) {
+                displayQuest(questTrain, questQuantity, questPrice, companyName);
+            }
+        }
+
+        function displayQuest(questTrain, quantity, price, companyName) {
+            alert(`Quest Accepted!\nCompany ${companyName} is looking for ${quantity} trains (${questTrain.description}) for $${price}.`);
+        }
     </script>
 
 </body>
