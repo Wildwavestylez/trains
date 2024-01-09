@@ -5,26 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train Exchange</title>
     <style>
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #totalMoney {
+            margin-bottom: 10px;
+        }
         #trainMarket {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
+            flex-direction: column; /* Zobrazení vlaků pod sebou */
+            align-items: center;
         }
         .train {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
+            margin-bottom: 10px; /* Oddělení vlaků */
+        }
+        .portfolio {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .portfolio li {
+            flex: 0 0 48%; /* Omezení šířky na 48% pro lepší uspořádání na malých obrazovkách */
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .portfolio li {
+                flex: 0 0 100%; /* Na malých obrazovkách zobrazit jeden pod druhým */
+            }
         }
     </style>
 </head>
 <body>
 
     <h1>Train Exchange</h1>
-    <div id="trainMarket"></div>
+    <div id="container">
+        <p>Total Money: $<span id="totalMoney">10000</span></p>
+        <div id="trainMarket"></div>
+    </div>
     <div>
         <h2>Your Portfolio</h2>
-        <ul id="portfolio"></ul>
-        <p>Total Money: $<span id="totalMoney">1000</span></p>
+        <ul id="portfolio" class="portfolio"></ul>
     </div>
 
     <script>
@@ -32,23 +58,23 @@
         const portfolioElement = document.getElementById('portfolio');
         const totalMoneyElement = document.getElementById('totalMoney');
 
-        let money = 1000;
+        let money = 10000;
         let portfolio = [];
 
-        const trains = [
+      const trains = [
             { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622', basePrice: 2000 },
             { id: 61, image: 'https://i.imgur.com/ELbeAkI.png', description: 'Train 61', basePrice: 1500 },
             { id: 1038, image: 'https://i.imgur.com/Ll9Fa7s.png', description: 'Train 1038', basePrice: 2500 },
             { id: 1795, image: 'https://i.imgur.com/IPL5P9P.png', description: 'Train 1795', basePrice: 43000 },
             { id: 9999, image: 'https://i.imgur.com/XbzFNiC.png', description: 'Southern Express', basePrice: 5000 },
-            { id: 1, image: 'https://i.imgur.com/U3EmWzR.png', description: 'SNCF B 82500 (BiBi) TER Poitou Charentes', basePrice: 6000 },
-            { id: 2, image: 'https://i.imgur.com/FHJVLeg.png', description: 'SNCF B 83500', basePrice: 6800 },
+            { id: 1, image: 'https://i.imgur.com/U3EmWzR.png', description: 'SNCF B 82500 (BiBi) TER Poitou Charentes', basePrice: 12000 },
+            { id: 2, image: 'https://i.imgur.com/FHJVLeg.png', description: 'SNCF B 83500', basePrice: 11800 },
             { id: 3, image: 'https://i.imgur.com/vWdHlcn.png', description: 'FS E424.200 XMPR', basePrice: 4200 },
             { id: 4, image: 'https://i.imgur.com/amzzO2P.png', description: 'SNCF RIO Metrolor', basePrice: 3500 },
-            { id: 5, image: 'https://i.imgur.com/FQtW76Q.png', description: 'SNCF X 2800 rénové', basePrice: 1750 },
+            { id: 5, image: 'https://i.imgur.com/FQtW76Q.png', description: 'SNCF X 2800 r nov ', basePrice: 1750 },
             { id: 6, image: 'https://i.imgur.com/nRxNrof.png', description: 'Southern Class 377/1-4', basePrice: 9200 },
             { id: 7, image: 'https://i.imgur.com/tScXMwO.png', description: 'FS MDVC nB XMPR', basePrice: 500 },
-            { id: 8, image: 'https://i.imgur.com/3w7kBqh.png', description: 'SNCF Corail VTU B9½tu Carmillon', basePrice: 500 },
+            { id: 8, image: 'https://i.imgur.com/3w7kBqh.png', description: 'SNCF Corail VTU B9?tu Carmillon', basePrice: 500 },
             { id: 9, image: 'https://i.imgur.com/GcAWhm6.png', description: 'SNCF X 74500', basePrice: 4000 },
             { id: 10, image: 'https://i.imgur.com/98FnBRe.png', description: 'DB BR 481.5', basePrice: 15000 },
             { id: 11, image: 'https://i.imgur.com/HpD2M1w.png', description: 'SNCF CIC Haute Normandie Corail VTU A10', basePrice: 500 },
@@ -70,7 +96,7 @@
             { id: 27, image: 'https://i.imgur.com/WakoZ0Y.png', description: 'Connex BR 185-CL', basePrice: 41800 },
             { id: 28, image: 'https://i.imgur.com/10mh8rb.png', description: 'SNCF VB2N IdF (6c)', basePrice: 31500 },
             { id: 29, image: 'https://i.imgur.com/qTWIlf6.png', description: 'SATTI ALe 056', basePrice: 5800 },
-            { id: 30, image: 'https://i.imgur.com/WfZZVVh.png', description: 'ÖBB 1044.0 Valousek', basePrice: 25000 },
+            { id: 30, image: 'https://i.imgur.com/WfZZVVh.png', description: ' BB 1044.0 Valousek', basePrice: 25000 },
             { id: 31, image: 'https://i.imgur.com/YKzGstl.png', description: 'SNCF TBB 64800 Fret', basePrice: 1000 },  
             { id: 32, image: 'https://i.imgur.com/jWwJrxE.png', description: 'SNCF Corail VTU A5B5', basePrice: 550 },
             { id: 33, image: 'https://i.imgur.com/DcBxZVf.png', description: 'NS ICR A', basePrice: 550 },
@@ -81,9 +107,9 @@
             { id: 38, image: 'https://i.imgur.com/sAiuFSX.png', description: 'DB Bpmz 291 Blau-Beige', basePrice: 530 },
             { id: 39, image: 'https://i.imgur.com/HZkwLJP.png', description: 'DB BR 420 Verkehrsrot', basePrice: 14830 },
             { id: 40, image: 'https://i.imgur.com/NHnRECO.png', description: 'SNCF Tombereau E74', basePrice: 1100 },
-            { id: 41, image: 'https://i.imgur.com/Qqp0tMx.png', description: 'Fyra (rame tractée)', basePrice: 51100 },
-            { id: 42, image: 'https://i.imgur.com/gD72anQ.png', description: 'ÖBB Modularwagen Bcm', basePrice: 620 },
-            { id: 43, image: 'https://i.imgur.com/Nb44nzp.png', description: 'ÖBB 1216 RailJet', basePrice: 60000 },
+            { id: 41, image: 'https://i.imgur.com/Qqp0tMx.png', description: 'Fyra (rame tract e)', basePrice: 51100 },
+            { id: 42, image: 'https://i.imgur.com/gD72anQ.png', description: ' BB Modularwagen Bcm', basePrice: 620 },
+            { id: 43, image: 'https://i.imgur.com/Nb44nzp.png', description: ' BB 1216 RailJet', basePrice: 60000 },
             { id: 44, image: 'https://i.imgur.com/EwM9TPi.png', description: 'ANF60', basePrice: 1245 },
             { id: 45, image: 'https://i.imgur.com/Zg8G9Bp.png', description: 'SNCF Plat S73', basePrice: 1000 },
             { id: 46, image: 'https://i.imgur.com/ZO59DC3.png', description: 'Alex EuroThurbo ER20', basePrice: 61000 },
@@ -93,24 +119,24 @@
             { id: 50, image: 'https://i.imgur.com/o8BBH52.png', description: 'SNCB Shimmns 3614 D5', basePrice: 500 },
             { id: 51, image: 'https://i.imgur.com/NRsEr8G.png', description: 'East Coast Mk4 TSO', basePrice: 700 },
             { id: 52, image: 'https://i.imgur.com/01m4frV.png', description: 'Renfe S9450 DG9 Danone', basePrice: 580 },
-            { id: 53, image: 'https://i.imgur.com/1BbXGy1.png', description: 'RZD WLABm 78 Golubój-Bélyj', basePrice: 550 },
+            { id: 53, image: 'https://i.imgur.com/1BbXGy1.png', description: 'RZD WLABm 78 Golubo?j-Be?lyj', basePrice: 550 },
             { id: 54, image: 'https://i.imgur.com/a5GlKrc.png', description: 'SNCB I6 B C1', basePrice: 550 },
             { id: 55, image: 'https://i.imgur.com/Dlebfrl.png', description: 'DB Laeeks 553', basePrice: 1150 },
             { id: 56, image: 'https://i.imgur.com/yM4GBJP.png', description: 'Cisalpino EC Bpm', basePrice: 650 },
-            { id: 57, image: 'https://i.imgur.com/vZ7iscK.png', description: 'SNCB M4 B rénovée', basePrice: 550 },
-            { id: 58, image: 'https://i.imgur.com/2XWQlv9.png', description: 'SNCF Corail Lunéa VU B7ux Carmillon', basePrice: 600 },
+            { id: 57, image: 'https://i.imgur.com/vZ7iscK.png', description: 'SNCB M4 B r nov e', basePrice: 550 },
+            { id: 58, image: 'https://i.imgur.com/2XWQlv9.png', description: 'SNCF Corail Lun a VU B7ux Carmillon', basePrice: 600 },
             { id: 59, image: 'https://i.imgur.com/qwfODWd.png', description: 'NS 1600-1700-1800', basePrice: 31150 },
             { id: 60, image: 'https://i.imgur.com/3IuJFnd.png', description: 'Thello UIC-X Bc XMPR', basePrice: 555 },
             { id: 62, image: 'https://i.imgur.com/uG4XSKX.png', description: 'SNCF U25500 Transilien', basePrice: 7150 },
             { id: 63, image: 'https://i.imgur.com/o3xKVGA.png', description: 'DB BR 612 Bayern', basePrice: 6750 },
-            { id: 64, image: 'https://i.imgur.com/yAI9Wa0.png', description: 'SNCF XR 6100 TER Midi-Pyrénées origine', basePrice: 4550 },
+            { id: 64, image: 'https://i.imgur.com/yAI9Wa0.png', description: 'SNCF XR 6100 TER Midi-Pyr n es origine', basePrice: 4550 },
             { id: 65, image: 'https://i.imgur.com/tf5K87a.png', description: 'CFF VU I A IR', basePrice: 540 },
             { id: 66, image: 'https://i.imgur.com/LLfiPSb.png', description: 'Railpool BR 185.2', basePrice: 45540 },
-            { id: 67, image: 'https://i.imgur.com/9noCS41.png', description: 'SNCF X 72500 Intercités', basePrice: 22540 },
+            { id: 67, image: 'https://i.imgur.com/9noCS41.png', description: 'SNCF X 72500 Intercit s', basePrice: 22540 },
             { id: 68, image: 'https://i.imgur.com/vqGNcx2.png', description: 'SNCF BB 36300', basePrice: 52540 },
             { id: 69, image: 'https://i.imgur.com/wB7kTvQ.png', description: 'CFF RBe 540', basePrice: 4580 },
             { id: 70, image: 'https://i.imgur.com/v3GkZaW.png', description: 'NxEA Class 90 grey', basePrice: 57380 },
-            { id: 71, image: 'https://i.imgur.com/wZmhUYi.png', description: 'ÖBB 5022', basePrice: 7520 },
+            { id: 71, image: 'https://i.imgur.com/wZmhUYi.png', description: ' BB 5022', basePrice: 7520 },
             { id: 72, image: 'https://i.imgur.com/D5W9VQQ.png', description: 'MthB-Thurbo Bm 596', basePrice: 5200 },
             { id: 73, image: 'https://i.imgur.com/ixfcPiS.png', description: 'DB BR 629', basePrice: 3800 },
             { id: 74, image: 'https://i.imgur.com/207LM4e.png', description: 'Alex BR 183', basePrice: 54800 },
@@ -180,10 +206,7 @@
         }
 
         function generateRandomCompanyName() {
-            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect', 'České Dráhy', 'Leo Expres', 'Student Agency', 
-                               'Deutsche Bahn', 'FlixTrain', 'Trenitalia', 'Trilexx', 'Waldbahn', 'SNCF', 'SNCB', 'ŽSSR', 'Arriva', 'Hrvatske Železnice',
-                               'Danske Statsbaner' ];
-                               
+            const companies = ['EuroRail', 'SwiftTrans', 'TransCargo', 'RailStar', 'ExpressConnect'];
             return companies[Math.floor(Math.random() * companies.length)];
         }
 
@@ -219,12 +242,12 @@
         // Každých 20 vteřin obnovit nabídky na trhu
         setInterval(() => {
             displayTrains();
-        }, 11000);
+        }, 120000);
 
         // Každou minutu generovat nabídku na prodej vlaku z hráčova portfolia
         setInterval(() => {
             generateSaleOffer();
-        }, 14000);
+        }, 18000);
     </script>
 
 </body>
