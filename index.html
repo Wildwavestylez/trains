@@ -514,15 +514,37 @@ function loadFromLocalStorage() {
     }
 }
 
-// Uložení hodnot do Local Storage
-function saveToLocalStorage() {
-    localStorage.setItem('money', money.toString());
-    localStorage.setItem('portfolio', JSON.stringify(portfolio));
-    localStorage.setItem('garage', JSON.stringify(garage));
+// Načtení hodnot z cookies při načtení stránky
+function loadFromCookies() {
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+        const [name, value] = cookie.split('=');
+        switch (name) {
+            case 'money':
+                money = parseInt(value);
+                updateTotalMoney();
+                break;
+            case 'portfolio':
+                portfolio = JSON.parse(value);
+                displayPortfolio();
+                break;
+            case 'garage':
+                garage = JSON.parse(value);
+                displayGarage();
+                break;
+        }
+    }
+}
+
+// Uložení hodnot do cookies
+function saveToCookies() {
+    document.cookie = "money=" + money;
+    document.cookie = "portfolio=" + JSON.stringify(portfolio);
+    document.cookie = "garage=" + JSON.stringify(garage);
 }
 
 // Spustit hru
-loadFromLocalStorage();
+loadFromCookies();
 displayTrains();
 displayPortfolio();
 displayGarage();
@@ -530,8 +552,24 @@ updateTotalMoney();
 
 // Zavolejte tuto funkci při každé změně stavu, který chcete ukládat
 function handleStateChange() {
-    saveToLocalStorage();
+    // Například po přidání do portfolia nebo do garáže
+    saveToCookies();
 }
+
+// Příklad funkce přidání do portfolia s voláním handleStateChange()
+function addToPortfolio(train) {
+    const existingTrain = portfolio.find(item => item.id === train.id);
+    if (existingTrain) {
+        existingTrain.count += 1;
+    } else {
+        train.count = 1;
+        portfolio.push(train);
+    }
+    displayPortfolio();
+    checkQuestCompletion(train);
+    handleStateChange(); // Uložení do cookies
+}
+
 
     </script>
 
