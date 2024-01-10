@@ -492,6 +492,47 @@
                 alert('You do not have enough trains to fulfill the quest.');
             }
         }
+
+        // Načtení hodnot z Local Storage při načtení stránky
+function loadFromLocalStorage() {
+    const storedMoney = localStorage.getItem('money');
+    if (storedMoney !== null) {
+        money = parseInt(storedMoney);
+        updateTotalMoney();
+    }
+
+    const storedPortfolio = localStorage.getItem('portfolio');
+    if (storedPortfolio !== null) {
+        portfolio = JSON.parse(storedPortfolio);
+        displayPortfolio();
+    }
+
+    const storedGarage = localStorage.getItem('garage');
+    if (storedGarage !== null) {
+        garage = JSON.parse(storedGarage);
+        displayGarage();
+    }
+}
+
+// Uložení hodnot do Local Storage
+function saveToLocalStorage() {
+    localStorage.setItem('money', money.toString());
+    localStorage.setItem('portfolio', JSON.stringify(portfolio));
+    localStorage.setItem('garage', JSON.stringify(garage));
+}
+
+// Spustit hru
+loadFromLocalStorage();
+displayTrains();
+displayPortfolio();
+displayGarage();
+updateTotalMoney();
+
+// Zavolejte tuto funkci při každé změně stavu, který chcete ukládat
+function handleStateChange() {
+    saveToLocalStorage();
+}
+
     </script>
 
 </body>
