@@ -473,25 +473,46 @@
         }
 
         function fulfillQuest() {
-            if (activeQuest && garage.length >= activeQuest.quantity) {
-                const totalPrice = activeQuest.price;
-                for (let i = 0; i < activeQuest.quantity; i++) {
-                    const train = garage[i];
-                    totalPrice += train.basePrice;
-                    moveTrainToPortfolio(0); // Přesuň první vlak z garáže do portfolia
-                }
-                alert(`Quest Fulfilled!\nYou earned $${totalPrice} from fulfilling the quest.`);
-                money += totalPrice;
-                activeQuest = null;
-                if (activeQuest) {
-                    displayQuestOffer();
-                } else {
-                    questInfoElement.textContent = ''; // Odstraníme text z nabídky, protože quest byl ukončen
-                }
-            } else {
-                alert('You do not have enough trains to fulfill the quest.');
-            }
+    if (activeQuest) {
+        const questTrain = activeQuest.train;
+        const questQuantity = activeQuest.quantity;
+
+        // Check if the required number of trains is available in the garage
+        const garageTrain = garage.find(train => train.id === questTrain.id && train.count >= questQuantity);
+
+        if (garageTrain) {
+            // Decrease the count of the train in the garage
+            garageTrain.count -= questQuantity;
+
+            // Increase player's money based on the quest price
+            money += activeQuest.price;
+
+            // Display updated garage and total money
+            displayGarage();
+            updateTotalMoney();
+
+            // Complete the quest and reset the active quest
+            alert(`Quest completed! You earned $${activeQuest.price}.`);
+            activeQuest = null;
+            displayQuestInfo();
+        } else {
+            alert(`You do not have enough trains in your garage to fulfill the quest.`);
         }
+    } else {
+        alert(`No active quest available.`);
+    }
+}
+
+// Function to check quest completion
+function checkQuestCompletion(train) {
+    if (activeQuest && train && train.id === activeQuest.train.id) {
+        const trainCount = portfolio.reduce((total, t) => (t.id === train.id ? total + t.count : total), 0);
+        if (trainCount >= activeQuest.quantity) {
+            alert(`You have enough trains to fulfill the quest!`);
+            displayQuestInfo();
+        }
+    }
+}
 
         // Načtení hodnot z Local Storage při načtení stránky
 function loadFromLocalStorage() {
