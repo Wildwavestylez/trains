@@ -325,7 +325,7 @@
                 const train = portfolio[randomTrainIndex];
                 const offerPrice = Math.floor(train.basePrice * (Math.random() * 0.1 + 1.05)); // Cena o 5-10% vyšší
                 const companyName = generateRandomCompanyName();
-                const confirmation = confirm(`Společnost ${companyName} chce koupit tvůj vlak (${train.description}) za $${offerPrice}. Checeš prodat tento vlak?`);
+                const confirmation = confirm(`Společnost ${companyName} chce koupit tvůj vlak (${train.description}) za $${offerPrice}. Chceš prodat tento vlak?`);
                 if (confirmation) {
                     sellTrain(randomTrainIndex, offerPrice);
                 }
