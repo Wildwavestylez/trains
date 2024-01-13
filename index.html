@@ -263,7 +263,21 @@
             { id: 118, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
             ];
 
+            // Dynamická změna velikosti obrázků
+           function adjustImageSize(selector, width) {
+               const images = document.querySelectorAll(`${selector} img`);
+                    images.forEach(img => {
+                    img.style.width = width; // nebo jiná požadovaná šířka
+                    img.style.height = 'auto';
+                   });
+          }
 
+             // Volání funkce pro změnu velikosti obrázků před jednotlivými bloky
+               adjustImageSize('#garage', '80px');
+               adjustImageSize('.portfolio', '80px');
+               adjustImageSize('#questOffer', '80px');
+
+        
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
             const train = {
@@ -304,12 +318,7 @@
         }
 
         function addToPortfolio(train) {
-            const trainImages = document.querySelectorAll('.train img');
-
-             trainImages.forEach(img => {
-               img.style.width = '80px'; // nebo jiná požadovaná šířka
-             img.style.height = 'auto';
-          });
+           
 
             const existingTrain = portfolio.find(item => item.id === train.id);
             if (existingTrain) {
