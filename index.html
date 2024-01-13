@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Železniční Imperium</title>
     <style>
-        /* Společné styly pro všechny vlaky ve hře */
+        /* Společné styly pro vlaky ve hře a na burze */
         .train {
-            border: 2px solid #4caf50;
+            border: 2px solid #4caf50; /* Zelený rámeček */
             border-radius: 5px;
             padding: 10px;
-            background-color: #f0f8ff;
+            background-color: #f0f8ff; /* Barva pozadí */
             text-align: center;
             margin: 0 10px 20px 10px;
             max-width: 200px;
@@ -46,19 +46,19 @@
             width: 80%;
             margin: 0 auto;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* Změna na sloupcový layout pro mobilní zařízení */
+            align-items: center; /* Zarovnat obsah do středu */
         }
 
         p {
             color: #333;
-            text-align: center;
+            text-align: center; /* Zarovnat text do středu */
         }
 
         .train-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-wrap: wrap; /* Položky se přesunou na nový řádek, pokud není dostatek místa */
+            justify-content: center; /* Zarovnat položky do středu */
             width: 100%;
             margin-bottom: 20px;
         }
@@ -75,7 +75,7 @@
             margin: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: center; /* Zarovnat položky do středu */
         }
 
         li {
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-
+    
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
