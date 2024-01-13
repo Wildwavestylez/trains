@@ -48,41 +48,18 @@
         }
 
         .train {
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
+            border: 2px solid #555; /* Rámeček s barvou šedé */
+            border-radius: 8px;
+            overflow: hidden; /* Skryje rohy, aby rámeček měl zaoblené rohy */
             margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
             max-width: 200px; /* Maximální šířka vlaku */
-            border: 2px solid #333; /* Výchozí barva rámečku */
+            background-color: #fff; /* Barva pozadí */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lehký stín pro trochu hloubky */
         }
 
         .train img {
             max-width: 100%;
             height: auto;
-        }
-
-        /* Rámec pro vlaky na burze */
-        .train.market {
-            border-color: #4CAF50; /* Zelený rámec pro burzu */
-            background-color: #d9f9d9; /* Světle zelené pozadí pro burzu */
-        }
-
-        /* Rámec pro vlaky v portfoliu */
-        .train.portfolio {
-            border-color: #2196F3; /* Modrý rámec pro portfolio */
-            background-color: #d9e5f9; /* Světle modré pozadí pro portfolio */
-        }
-
-        /* Rámec pro vlaky v garáži */
-        .train.garage {
-            border-color: #FF0000; /* Červený rámec pro garáž */
-            background-color: #f9d9d9; /* Světle červené pozadí pro garáž */
-        }
-
-        /* Rámec pro vlaky v nabídce questu */
-        .train.quest {
-            border-color: #333; /* Tmavý rámec pro quest */
-            background-color: #ccc; /* Světle šedé pozadí pro quest */
         }
 
         .info-container {
@@ -123,10 +100,12 @@
 
         .train-info {
             font-weight: bold;
+            margin-top: 8px; /* Odstup nad informacemi o vlaku */
         }
 
         .train-count {
             font-size: 14px;
+            margin-top: 4px; /* Odstup nad počtem vlaků */
         }
     </style>
 </head>
@@ -156,7 +135,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
