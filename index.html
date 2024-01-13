@@ -17,6 +17,16 @@
             max-width: 200px;
         }
 
+    .common-train {
+    border: 2px solid #4caf50; /* Zelený rámeček */
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f0f8ff; /* Barva pozadí */
+    text-align: center;
+    margin: 0 10px 20px 10px;
+    max-width: 200px;
+}
+
         .train img {
             max-width: 100%;
             height: auto;
@@ -288,20 +298,21 @@
         }
 
         function displayTrains() {
-            trainMarketElement.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const train = generateRandomTrain();
-                const trainElement = document.createElement('div');
-                trainElement.classList.add('train');
-                trainElement.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
-                    <p>Cena $${train.price}</p>
-                    <button onclick="buyTrain(${train.id})">Koupit</button>
-                `;
-                trainMarketElement.appendChild(trainElement);
-            }
-        }
+    trainMarketElement.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const train = generateRandomTrain();
+        const trainElement = document.createElement('div');
+        trainElement.classList.add('train', 'common-train'); // Přidejte novou třídu zde
+        trainElement.innerHTML = `
+            <img src="${train.image}" alt="${train.description}">
+            <p class="train-info">${train.description}</p>
+            <p>Cena $${train.price}</p>
+            <button onclick="buyTrain(${train.id})">Koupit</button>
+        `;
+        trainMarketElement.appendChild(trainElement);
+    }
+}
+
 
         function buyTrain(trainId) {
             const selectedTrain = trains.find(train => train.id === trainId);
@@ -358,20 +369,22 @@
                                'NS (NL)', 'Metronom (DE)'];
             return companies[Math.floor(Math.random() * companies.length)];
         }
-        function displayPortfolio() {
-            portfolioElement.innerHTML = '';
-            portfolio.forEach((train, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
-                    <p>Price: $${train.basePrice}</p>
-                    <p class="train-count">Počet: ${train.count}</p>
-                    <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
-                `;
-                portfolioElement.appendChild(li);
-            });
-        }
+       function displayPortfolio() {
+    portfolioElement.innerHTML = '';
+    portfolio.forEach((train, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="common-train">
+                <img src="${train.image}" alt="${train.description}">
+                <p class="train-info">${train.description}</p>
+                <p>Price: $${train.basePrice}</p>
+                <p class="train-count">Počet: ${train.count}</p>
+                <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
+            </div>
+        `;
+        portfolioElement.appendChild(li);
+    });
+}
 
         function addToGarage(train) {
             const existingTrain = garage.find(item => item.id === train.id);
@@ -405,22 +418,24 @@
         }
 
         function displayGarage() {
-            garageElement.innerHTML = '';
-            garage.forEach((train, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
-                    <p>Price: $${train.basePrice}</p>
-                    <p class="train-count">Count: ${train.count}</p>
-                    <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
-                `;
-                garageElement.appendChild(li);
-            });
+    garageElement.innerHTML = '';
+    garage.forEach((train, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="common-train">
+                <img src="${train.image}" alt="${train.description}">
+                <p class="train-info">${train.description}</p>
+                <p>Price: $${train.basePrice}</p>
+                <p class="train-count">Count: ${train.count}</p>
+                <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
+            </div>
+        `;
+        garageElement.appendChild(li);
+    });
 
-            // Zkontroluj, zda lze splnit aktivní quest
-            checkQuestCompletion();
-        }
+    // Zkontroluj, zda lze splnit aktivní quest
+    checkQuestCompletion();
+}
 
         function moveTrainToPortfolio(index) {
             const train = garage[index];
