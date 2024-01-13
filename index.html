@@ -304,6 +304,13 @@
         }
 
         function addToPortfolio(train) {
+            const trainImages = document.querySelectorAll('.train img');
+
+             trainImages.forEach(img => {
+               img.style.width = '80px'; // nebo jiná požadovaná šířka
+             img.style.height = 'auto';
+          });
+
             const existingTrain = portfolio.find(item => item.id === train.id);
             if (existingTrain) {
                 existingTrain.count += 1;
