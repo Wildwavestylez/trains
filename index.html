@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Železniční Imperium</title>
+    <title>Train Exchange</title>
     <style>
         /* Styl pro mobilní zařízení */
         @media screen and (max-width: 600px) {
@@ -103,24 +103,24 @@
 
 <body>
 
-    <h1>Železniční magnát</h1>
+    <h1>Train Exchange</h1>
 
     <div id="container">
-        <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
+        <p>Total Money: $<span id="totalMoney">1000</span></p>
         <div id="trainMarket"></div>
         <div>
-            <h2>Tvé vlaky určené pro prodej</h2>
+            <h2>Your Portfolio</h2>
             <ul id="portfolio" class="portfolio"></ul>
         </div>
     </div>
 
     <!-- Přidání bloku pro garáž pod portfoliem -->
     <div id="garage">
-        <h2>Tvé depo</h2>
+        <h2>Your Garage</h2>
         <ul id="garageList" class="portfolio"></ul>
         <!-- Přidání nabídky questů -->
         <div id="questOffer">
-            <h2>Přijatý úkol</h2>
+            <h2>Quest Offer</h2>
             <p id="questInfo"></p>
             <button onclick="fulfillQuest()">Fulfill Quest</button>
         </div>
@@ -250,17 +250,6 @@
             { id: 105, image: 'https://i.imgur.com/3LPSrVr.png', description: 'NS Fcs', basePrice: 1150 },
             { id: 106, image: 'https://i.imgur.com/pzqXfca.png', description: 'NS Cargo Shimmns', basePrice: 1050 },
             { id: 107, image: 'https://i.imgur.com/pTQgbVU.png', description: 'DB BR 189 ex-MRCE', basePrice: 61550 },
-            { id: 108, image: 'https://i.imgur.com/jXoYbZs.png', description: 'PESA ČD 844 ', basePrice: 5500 },
-            { id: 109, image: 'https://i.imgur.com/aa6mmwq.png', description: 'ČD 810 ', basePrice: 1000 },
-            { id: 110, image: 'https://i.imgur.com/u0phELQ.png', description: 'ČD 814 ', basePrice: 2000 },
-            { id: 111, image: 'https://i.imgur.com/TyxYs1f.png', description: 'ČD 150 Banán ', basePrice: 10000 },
-            { id: 112, image: 'https://i.imgur.com/1xGFDKV.png', description: 'ČD 163 Peršing', basePrice: 13500 },
-            { id: 113, image: 'https://i.imgur.com/C0nmEUE.png', description: 'ČD Cargo 163 Peršing Najbrt', basePrice: 15000 },
-            { id: 114, image: 'https://i.imgur.com/6lom0Dq.png', description: 'ČD 750 Brejlovec', basePrice: 18000 },
-            { id: 115, image: 'https://i.imgur.com/XcHIeOk.png', description: 'ČD 380 - Škoda 109E', basePrice: 25000 },
-            { id: 116, image: 'https://i.imgur.com/HOsq8nT.png', description: 'ČD 193 - Siemens Vectron Najbrt', basePrice: 50000 },
-            { id: 117, image: 'https://i.imgur.com/JxwjoVd.png', description: 'ČD 680 Pendolíno', basePrice: 38000 },
-            { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
         
         
         
@@ -288,8 +277,8 @@
                 trainElement.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
                     <p class="train-info">${train.description}</p>
-                    <p>Cena $${train.price}</p>
-                    <button onclick="buyTrain(${train.id})">Koupit</button>
+                    <p>Price: $${train.price}</p>
+                    <button onclick="buyTrain(${train.id})">Buy</button>
                 `;
                 trainMarketElement.appendChild(trainElement);
             }
@@ -303,7 +292,7 @@
                 displayTrains();
                 updateTotalMoney();
             } else {
-                alert('Nemáš dostatek peněz pro nákup tohoto vlaku!');
+                alert('Not enough money to buy this train!');
             }
         }
 
@@ -325,7 +314,7 @@
                 const train = portfolio[randomTrainIndex];
                 const offerPrice = Math.floor(train.basePrice * (Math.random() * 0.1 + 1.05)); // Cena o 5-10% vyšší
                 const companyName = generateRandomCompanyName();
-                const confirmation = confirm(`Společnost ${companyName} chce koupit tvůj vlak (${train.description}) za $${offerPrice}. Chceš prodat tento vlak?`);
+                const confirmation = confirm(`Company ${companyName} wants to buy your train (${train.description}) for $${offerPrice}. Do you want to sell this train?`);
                 if (confirmation) {
                     sellTrain(randomTrainIndex, offerPrice);
                 }
@@ -358,8 +347,8 @@
                     <img src="${train.image}" alt="${train.description}">
                     <p class="train-info">${train.description}</p>
                     <p>Price: $${train.basePrice}</p>
-                    <p class="train-count">Počet: ${train.count}</p>
-                    <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
+                    <p class="train-count">Count: ${train.count}</p>
+                    <button onclick="moveTrainToGarage(${index})">Move to Garage</button>
                 `;
                 portfolioElement.appendChild(li);
             });
@@ -405,7 +394,7 @@
                     <p class="train-info">${train.description}</p>
                     <p>Price: $${train.basePrice}</p>
                     <p class="train-count">Count: ${train.count}</p>
-                    <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
+                    <button onclick="moveTrainToPortfolio(${index})">Move to Portfolio</button>
                 `;
                 garageElement.appendChild(li);
             });
@@ -456,7 +445,7 @@
                 const questQuantity = Math.floor(Math.random() * (50 - 5 + 1) + 5); // Náhodný počet 5 až 50
                 const questPrice = Math.floor(questTrain.price * questQuantity * (Math.random() * 0.1 + 1.05));
                 const companyName = generateRandomCompanyName();
-                const confirmation = confirm(`Společnost ${companyName} chce koupit ${questQuantity} vlaků (${questTrain.description}). Nabízí za ně $${questPrice}. Chceš přijmout tento úkol?`);
+                const confirmation = confirm(`Company ${companyName} is looking for ${questQuantity} trains (${questTrain.description}). The offer price is $${questPrice}. Do you want to accept this quest?`);
                 if (confirmation) {
                     activeQuest = { train: questTrain, quantity: questQuantity, price: questPrice, companyName: companyName };
                     displayQuestOffer();
@@ -464,22 +453,18 @@
             }
         }
 
-        if (activeQuest) {
-        questInfoElement.innerHTML = `
-            <p>Pro společnost ${activeQuest.companyName} sháníš ${activeQuest.quantity} vlaků (${activeQuest.train.description}). Za splnění úkolu dostaneš $${activeQuest.price}.</p>
-            <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
-        `;
-    } else {
-        questInfoElement.innerHTML = ''; // Pokud není aktivní quest, vymaž informace o questu
-    }
-}
-
+        function displayQuestOffer() {
+            questInfoElement.innerHTML = `
+                <p>Company ${activeQuest.companyName} is looking for ${activeQuest.quantity} trains (${activeQuest.train.description}). The offer price is $${activeQuest.price}.</p>
+                <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
+            `;
+        }
 
         function checkQuestCompletion(train) {
             if (activeQuest && train && train.id === activeQuest.train.id) {
                 activeQuest.quantity -= 1;
                 if (activeQuest.quantity === 0) {
-                    alert(`Úkol splněn!\nSplnil jsi dodávku firmě ${activeQuest.companyName}. Obdržel jsi platbu ve výši $${activeQuest.price}.`);
+                    alert(`Quest Completed!\nYou fulfilled the quest from Company ${activeQuest.companyName}. You earned $${activeQuest.price}.`);
                     money += activeQuest.price;
                     activeQuest = null;
                     displayQuestOffer();
@@ -488,48 +473,27 @@
         }
 
         function fulfillQuest() {
-    if (activeQuest) {
-        const questTrain = activeQuest.train;
-        const questQuantity = activeQuest.quantity;
-
-        // Check if the required number of trains is available in the garage
-        const garageTrain = garage.find(train => train.id === questTrain.id && train.count >= questQuantity);
-
-        if (garageTrain) {
-            // Decrease the count of the train in the garage
-            garageTrain.count -= questQuantity;
-
-            // Increase player's money based on the quest price
-            money += activeQuest.price;
-
-            // Display updated garage and total money
-            displayGarage();
-            updateTotalMoney();
-
-            // Complete the quest and reset the active quest
-            alert(`Úkol splněn! Obdržel jsi $${activeQuest.price}.`);
-            activeQuest = null;
-            displayQuestInfo();
-        } else {
-            alert(`Ve svém depu nemáš dostatečný počet požadovaných vlaků!`);
+            if (activeQuest && garage.length >= activeQuest.quantity) {
+                const totalPrice = activeQuest.price;
+                for (let i = 0; i < activeQuest.quantity; i++) {
+                    const train = garage[i];
+                    totalPrice += train.basePrice;
+                    moveTrainToPortfolio(0); // Přesuň první vlak z garáže do portfolia
+                }
+                alert(`Quest Fulfilled!\nYou earned $${totalPrice} from fulfilling the quest.`);
+                money += totalPrice;
+                activeQuest = null;
+                if (activeQuest) {
+                    displayQuestOffer();
+                } else {
+                    questInfoElement.textContent = ''; // Odstraníme text z nabídky, protože quest byl ukončen
+                }
+            } else {
+                alert('You do not have enough trains to fulfill the quest.');
+            }
         }
-    } else {
-        alert(`Momentálně neplníš žádný úkol.`);
-    }
-}
 
-// Function to check quest completion
-function checkQuestCompletion(train) {
-    if (activeQuest && train && train.id === activeQuest.train.id) {
-        const trainCount = portfolio.reduce((total, t) => (t.id === train.id ? total + t.count : total), 0);
-        if (trainCount >= activeQuest.quantity) {
-            alert(`Máš dost vlaků pro splnění úkolu!`);
-            displayQuestInfo();
-        }
-    }
-}
-
-          // Načtení hodnot z Local Storage při načtení stránky
+        // Načtení hodnot z Local Storage při načtení stránky
 function loadFromLocalStorage() {
     const storedMoney = localStorage.getItem('money');
     if (storedMoney !== null) {
@@ -547,11 +511,6 @@ function loadFromLocalStorage() {
     if (storedGarage !== null) {
         garage = JSON.parse(storedGarage);
         displayGarage();
-    }
-    const storedQuest = localStorage.getItem('activeQuest');
-    if (storedQuest !== null) {
-        activeQuest = JSON.parse(storedQuest);
-        displayQuestOffer();
     }
 }
 
@@ -582,10 +541,6 @@ function saveToCookies() {
     document.cookie = "money=" + money;
     document.cookie = "portfolio=" + JSON.stringify(portfolio);
     document.cookie = "garage=" + JSON.stringify(garage);
-     if (activeQuest) {
-        document.cookie = "activeQuest=" + JSON.stringify(activeQuest);
-    }
-
 }
 
 // Spustit hru
@@ -593,7 +548,6 @@ loadFromCookies();
 displayTrains();
 displayPortfolio();
 displayGarage();
-displayQuestOffer(); 
 updateTotalMoney();
 
 // Zavolejte tuto funkci při každé změně stavu, který chcete ukládat
@@ -622,3 +576,4 @@ function addToPortfolio(train) {
 </body>
 
 </html>
+
