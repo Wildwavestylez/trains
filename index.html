@@ -260,24 +260,14 @@
             { id: 115, image: 'https://i.imgur.com/XcHIeOk.png', description: 'ČD 380 - Škoda 109E', basePrice: 25000 },
             { id: 116, image: 'https://i.imgur.com/HOsq8nT.png', description: 'ČD 193 - Siemens Vectron Najbrt', basePrice: 50000 },
             { id: 117, image: 'https://i.imgur.com/JxwjoVd.png', description: 'ČD 680 Pendolíno', basePrice: 38000 },
-            { id: 118, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
-            ];
-
-            // Dynamická změna velikosti obrázků
-           function adjustImageSize(selector, width) {
-               const images = document.querySelectorAll(`${selector} img`);
-                    images.forEach(img => {
-                    img.style.width = width; // nebo jiná požadovaná šířka
-                    img.style.height = 'auto';
-                   });
-          }
-
-             // Volání funkce pro změnu velikosti obrázků před jednotlivými bloky
-               adjustImageSize('#garage', '80px');
-               adjustImageSize('.portfolio', '80px');
-               adjustImageSize('#questOffer', '80px');
-
+            { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
         
+        
+        
+            
+        ];
+
+
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
             const train = {
@@ -318,8 +308,6 @@
         }
 
         function addToPortfolio(train) {
-           
-
             const existingTrain = portfolio.find(item => item.id === train.id);
             if (existingTrain) {
                 existingTrain.count += 1;
@@ -365,12 +353,6 @@
         function displayPortfolio() {
             portfolioElement.innerHTML = '';
             portfolio.forEach((train, index) => {
-                const trainImages = document.querySelectorAll('.train img');
-
-                       trainImages.forEach(img => {
-                       img.style.width = '150px'; // nebo jiná požadovaná šířka
-                       img.style.height = 'auto';
-        });
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
