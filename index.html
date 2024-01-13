@@ -11,6 +11,10 @@
             #container {
                 flex-direction: column;
             }
+
+            .train-container {
+                flex-direction: column; /* Změna na sloupcový layout pro mobilní zařízení */
+            }
         }
 
         body {
@@ -41,6 +45,7 @@
 
         .train-container {
             display: flex;
+            flex-direction: row; /* Změna na řádkový layout pro širší obrazovky */
             justify-content: space-around;
             width: 100%;
             margin-bottom: 20px;
@@ -53,6 +58,8 @@
             background-color: #fff;
             text-align: center;
             margin: 0 10px; /* Odstup mezi jednotlivými vlaky */
+            max-width: 200px; /* Maximální šířka vlaku */
+            width: 100%; /* Šířka vlaku na 100% pro šířku obrazovky na úzkých displejích */
         }
 
         .train img {
@@ -131,8 +138,6 @@
             </div>
         </div>
     </div>
-
-
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
