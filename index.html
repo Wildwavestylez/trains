@@ -11,13 +11,6 @@
             #container {
                 flex-direction: column;
             }
-            .train,
-            .portfolio-item,
-            .garage-item,
-            .quest-item {
-                width: 100%;
-                margin-bottom: 20px;
-            }
         }
 
         body {
@@ -37,30 +30,40 @@
             width: 80%;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column; /* Změna na sloupcový layout pro mobilní zařízení */
+            align-items: center; /* Zarovnat obsah do středu */
         }
 
         p {
             color: #333;
+            text-align: center; /* Zarovnat text do středu */
         }
 
-        .train,
-        .portfolio-item,
-        .garage-item,
-        .quest-item {
+        .train-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .train {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             background-color: #fff;
             text-align: center;
+            margin: 0 10px; /* Odstup mezi jednotlivými vlaky */
         }
 
-        .train img,
-        .portfolio-item img,
-        .garage-item img,
-        .quest-item img {
+        .train img {
             max-width: 100%;
             height: auto;
+        }
+
+        .info-container {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
         }
 
         ul {
@@ -69,6 +72,7 @@
             margin: 0;
             display: flex;
             flex-wrap: wrap;
+            justify-content: center; /* Zarovnat položky do středu */
         }
 
         li {
@@ -92,17 +96,11 @@
             background-color: #45a049;
         }
 
-        .train-info,
-        .portfolio-info,
-        .garage-info,
-        .quest-info {
+        .train-info {
             font-weight: bold;
         }
 
-        .train-count,
-        .portfolio-count,
-        .garage-count,
-        .quest-count {
+        .train-count {
             font-size: 14px;
         }
     </style>
@@ -113,17 +111,19 @@
     <h1>Železniční magnát</h1>
 
     <div id="container">
-        <div>
-            <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
-            <div id="trainMarket"></div>
-        </div>
-        <div>
+        <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
+
+        <!-- Obecný kontejner pro vlaky -->
+        <div class="train-container" id="trainMarket"></div>
+
+        <!-- Obecný kontejner pro Portfolio, Garáž a Quest -->
+        <div class="info-container">
             <h2>Tvé vlaky určené pro prodej</h2>
             <ul id="portfolio" class="portfolio"></ul>
-        </div>
-        <div>
+
             <h2>Tvé depo</h2>
             <ul id="garageList" class="portfolio"></ul>
+
             <div id="questOffer">
                 <h2>Přijatý úkol</h2>
                 <p id="questInfo"></p>
@@ -131,6 +131,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
