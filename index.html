@@ -468,6 +468,7 @@
             questInfoElement.innerHTML = `
                 <p>Pro společnost ${activeQuest.companyName} sháníš ${activeQuest.quantity} vlaků (${activeQuest.train.description}). Za splnění úkolu dostaneš $${activeQuest.price}.</p>
                 <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
+                 saveToCookies();
             `;
         }
 
@@ -506,6 +507,7 @@
             alert(`Úkol splněn! Obdržel jsi $${activeQuest.price}.`);
             activeQuest = null;
             displayQuestInfo();
+            saveToCookies();
         } else {
             alert(`Ve svém depu nemáš dostatečný počet požadovaných vlaků!`);
         }
