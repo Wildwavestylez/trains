@@ -407,7 +407,7 @@
         function displayGarage() {
             garageElement.innerHTML = '';
             garage.forEach((train, index) => {
-                const li = document.createElement('li');
+                const li = document.createElement('train');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
                     <p class="train-info">${train.description}</p>
