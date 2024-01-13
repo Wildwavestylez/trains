@@ -17,20 +17,21 @@
             max-width: 200px;
         }
 
-    .common-train {
-    border: 2px solid #4caf50; /* Zelený rámeček */
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #f0f8ff; /* Barva pozadí */
-    text-align: center;
-    margin: 0 10px 20px 10px;
-    max-width: 200px;
-}
+     .common-train {
+        border: 2px solid #4caf50; /* Zelený rámeček */
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f0f8ff; /* Barva pozadí */
+        text-align: center;
+        margin: 0 10px 20px 10px;
+        max-width: 200px;
+    }
 
-        .common-train img {
-    max-width: 100%; /* Omezí šířku obrázku na maximálně 100% šířky rámečku */
-    max-height: 100%; /* Omezí výšku obrázku na maximálně 100% výšky rámečku */
-    height: auto; /* Udržuje poměr stran obrázku */
+    .common-train img {
+        max-width: 100%; /* Omezí šířku obrázku na maximálně 100% šířky rámečku */
+        max-height: 100%; /* Omezí výšku obrázku na maximálně 100% výšky rámečku */
+        height: auto; /* Udržuje poměr stran obrázku */
+    }
             
         .train img {
             max-width: 100%;
@@ -38,11 +39,11 @@
         }
 
         /* Styl pro mobilní zařízení */
-        @media screen and (max-width: 600px) {
-            #container {
-                flex-direction: column;
-            }
+    @media screen and (max-width: 600px) {
+        .common-train {
+            max-width: 100%; /* Upraví maximální šířku rámečku na 100% pro malé obrazovky */
         }
+    }
 
         body {
             font-family: Arial, sans-serif;
