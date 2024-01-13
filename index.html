@@ -464,12 +464,16 @@
             }
         }
 
-        function displayQuestOffer() {
-            questInfoElement.innerHTML = `
-                <p>Pro společnost ${activeQuest.companyName} sháníš ${activeQuest.quantity} vlaků (${activeQuest.train.description}). Za splnění úkolu dostaneš $${activeQuest.price}.</p>
-                <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
-            `;
-        }
+        if (activeQuest) {
+        questInfoElement.innerHTML = `
+            <p>Pro společnost ${activeQuest.companyName} sháníš ${activeQuest.quantity} vlaků (${activeQuest.train.description}). Za splnění úkolu dostaneš $${activeQuest.price}.</p>
+            <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
+        `;
+    } else {
+        questInfoElement.innerHTML = ''; // Pokud není aktivní quest, vymaž informace o questu
+    }
+}
+
 
         function checkQuestCompletion(train) {
             if (activeQuest && train && train.id === activeQuest.train.id) {
@@ -544,6 +548,11 @@ function loadFromLocalStorage() {
         garage = JSON.parse(storedGarage);
         displayGarage();
     }
+    const storedQuest = localStorage.getItem('activeQuest');
+    if (storedQuest !== null) {
+        activeQuest = JSON.parse(storedQuest);
+        displayQuestOffer();
+    }
 }
 
 // Načtení hodnot z cookies při načtení stránky
@@ -573,6 +582,10 @@ function saveToCookies() {
     document.cookie = "money=" + money;
     document.cookie = "portfolio=" + JSON.stringify(portfolio);
     document.cookie = "garage=" + JSON.stringify(garage);
+     if (activeQuest) {
+        document.cookie = "activeQuest=" + JSON.stringify(activeQuest);
+    }
+
 }
 
 // Spustit hru
@@ -580,6 +593,7 @@ loadFromCookies();
 displayTrains();
 displayPortfolio();
 displayGarage();
+displayQuestOffer(); 
 updateTotalMoney();
 
 // Zavolejte tuto funkci při každé změně stavu, který chcete ukládat
