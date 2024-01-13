@@ -22,6 +22,27 @@
             height: auto;
         }
 
+        /* Společné styly pro všechny vlaky ve hře */
+.common-train {
+    padding: 10px;
+    text-align: center;
+    margin: 0 10px 20px 10px;
+    max-width: 200px;
+}
+
+.common-train img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Nastavení rámečku a pozadí pro všechny vlaky */
+.train, .common-train {
+    border: 2px solid #4caf50; /* Zelený rámeček */
+    border-radius: 5px;
+    background-color: #f0f8ff; /* Barva pozadí */
+}
+
+
         /* Styl pro mobilní zařízení */
         @media screen and (max-width: 600px) {
             #container {
@@ -287,21 +308,33 @@
             return train;
         }
 
-        function displayTrains() {
-            trainMarketElement.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const train = generateRandomTrain();
-                const trainElement = document.createElement('div');
-                trainElement.classList.add('train');
-                trainElement.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
-                    <p>Cena $${train.price}</p>
-                    <button onclick="buyTrain(${train.id})">Koupit</button>
-                `;
-                trainMarketElement.appendChild(trainElement);
-            }
-        }
+       function displayTrains() {
+    trainMarketElement.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const train = generateRandomTrain();
+        const trainElement = document.createElement('div');
+        trainElement.classList.add('common-train'); // Přidáme společnou třídu
+        trainElement.innerHTML = `
+            <img src="${train.image}" alt="${train.description}">
+            <p class="train-info">${train.description}</p>
+            <p>Cena $${train.price}</p>
+            <button onclick="buyTrain(${train.id})">Koupit</button>
+        `;
+        trainMarketElement.appendChild(trainElement);
+    }
+}
+
+function generateRandomTrain() {
+    const randomTrain = trains[Math.floor(Math.random() * trains.length)];
+    const train = {
+        id: randomTrain.id,
+        image: randomTrain.image,
+        description: randomTrain.description,
+        price: Math.floor(randomTrain.basePrice * (Math.random() * 0.1 + 0.95)), // Cena o 5-10% vyšší
+    };
+    return train;
+}
+
 
         function buyTrain(trainId) {
             const selectedTrain = trains.find(train => train.id === trainId);
@@ -369,7 +402,7 @@
                     <p class="train-count">Počet: ${train.count}</p>
                     <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
                 `;
-                portfolioElement.appendChild(train);
+                portfolioElement.appendChild(li);
             });
         }
 
@@ -415,7 +448,7 @@
                     <p class="train-count">Count: ${train.count}</p>
                     <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
                 `;
-                garageElement.appendChild(train);
+                garageElement.appendChild(li);
             });
 
             // Zkontroluj, zda lze splnit aktivní quest
