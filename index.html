@@ -11,10 +11,6 @@
             #container {
                 flex-direction: column;
             }
-
-            .train-container {
-                flex-direction: column; /* Změna na sloupcový layout pro mobilní zařízení */
-            }
         }
 
         body {
@@ -45,8 +41,8 @@
 
         .train-container {
             display: flex;
-            flex-direction: column; /* Změna na řádkový layout pro širší obrazovky */
-            justify-content: space-around;
+            flex-wrap: wrap; /* Položky se přesunou na nový řádek, pokud není dostatek místa */
+            justify-content: center; /* Zarovnat položky do středu */
             width: 100%;
             margin-bottom: 20px;
         }
@@ -57,9 +53,8 @@
             padding: 10px;
             background-color: #fff;
             text-align: center;
-            margin: 0 10px; /* Odstup mezi jednotlivými vlaky */
+            margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
             max-width: 200px; /* Maximální šířka vlaku */
-            width: 100%; /* Šířka vlaku na 100% pro šířku obrazovky na úzkých displejích */
         }
 
         .train img {
@@ -83,7 +78,7 @@
         }
 
         li {
-            margin: 0 10px 10px 0;
+            margin: 0 10px 10px 10px;
         }
 
         button {
@@ -138,6 +133,7 @@
             </div>
         </div>
     </div>
+
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
