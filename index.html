@@ -369,7 +369,7 @@
                     <p class="train-count">Počet: ${train.count}</p>
                     <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
                 `;
-                portfolioElement.appendChild(li);
+                portfolioElement.appendChild(train);
             });
         }
 
@@ -407,7 +407,7 @@
         function displayGarage() {
             garageElement.innerHTML = '';
             garage.forEach((train, index) => {
-                const li = document.createElement('train');
+                const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
                     <p class="train-info">${train.description}</p>
@@ -415,7 +415,7 @@
                     <p class="train-count">Count: ${train.count}</p>
                     <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
                 `;
-                garageElement.appendChild(li);
+                garageElement.appendChild(train);
             });
 
             // Zkontroluj, zda lze splnit aktivní quest
