@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Železniční Imperium</title>
     <style>
+        /* Společné styly pro vlaky ve hře a na burze */
+        .train {
+            border: 2px solid #4caf50; /* Zelený rámeček */
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f0f8ff; /* Barva pozadí */
+            text-align: center;
+            margin: 0 10px 20px 10px;
+            max-width: 200px;
+        }
+
+        .train img {
+            max-width: 100%;
+            height: auto;
+        }
+
         /* Styl pro mobilní zařízení */
         @media screen and (max-width: 600px) {
             #container {
@@ -45,22 +61,6 @@
             justify-content: center; /* Zarovnat položky do středu */
             width: 100%;
             margin-bottom: 20px;
-        }
-
-        .train {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            background-color: #fff;
-            text-align: center;
-            margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
-            max-width: 200px; /* Maximální šířka vlaku */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stín pro dojem vrstvení */
-        }
-
-        .train img {
-            max-width: 100%;
-            height: auto;
         }
 
         .info-container {
@@ -136,7 +136,8 @@
     </div>
 
 
-    <script>
+
+ <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
         const totalMoneyElement = document.getElementById('totalMoney');
