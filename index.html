@@ -55,6 +55,9 @@
             text-align: center;
             margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
             max-width: 200px; /* Maximální šířka vlaku */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Zarovnat obsah do středu */
         }
 
         .train img {
@@ -136,7 +139,7 @@
         </div>
     </div>
 
- 
+
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
