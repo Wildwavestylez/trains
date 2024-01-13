@@ -405,17 +405,18 @@
         }
 
         function displayGarage() {
-            garageElement.innerHTML = '';
-            garage.forEach((train, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train">${train.description}</p>
-                    <p>Price: $${train.basePrice}</p>
-                    <p class="train-count">Count: ${train.count}</p>
-                    <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
-                `;
-                garageElement.appendChild(li);
+    garageElement.innerHTML = '';
+    garage.forEach((train, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <img src="${train.image}" alt="${train.description}">
+            <p class="train">${train.description}</p>
+            <p>Cena: $${train.basePrice}</p>
+            <p class="train-count">Count: ${train.count}</p>
+            <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
+        `;
+        garageElement.appendChild(li);
+    });
             });
 
             // Zkontroluj, zda lze splnit aktivní quest
