@@ -364,7 +364,7 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
+                    <p class="train">${train.description}</p>
                     <p>Price: $${train.basePrice}</p>
                     <p class="train-count">Počet: ${train.count}</p>
                     <button onclick="moveTrainToGarage(${index})">Zaparkuj do depa</button>
@@ -410,7 +410,7 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
+                    <p class="train">${train.description}</p>
                     <p>Price: $${train.basePrice}</p>
                     <p class="train-count">Count: ${train.count}</p>
                     <button onclick="moveTrainToPortfolio(${index})">Vrátit vlak do prodeje</button>
