@@ -288,20 +288,21 @@
         }
 
         function displayTrains() {
-            trainMarketElement.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const train = generateRandomTrain();
-                const trainElement = document.createElement('div');
-                trainElement.classList.add('train');
-                trainElement.innerHTML = `
-                    <img src="${train.image}" alt="${train.description}">
-                    <p class="train-info">${train.description}</p>
-                    <p>Cena $${train.price}</p>
-                    <button onclick="buyTrain(${train.id})">Koupit</button>
-                `;
-                trainMarketElement.appendChild(trainElement);
-            }
-        }
+    trainMarketElement.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const train = generateRandomTrain();
+        const trainElement = document.createElement('div');
+        trainElement.classList.add('train'); // Přidáme třídu pro společné styly
+        trainElement.innerHTML = `
+            <img src="${train.image}" alt="${train.description}">
+            <p class="train-info">${train.description}</p>
+            <p>Cena $${train.price}</p>
+            <button onclick="buyTrain(${train.id})">Koupit</button>
+        `;
+        trainMarketElement.appendChild(trainElement);
+    }
+}
+
 
         function buyTrain(trainId) {
             const selectedTrain = trains.find(train => train.id === trainId);
