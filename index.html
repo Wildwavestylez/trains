@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Železniční Imperium</title>
     <style>
+        /* Společné styly pro vlaky ve hře a na burze */
+        .train {
+            border: 2px solid #4caf50; /* Zelený rámeček */
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f0f8ff; /* Barva pozadí */
+            text-align: center;
+            margin: 0 10px 20px 10px;
+            max-width: 200px;
+        }
+
+        .train img {
+            max-width: 100%;
+            height: auto;
+        }
+
         /* Styl pro mobilní zařízení */
         @media screen and (max-width: 600px) {
             #container {
@@ -45,19 +61,6 @@
             justify-content: center; /* Zarovnat položky do středu */
             width: 100%;
             margin-bottom: 20px;
-        }
-
-        .train {
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-            margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
-            max-width: 200px; /* Maximální šířka vlaku */
-        }
-
-        .train img {
-            max-width: 100%;
-            height: auto;
         }
 
         .info-container {
@@ -103,27 +106,6 @@
         .train-count {
             font-size: 14px;
         }
-
-        /* Rámce podle stavu vlaku */
-        .train-market {
-            border: 2px solid #4caf50; /* Zelený rámeček pro vlaky na burze */
-            background-color: #f0fff0; /* Světle zelené pozadí pro vlaky na burze */
-        }
-
-        .train-portfolio {
-            border: 2px solid #2196f3; /* Modrý rámeček pro vlaky v portfoliu */
-            background-color: #f0f8ff; /* Světle modré pozadí pro vlaky v portfoliu */
-        }
-
-        .train-garage {
-            border: 2px solid #ff0000; /* Červený rámeček pro vlaky v garáži */
-            background-color: #ffe4e1; /* Světle červené pozadí pro vlaky v garáži */
-        }
-
-        .train-quest {
-            border: 2px solid #2f4f4f; /* Tmavý rámeček pro vlaky v nabídce questu */
-            background-color: #dcdcdc; /* Světle šedé pozadí pro vlaky v nabídce questu */
-        }
     </style>
 </head>
 
@@ -152,6 +134,7 @@
             </div>
         </div>
     </div>
+
 
 
 
