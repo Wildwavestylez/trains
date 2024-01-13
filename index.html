@@ -48,19 +48,41 @@
         }
 
         .train {
-             border: 2px solid #4caf50; /* Zelený rámeček */
             border-radius: 5px;
             padding: 10px;
-            background-color: #f0f8ff; /* Barva pozadí */
             text-align: center;
-            margin: 0 10px 20px 10px;
-            max-width: 200px;
+            margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
+            max-width: 200px; /* Maximální šířka vlaku */
+            border: 2px solid #333; /* Výchozí barva rámečku */
         }
 
         .train img {
             max-width: 100%;
             height: auto;
-            border-radius: 5px;
+        }
+
+        /* Rámec pro vlaky na burze */
+        .train.market {
+            border-color: #4CAF50; /* Zelený rámec pro burzu */
+            background-color: #d9f9d9; /* Světle zelené pozadí pro burzu */
+        }
+
+        /* Rámec pro vlaky v portfoliu */
+        .train.portfolio {
+            border-color: #2196F3; /* Modrý rámec pro portfolio */
+            background-color: #d9e5f9; /* Světle modré pozadí pro portfolio */
+        }
+
+        /* Rámec pro vlaky v garáži */
+        .train.garage {
+            border-color: #FF0000; /* Červený rámec pro garáž */
+            background-color: #f9d9d9; /* Světle červené pozadí pro garáž */
+        }
+
+        /* Rámec pro vlaky v nabídce questu */
+        .train.quest {
+            border-color: #333; /* Tmavý rámec pro quest */
+            background-color: #ccc; /* Světle šedé pozadí pro quest */
         }
 
         .info-container {
@@ -106,27 +128,6 @@
         .train-count {
             font-size: 14px;
         }
-
-        /* Vizuální úpravy podle umístění vlaku */
-        .train-market {
-            border: 2px solid #4caf50; /* Zelený rámeček pro vlaky na burze */
-            background-color: #d9ffd9; /* Světle zelené pozadí */
-        }
-
-        .portfolio-train {
-            border: 2px solid #2196F3; /* Modrý rámeček pro vlaky v portfoliu */
-            background-color: #cce5ff; /* Světle modré pozadí */
-        }
-
-        .garage-train {
-            border: 2px solid #e74c3c; /* Červený rámeček pro vlaky v garáži */
-            background-color: #ffd9d9; /* Světle červené pozadí */
-        }
-
-        .quest-train {
-            border: 2px solid #333; /* Tmavý rámeček pro vlaky v nabídce questu */
-            background-color: #f2f2f2; /* Světle šedé pozadí */
-        }
     </style>
 </head>
 
@@ -155,6 +156,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
