@@ -468,7 +468,7 @@
             questInfoElement.innerHTML = `
                 <p>Pro společnost ${activeQuest.companyName} sháníš ${activeQuest.quantity} vlaků (${activeQuest.train.description}). Za splnění úkolu dostaneš $${activeQuest.price}.</p>
                 <img src="${activeQuest.train.image}" alt="${activeQuest.train.description}">
-                 saveToCookies();
+                
             `;
         }
 
@@ -585,8 +585,12 @@ function saveToCookies() {
     // Uložení stavu questu do cookies
     if (activeQuest) {
         document.cookie = "activeQuest=" + JSON.stringify(activeQuest);
+    } else {
+        // Pokud není aktivní úkol, odstranit cookie pro aktivní úkol
+        document.cookie = "activeQuest=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
 }
+    
 
 // Spustit hru
 loadFromCookies();
