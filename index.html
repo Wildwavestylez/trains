@@ -25,6 +25,7 @@
         text-align: center;
         margin: 0 10px 20px 10px;
         max-width: 200px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stín pro dojem vrstvení */
     }
 
     .common-train img {
@@ -42,6 +43,9 @@
     @media screen and (max-width: 600px) {
         .common-train {
             max-width: 100%; /* Upraví maximální šířku rámečku na 100% pro malé obrazovky */
+            #container {
+                flex-direction: column;
+             }
         }
     }
 
@@ -308,7 +312,7 @@
     for (let i = 0; i < 3; i++) {
         const train = generateRandomTrain();
         const trainElement = document.createElement('div');
-        trainElement.classList.add('train', 'common-train'); // Přidejte novou třídu zde
+        trainElement.classList.add('common-train'); // Přidejte novou třídu zde
         trainElement.innerHTML = `
             <img src="${train.image}" alt="${train.description}">
             <p class="train-info">${train.description}</p>
