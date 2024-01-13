@@ -48,10 +48,8 @@
         }
 
         .train {
-            border: 2px solid #3498db; /* Barva rámečku vlaku */
-            border-radius: 10px;
-            padding: 15px;
-            background-color: #ecf0f1; /* Barva pozadí vlaku */
+            border-radius: 5px;
+            padding: 10px;
             text-align: center;
             margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
             max-width: 200px; /* Maximální šířka vlaku */
@@ -60,8 +58,6 @@
         .train img {
             max-width: 100%;
             height: auto;
-            border-radius: 5px; /* Zaoblení rohů obrázku vlaku */
-            margin-bottom: 10px;
         }
 
         .info-container {
@@ -106,6 +102,27 @@
 
         .train-count {
             font-size: 14px;
+        }
+
+        /* Rámce podle stavu vlaku */
+        .train-market {
+            border: 2px solid #4caf50; /* Zelený rámeček pro vlaky na burze */
+            background-color: #f0fff0; /* Světle zelené pozadí pro vlaky na burze */
+        }
+
+        .train-portfolio {
+            border: 2px solid #2196f3; /* Modrý rámeček pro vlaky v portfoliu */
+            background-color: #f0f8ff; /* Světle modré pozadí pro vlaky v portfoliu */
+        }
+
+        .train-garage {
+            border: 2px solid #ff0000; /* Červený rámeček pro vlaky v garáži */
+            background-color: #ffe4e1; /* Světle červené pozadí pro vlaky v garáži */
+        }
+
+        .train-quest {
+            border: 2px solid #2f4f4f; /* Tmavý rámeček pro vlaky v nabídce questu */
+            background-color: #dcdcdc; /* Světle šedé pozadí pro vlaky v nabídce questu */
         }
     </style>
 </head>
