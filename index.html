@@ -525,7 +525,7 @@ function checkQuestCompletion(train) {
     }
 }
 
-        // Načtení hodnot z Local Storage při načtení stránky
+       // Načtení hodnot z Local Storage při načtení stránky
 function loadFromLocalStorage() {
     const storedMoney = localStorage.getItem('money');
     if (storedMoney !== null) {
@@ -543,6 +543,12 @@ function loadFromLocalStorage() {
     if (storedGarage !== null) {
         garage = JSON.parse(storedGarage);
         displayGarage();
+    }
+
+    const storedQuest = localStorage.getItem('currentQuest');
+    if (storedQuest !== null) {
+        currentQuest = JSON.parse(storedQuest);
+        // Zde můžete přidat kód na zobrazení Questu
     }
 }
 
@@ -564,6 +570,10 @@ function loadFromCookies() {
                 garage = JSON.parse(value);
                 displayGarage();
                 break;
+            case 'currentQuest':
+                currentQuest = JSON.parse(value);
+                // Zde můžete přidat kód na zobrazení Questu
+                break;
         }
     }
 }
@@ -573,20 +583,10 @@ function saveToCookies() {
     document.cookie = "money=" + money;
     document.cookie = "portfolio=" + JSON.stringify(portfolio);
     document.cookie = "garage=" + JSON.stringify(garage);
+    document.cookie = "currentQuest=" + JSON.stringify(currentQuest); // Uložení Questu do cookies
 }
 
-// Spustit hru
-loadFromCookies();
-displayTrains();
-displayPortfolio();
-displayGarage();
-updateTotalMoney();
-
-// Zavolejte tuto funkci při každé změně stavu, který chcete ukládat
-function handleStateChange() {
-    // Například po přidání do portfolia nebo do garáže
-    saveToCookies();
-}
+// ... (zbytek kódu)
 
 // Příklad funkce přidání do portfolia s voláním handleStateChange()
 function addToPortfolio(train) {
