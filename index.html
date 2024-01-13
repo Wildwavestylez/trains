@@ -11,6 +11,13 @@
             #container {
                 flex-direction: column;
             }
+            .train,
+            .portfolio-item,
+            .garage-item,
+            .quest-item {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
 
         body {
@@ -37,22 +44,23 @@
             color: #333;
         }
 
-        .train {
+        .train,
+        .portfolio-item,
+        .garage-item,
+        .quest-item {
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-bottom: 20px;
             padding: 10px;
             background-color: #fff;
             text-align: center;
         }
 
-        .train img {
-            max-width: 200px;
+        .train img,
+        .portfolio-item img,
+        .garage-item img,
+        .quest-item img {
+            max-width: 100%;
             height: auto;
-        }
-
-        #garage {
-            margin-top: 20px;
         }
 
         ul {
@@ -84,19 +92,18 @@
             background-color: #45a049;
         }
 
-        .train-info {
+        .train-info,
+        .portfolio-info,
+        .garage-info,
+        .quest-info {
             font-weight: bold;
         }
 
-        .train-count {
+        .train-count,
+        .portfolio-count,
+        .garage-count,
+        .quest-count {
             font-size: 14px;
-        }
-
-        /* Responsive styles */
-        @media screen and (max-width: 600px) {
-            #container {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -106,23 +113,22 @@
     <h1>Železniční magnát</h1>
 
     <div id="container">
-        <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
-        <div id="trainMarket"></div>
+        <div>
+            <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
+            <div id="trainMarket"></div>
+        </div>
         <div>
             <h2>Tvé vlaky určené pro prodej</h2>
             <ul id="portfolio" class="portfolio"></ul>
         </div>
-    </div>
-
-    <!-- Přidání bloku pro garáž pod portfoliem -->
-    <div id="garage">
-        <h2>Tvé depo</h2>
-        <ul id="garageList" class="portfolio"></ul>
-        <!-- Přidání nabídky questů -->
-        <div id="questOffer">
-            <h2>Přijatý úkol</h2>
-            <p id="questInfo"></p>
-            <button onclick="fulfillQuest()">Odeslat vlaky zákaznikovi</button>
+        <div>
+            <h2>Tvé depo</h2>
+            <ul id="garageList" class="portfolio"></ul>
+            <div id="questOffer">
+                <h2>Přijatý úkol</h2>
+                <p id="questInfo"></p>
+                <button onclick="fulfillQuest()">Fulfill Quest</button>
+            </div>
         </div>
     </div>
 
