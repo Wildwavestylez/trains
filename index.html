@@ -260,12 +260,8 @@
             { id: 115, image: 'https://i.imgur.com/XcHIeOk.png', description: 'ČD 380 - Škoda 109E', basePrice: 25000 },
             { id: 116, image: 'https://i.imgur.com/HOsq8nT.png', description: 'ČD 193 - Siemens Vectron Najbrt', basePrice: 50000 },
             { id: 117, image: 'https://i.imgur.com/JxwjoVd.png', description: 'ČD 680 Pendolíno', basePrice: 38000 },
-            { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
-        
-        
-        
-            
-        ];
+            { id: 118, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
+            ];
 
 
         function generateRandomTrain() {
@@ -353,6 +349,12 @@
         function displayPortfolio() {
             portfolioElement.innerHTML = '';
             portfolio.forEach((train, index) => {
+                const trainImages = document.querySelectorAll('.train img');
+
+                       trainImages.forEach(img => {
+                       img.style.width = '150px'; // nebo jiná požadovaná šířka
+                       img.style.height = 'auto';
+        });
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <img src="${train.image}" alt="${train.description}">
