@@ -48,18 +48,20 @@
         }
 
         .train {
-            border: 2px solid #555; /* Rámeček s barvou šedé */
-            border-radius: 8px;
-            overflow: hidden; /* Skryje rohy, aby rámeček měl zaoblené rohy */
+            border: 2px solid #3498db; /* Barva rámečku vlaku */
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #ecf0f1; /* Barva pozadí vlaku */
+            text-align: center;
             margin: 0 10px 20px 10px; /* Odstup mezi jednotlivými vlaky a pod nimi */
             max-width: 200px; /* Maximální šířka vlaku */
-            background-color: #fff; /* Barva pozadí */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lehký stín pro trochu hloubky */
         }
 
         .train img {
             max-width: 100%;
             height: auto;
+            border-radius: 5px; /* Zaoblení rohů obrázku vlaku */
+            margin-bottom: 10px;
         }
 
         .info-container {
@@ -100,12 +102,10 @@
 
         .train-info {
             font-weight: bold;
-            margin-top: 8px; /* Odstup nad informacemi o vlaku */
         }
 
         .train-count {
             font-size: 14px;
-            margin-top: 4px; /* Odstup nad počtem vlaků */
         }
     </style>
 </head>
@@ -135,6 +135,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
