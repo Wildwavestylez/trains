@@ -12,26 +12,21 @@ nav {
             justify-content: space-between;
             align-items: center;
             background-color: #333;
+            color: white;
             padding: 10px;
         }
 
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        nav li {
-            margin-right: 20px;
-        }
-
         nav a {
-            text-decoration: none;
             color: white;
-            font-weight: bold;
-            font-size: 16px;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
+
+        nav a:hover {
+            background-color: #555;
 
         
         /* Společné styly pro vlaky ve hře a na burze */
@@ -164,13 +159,17 @@ nav {
 
 <body>
 <nav>
-        <h1>Železniční magnát</h1>
-        <ul>
-            <li><a href="seznam-questu.html">Seznam Questů</a></li>
-            <li><a href="dodavatelska-sekce.html">Dodavatelská Sekce</a></li>
-            <li><a href="logistic.html">Doprava Osob</a></li>
-        </ul>
+        <div>
+            <a href="link-na-html-stranku-1.html">Část hry 1</a>
+            <a href="link-na-html-stranku-2.html">Část hry 2</a>
+            <!-- Přidejte další odkazy na HTML stránky podle potřeby -->
+        </div>
+        <div>
+            <a href="#">Odemknout sekci dodavatelskou</a>
+            <a href="#">Založit železniční společnost</a>
+        </div>
     </nav>
+
 
     <h1>Železniční magnát</h1>
 
