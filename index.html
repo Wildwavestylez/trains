@@ -533,7 +533,11 @@ function fulfillQuest() {
             // Display updated garage and total money
             displayGarage();
             updateTotalMoney();
+            
+            // Complete the quest and reset the active quest
+            alert(`Úkol splněn! Obdržel jsi $${activeQuest.price}.`);
 
+            
             // Reset the active quest
             activeQuest = null;
 
