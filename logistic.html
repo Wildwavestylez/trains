@@ -23,6 +23,7 @@
         #map-container {
             flex-grow: 1;
             position: relative;
+            height: 100%;
         }
 
         #info-container {
@@ -46,24 +47,13 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Zde bude následovat inicializace Leaflet mapy
-        // ...
+        // Inicializace Leaflet mapy s počátečním centrem na zadaných souřadnicích
+        const map = L.map('map-container').setView([49.2551575, 13.9163047], 13);
 
-        // Přidáme funkci pro získání dat o vlacích a zastávkách z Local Storage nebo Cookies
-        function loadDataFromStorage() {
-            const trains = JSON.parse(localStorage.getItem('trains')) || [];
-            const stops = JSON.parse(localStorage.getItem('stops')) || [];
-            
-            // Zde můžete předat získaná data do funkce, která je zpracuje na mapě
-            // ...
-
-            // Můžete přidat další logiku pro zpracování dat podle potřeby
-        }
-
-        // Při načtení stránky zavoláme funkci pro načtení dat
-        window.onload = function () {
-            loadDataFromStorage();
-        };
+        // Přidání základní dlaždicové mapy
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
     </script>
 </body>
 
