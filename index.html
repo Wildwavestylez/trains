@@ -207,7 +207,7 @@
             <li><a href="#">Zakladání společnosti</a></li>
         </ul>
     <div>
-            <a href="#" onclick="unlockSupplySection()">Staň se dodavatelem </a>
+            <a href="#" onclick="unlockQuestSection()">Staň se dodavatelem </a>
             <a href="#" onclick="startRailwayCompany()">Staň se dopravcem</a>
         </div>
     </nav>
@@ -251,6 +251,7 @@
         let portfolio = [];
         let garage = [];
         let activeQuest = null;
+        let questSectionUnlocked = false;
         
 
              const trains = [
@@ -572,7 +573,21 @@
             generateQuest();
         }, 20000); // 5 minut v milisekundách
 
-        
+        function unlockQuestSection() {
+            const unlockFee = 100000; // Poplatek pro odemknutí
+            if (money >= unlockFee && !questSectionUnlocked) {
+                money -= unlockFee; // Odečíst poplatek
+                questSectionUnlocked = true; // Nastavit, že sekce questů je odemčená
+                alert("Sekce questů odemčena!"); // Upozornění pro hráče
+                generateQuest(); // Zobrazit sekci questů
+                updateTotalMoney(); // Aktualizovat zobrazení peněz
+            } else if (questSectionUnlocked) {
+                alert("Sekce questů již byla odemčena."); // Upozornění, že je již odemčena
+            } else {
+                alert("Nemáte dostatek peněz k odemknutí sekce questů."); // Upozornění, že není dostatek peněz
+            }
+        }
+
 
         function generateQuest() {
             if (!activeQuest) {
