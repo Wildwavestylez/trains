@@ -55,9 +55,9 @@
 
         // Seznam nádraží a zastávek
         const locations = [
-            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047 },
-            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125 },
-            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200 },
+            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, population: 2 },
+            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, population: 1 },
+            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, population: 0.5 },
             // Přidávejte další místa podle potřeby
         ];
 
@@ -70,7 +70,7 @@
         });
 
         // Vytvoření markerů pro každé místo s ikonou zastávky a pop-upem
-        locations.forEach(location => {
+        const markers = locations.map(location => {
             const marker = L.marker([location.lat, location.lon], { icon: stopIcon }).addTo(map);
             marker.bindPopup(`<b>${location.name}</b><br>Zastávka nebo nádraží.`);
             marker.on('mouseover', function () {
@@ -79,9 +79,24 @@
             marker.on('mouseout', function () {
                 marker.closePopup();
             });
+            return marker;
         });
+
+        // Funkce pro generování cestujících na základě velikosti města
+        function generatePassengers() {
+            locations.forEach((location, index) => {
+                // Počet cestujících se generuje na základě velikosti města
+                const passengers = Math.round(location.population * Math.random() * 2); // 0 až 2x velikost města
+                // Zobrazit počet cestujících v konzoli pro účely debugování
+                console.log(`Zastávka/Nádraží ${location.name} generuje ${passengers} cestujících.`);
+                // Zde byste mohli aktualizovat stav hry nebo provést další akce v závislosti na počtu cestujících
+            });
+        }
+
+        // Spustit generování cestujících každou minutu (60000 ms)
+        setInterval(generatePassengers, 60000);
+
     </script>
 </body>
 
 </html>
-
