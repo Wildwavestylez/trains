@@ -517,38 +517,42 @@
             }
         }
 
-       f  function fulfillQuest() {
+      // Funkce pro splnění úkolu
+function fulfillQuest() {
     if (activeQuest) {
         const questTrain = activeQuest.train;
         const questQuantity = activeQuest.quantity;
 
         // Check if the required number of trains is available in the garage
         const garageTrain = garage.find(train => train.id === questTrain.id && train.count >= questQuantity);
-        saveToCookies();
+
         if (garageTrain) {
             // Decrease the count of the train in the garage
             garageTrain.count -= questQuantity;
-
-            // Increase player's money based on the quest price
-            money += activeQuest.price;
 
             // Display updated garage and total money
             displayGarage();
             updateTotalMoney();
 
-            // Complete the quest and reset the active quest
-            alert(`Úkol splněn! Obdržel jsi $${activeQuest.price}.`);
+            // Reset the active quest
             activeQuest = null;
-            displayQuestInfo();
+
+            // Remove the fulfilled quest from the quest section
+            displayQuestOffer();
+
+            // Zkontrolovat, zda jsou k dispozici nové úkoly
+            generateQuest();
+
+            // Uložit změny do cookies po splnění úkolu
             saveToCookies();
         } else {
             alert(`Ve svém depu nemáš dostatečný počet požadovaných vlaků!`);
         }
     } else {
         alert(`Momentálně neplníš žádný úkol.`);
-
     }
 }
+
 
 
 // Function to check quest completion
