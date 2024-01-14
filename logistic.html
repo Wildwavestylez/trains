@@ -71,11 +71,11 @@
         polyline.bindPopup(line.name);
 
          // Zastávky
-        line.stops.forEach(stop => {
-            stop.passengerCount = 0; // Počáteční počet cestujících na zastávce
-            L.marker(stop.location).addTo(map).bindPopup(`${stop.name}<br>Passengers: ${stop.passengerCount}`);
-        });
+    line.stops.forEach(stop => {
+        stop.passengerCount = 0; // Počáteční počet cestujících na zastávce
+        L.marker(stop.location, { icon: getCustomStopIcon() }).addTo(map).bindPopup(`${stop.name}<br>Passengers: ${stop.passengerCount}`);
     });
+});
     // Funkce pro generování cestujících na zastávkách
     function generatePassengers() {
         lines.forEach(line => {
