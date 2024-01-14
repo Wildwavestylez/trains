@@ -251,6 +251,7 @@
         let portfolio = [];
         let garage = [];
         let activeQuest = null;
+        
 
              const trains = [
             { id: 622, image: 'https://i.imgur.com/9gI6buP.png', description: 'Train 622', basePrice: 2000 },
@@ -570,6 +571,8 @@
         setInterval(() => {
             generateQuest();
         }, 20000); // 5 minut v milisekundách
+
+        
 
         function generateQuest() {
             if (!activeQuest) {
