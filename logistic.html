@@ -20,16 +20,16 @@
             height: 100vh;
         }
 
-        #map-container {
-            flex-grow: 1;
-            position: relative;
-            height: 100%;
-        }
-
         #info-container {
             padding: 10px;
             background-color: #fff;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #map-container {
+            flex-grow: 1;
+            position: relative;
+            height: 100%;
         }
     </style>
 </head>
@@ -47,29 +47,38 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializace Leaflet mapy s počátečním centrem na zadaných souřadnicích
         const map = L.map('map-container').setView([49.2551575, 13.9163047], 13);
 
-        // Přidání základní dlaždicové mapy
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Vytvoření markeru pro Nádraží Strakonice
-        const strakoniceStationMarker = L.marker([49.2551575, 13.9163047]).addTo(map);
-        strakoniceStationMarker.bindPopup("<b>Nádraží Strakonice</b><br>Železniční stanice v Strakonicích.", { autoClose: false });
+        // Seznam nádraží a zastávek
+        const locations = [
+            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047 },
+            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125 },
+            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200 },
+            // Přidávejte další místa podle potřeby
+        ];
 
-        // Zobrazit popup při najetí myší na marker
-        strakoniceStationMarker.on('mouseover', function (e) {
-            this.openPopup();
-        });
+        // Vytvoření markerů pro každé místo
+        const markers = [];
+        locations.forEach(location => {
+            const marker = L.marker([location.lat, location.lon]).addTo(map);
+            marker.bindPopup(`<b>${location.name}</b><br>Zastávka nebo nádraží.`);
+            markers.push(marker);
 
-        // Zavřít popup při odjetí myší z markeru
-        strakoniceStationMarker.on('mouseout', function (e) {
-            this.closePopup();
+            // Zobrazit popup při najetí myší na marker
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+
+            // Zavřít popup při odjetí myší z markeru
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
         });
     </script>
 </body>
 
 </html>
-
