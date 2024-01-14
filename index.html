@@ -590,7 +590,7 @@
 
 
         function generateQuest() {
-            if (!activeQuest) {
+            if (questSectionUnlocked) {
                 const questTrain = generateRandomTrain();
                 const questQuantity = Math.floor(Math.random() * (6 - 2 + 1) + 2); // Náhodný počet 5 až 50
                 const questPrice = Math.floor(questTrain.price * questQuantity * (Math.random() * 0.25 + 1.1));
