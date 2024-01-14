@@ -54,7 +54,12 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
+
+        // Vytvoření markeru pro Nádraží Strakonice
+        const strakoniceStationMarker = L.marker([49.2551575, 13.9163047]).addTo(map);
+        strakoniceStationMarker.bindPopup("<b>Nádraží Strakonice</b><br>Železniční stanice v Strakonicích.").openPopup();
     </script>
 </body>
 
 </html>
+
