@@ -153,7 +153,7 @@
         .common-train-count {
             font-size: 14px;
         }
-                @media screen and (max-width: 600px) {
+                
             nav ul {
                 display: none;
                 flex-direction: column;
@@ -376,12 +376,11 @@
       
         ];
 
-            function toggleMobileMenu() {
-                 const menu = document.querySelector('nav ul');
-                 menu.classList.toggle('show');
-            }
-
-
+           
+          function toggleMobileMenu() {
+            const menu = document.querySelector('nav ul');
+            menu.classList.toggle('show');
+        }
         
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
