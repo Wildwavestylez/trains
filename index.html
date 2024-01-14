@@ -7,7 +7,7 @@
     <title>Železniční Imperium</title>
     <style>
 
- /* Společné styly pro vlaky ve hře a na burze */
+  /* Společné styly pro vlaky ve hře a na burze */
         .train {
             border: 2px solid #4caf50; /* Zelený rámeček */
             border-radius: 5px;
@@ -39,41 +39,42 @@
             max-width: 100%;
             height: auto;
         }
-
         nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: 10px;
-}
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    padding: 5px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+        }
 
-nav a:hover {
-    background-color: #555;
-}
+        nav a {
+            text-decoration: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
 
-       @media screen and (max-width: 600px) {
-            /* Styly pro mobilní telefony */
-            nav {
+        nav a:hover {
+            background-color: #555;
+        }
+
+        /* Styl pro mobilní zařízení */
+    @media screen and (max-width: 600px) {
+        .common-train {
+            max-width: 100%; /* Upraví maximální šířku rámečku na 100% pro malé obrazovky */
+            #container {
                 flex-direction: column;
-                text-align: center;
-            }
-
-            nav a {
-                margin: 5px;
-            }
-
-           
+             }
+        }
+    }
 
         body {
             font-family: Arial, sans-serif;
@@ -152,21 +153,63 @@ nav a:hover {
         .common-train-count {
             font-size: 14px;
         }
+                @media screen and (max-width: 600px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #333;
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+        }
+
+        /* Hamburger ikona pro mobilní menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            transition: background-color 0.3s;
+        }
+
+        .hamburger:hover div {
+            background-color: #555;
+
+    
     </style>
 </head>
 
 <body>
 <nav>
-        <div>
-            <a href="link-na-html-stranku-1.html">Část hry 1</a>
-            <a href="link-na-html-stranku-2.html">Část hry 2</a>
-            <!-- Přidejte další odkazy na HTML stránky podle potřeby -->
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
+        <ul>
+            <li><a href="#">Domů</a></li>
+            <li><a href="#">O hře</a></li>
+            <li><a href="#">Doplňující sekce</a></li>
+            <li><a href="#">Zakladání společnosti</a></li>
+        </ul>
         <div>
-            <a href="#">Odemknout sekci dodavatelskou</a>
-            <a href="#">Založit železniční společnost</a>
+            <a href="#" onclick="unlockSupplySection()">Odemknout dodavatelskou sekci</a>
+            <a href="#" onclick="startRailwayCompany()">Založit železniční společnost</a>
         </div>
     </nav>
+
 
 
     <h1>Železniční magnát</h1>
@@ -333,7 +376,13 @@ nav a:hover {
       
         ];
 
+            function toggleMobileMenu() {
+                 const menu = document.querySelector('nav ul');
+                 menu.classList.toggle('show');
+            }
 
+
+        
         function generateRandomTrain() {
             const randomTrain = trains[Math.floor(Math.random() * trains.length)];
             const train = {
