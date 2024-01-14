@@ -53,39 +53,26 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Seznam nádraží a zastávek
+        // Seznam nádraží a zastávek s kategorií
         const locations = [
-            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, population: 2 },
-            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, population: 1 },
-            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, population: 0.5 },
+            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, category: "A" },
+            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, category: "B" },
+            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, category: "C" },
             // Přidávejte další místa podle potřeby
         ];
 
-        // Ikona pro zastávky
-        const stopIcon = L.icon({
-            iconUrl: 'https://i.imgur.com/TDw3Eio.png',
-            iconSize: [50, 50],
-            iconAnchor: [25, 50],
-            popupAnchor: [0, -50]
-        });
+        // Ikony pro zastávky s různými kategoriemi
+        const icons = {
+            A: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] }),
+            B: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40] }),
+            C: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+        };
 
-        // Vytvoření markerů pro každé místo s ikonou zastávky a pop-upem
+        // Vytvoření markerů pro každé místo s ikonou podle kategorie
         locations.forEach(location => {
-            const marker = L.marker([location.lat, location.lon], { icon: stopIcon }).addTo(map);
-            marker.bindPopup(`<b>${location.name}</b><br>Zastávka nebo nádraží.<br> Počet cestujících: <span id="passengerCount">${calculatePassengerCount(location.population)}</span>`);
-            marker.on('mouseover', function () {
-                marker.openPopup();
-            });
-            marker.on('mouseout', function () {
-                marker.closePopup();
-            });
+            const marker = L.marker([location.lat, location.lon], { icon: icons[location.category] }).addTo(map);
+            marker.bindPopup(`<b>${location.name}</b><br>Kategorie: ${location.category}`);
         });
-
-        // Funkce pro výpočet počtu cestujících na základě velikosti města
-        function calculatePassengerCount(population) {
-            // Předpokládejme, že každé město generuje 2 cestující za minutu
-            return population * 2;
-        }
     </script>
 </body>
 
