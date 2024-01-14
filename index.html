@@ -62,6 +62,23 @@ nav a:hover {
     background-color: #555;
 }
 
+        @media screen and (min-width: 600px) {
+            #container {
+                flex-direction: row; /* Pro širší obrazovky flex směr bude řádek */
+            }
+
+            .common-train {
+                width: 30%; /* Šířka bude 30% pro širší obrazovky */
+            }
+        }
+
+        /* Styly pro mobilní zařízení (obrazovky do 600px) */
+        @media screen and (max-width: 600px) {
+            #container {
+                flex-direction: column;
+            }
+
+            
         /* Styl pro mobilní zařízení */
     @media screen and (max-width: 600px) {
         .common-train {
