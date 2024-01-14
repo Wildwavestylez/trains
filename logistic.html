@@ -47,12 +47,12 @@
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
             stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047], generatedPassengersPerMinute: 1 },
-                { name: "Radošovice", location: [49.2322158, 13.9018125], generatedPassengersPerMinute: 0.2 },
-                { name: "Přední Zborovice", location: [49.2183647, 13.8940200],generatedPassengersPerMinute: 0.11 },
-                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], generatedPassengersPerMinute: 0.1 },
-                { name: "Hoštice", location: [49.1873397, 13.8930731], generatedPassengersPerMinute: 50 },
-                { name: "Volyně", location: [49.1701164, 13.8928975], generatedPassengersPerMinute: 0.45 },
+                { name: "Strakonice", location: [49.2551575, 13.9163047], passengerRate: 1 },
+                { name: "Radošovice", location: [49.2322158, 13.9018125], passengerRate: 0.2 },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200], passengerRate: 0.11 },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], passengerRate: 0.1 },
+                { name: "Hoštice", location: [49.1873397, 13.8930731], passengerRate: 50 },
+                { name: "Volyně", location: [49.1701164, 13.8928975], passengerRate: 0.45 },
             ]
         },
         // Další linky můžete přidávat podle potřeby
@@ -87,18 +87,18 @@
         marker.bindPopup(`${stop.name}<br>Passengers: ${stop.passengerCount}`);
     });
 });
-   function updateGeneratedPassengers() {
-    stops.forEach(stop => {
-        const generatedThisMinute = stop.generatedPassengersPerMinute;
-        stop.totalGeneratedPassengers += generatedThisMinute;
-
-        const popupContent = `${stop.name}<br>Generovaní cestující za minutu: ${generatedThisMinute}<br>Celkový počet: ${stop.totalGeneratedPassengers}`;
-        L.marker(stop.location, { icon: getCustomStopIcon() }).addTo(map).bindPopup(popupContent);
+   // Generování cestujících
+            setInterval(() => {
+                const generatedPassengers = Math.floor(Math.random() * stop.passengerRate) + 1;
+                const currentPassengerCountElement = document.getElementById(`${stop.name}-passenger-count`);
+                let currentPassengerCount = parseInt(currentPassengerCountElement.innerHTML);
+                currentPassengerCount += generatedPassengers;
+                currentPassengerCountElement.innerHTML = currentPassengerCount;
+            }, 60000); // Každou minutu generuj cestující
+        });
     });
-}
 
-// Nastavení intervalu pro aktualizaci generovaných cestujících
-setInterval(updateGeneratedPassengers, 60000); // Každou minutu aktualizuj generované cestující
+    
 
     // Pohybující se ikona vlaku
     let trainIcon = L.icon({
