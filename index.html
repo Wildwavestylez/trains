@@ -486,7 +486,7 @@
         function generateQuest() {
             if (!activeQuest) {
                 const questTrain = generateRandomTrain();
-                const questQuantity = Math.floor(Math.random() * (50 - 5 + 1) + 5); // Náhodný počet 5 až 50
+                const questQuantity = Math.floor(Math.random() * (6 - 2 + 1) + 2); // Náhodný počet 5 až 50
                 const questPrice = Math.floor(questTrain.price * questQuantity * (Math.random() * 0.1 + 1.05));
                 const companyName = generateRandomCompanyName();
                 const confirmation = confirm(`Společnost ${companyName} chce koupit ${questQuantity} vlaků (${questTrain.description}). Nabízí za ně $${questPrice}. Chceš přijmout tento úkol?`);
