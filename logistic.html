@@ -70,10 +70,21 @@
         let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
         polyline.bindPopup(line.name);
 
-         // Zastávky
+        // Zastávky
     line.stops.forEach(stop => {
         stop.passengerCount = 0; // Počáteční počet cestujících na zastávce
-        L.marker(stop.location, { icon: getCustomStopIcon() }).addTo(map).bindPopup(`${stop.name}<br>Passengers: ${stop.passengerCount}`);
+        const marker = L.marker(stop.location, { icon: getCustomStopIcon() }).addTo(map);
+
+        // Přidání interaktivity pro zobrazení a skrytí pop-up okna
+        marker.on('mouseover', function () {
+            this.openPopup();
+        });
+
+        marker.on('mouseout', function () {
+            this.closePopup();
+        });
+
+        marker.bindPopup(`${stop.name}<br>Passengers: ${stop.passengerCount}`);
     });
 });
     // Funkce pro generování cestujících na zastávkách
