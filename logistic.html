@@ -53,11 +53,11 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Seznam nádraží a zastávek s přidělenými generátory cestujících
+        // Seznam nádraží a zastávek
         const locations = [
-            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, rate: 2 },
-            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, rate: 1 },
-            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, rate: 0.5 },
+            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, population: 2 },
+            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, population: 1 },
+            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, population: 0.5 },
             // Přidávejte další místa podle potřeby
         ];
 
@@ -69,28 +69,23 @@
             popupAnchor: [0, -50]
         });
 
-        // Funkce pro generování cestujících
-        function generatePassengers(location) {
-            return Math.round(location.rate * Math.random() * 2); // Náhodný počet cestujících v závislosti na velikosti města
-        }
-
-        // Vytvoření markerů pro každé místo s ikonou zastávky, pop-upem a generovanými cestujícími
+        // Vytvoření markerů pro každé místo s ikonou zastávky a pop-upem
         locations.forEach(location => {
             const marker = L.marker([location.lat, location.lon], { icon: stopIcon }).addTo(map);
-            marker.bindPopup(`<b>${location.name}</b><br>Počet cestujících: <span id="${location.name.replace(/\s+/g, '_')}PassengerCount"></span>`);
+            marker.bindPopup(`<b>${location.name}</b><br>Zastávka nebo nádraží.<br> Počet cestujících: <span id="passengerCount">${calculatePassengerCount(location.population)}</span>`);
             marker.on('mouseover', function () {
                 marker.openPopup();
             });
             marker.on('mouseout', function () {
                 marker.closePopup();
             });
-
-            // Aktualizace počtu cestujících
-            setInterval(() => {
-                const passengerCount = generatePassengers(location);
-                document.getElementById(`${location.name.replace(/\s+/g, '_')}PassengerCount`).textContent = passengerCount;
-            }, 6000); // Aktualizovat každou minutu
         });
+
+        // Funkce pro výpočet počtu cestujících na základě velikosti města
+        function calculatePassengerCount(population) {
+            // Předpokládejme, že každé město generuje 2 cestující za minutu
+            return population * 2;
+        }
     </script>
 </body>
 
