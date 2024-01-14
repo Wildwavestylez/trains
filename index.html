@@ -7,36 +7,7 @@
     <title>Železniční Imperium</title>
     <style>
 
-body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        overflow: hidden; /* Skryje přebytečný obsah stránky při otevřeném menu */
-    }
 
-    .menu {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #333;
-        padding: 15px;
-        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
-        color: white;
-        display: flex;
-        justify-content: space-around;
-        transition: transform 0.3s ease-in-out; /* Přidá animaci transformace */
-    }
-
-    .menu a {
-        color: white;
-        text-decoration: none;
-        font-size: 18px;
-    }
-
-    /* Styl pro zavřené menu */
-    .menu.closed {
-        transform: translateY(-100%);
-    }
         
         /* Společné styly pro vlaky ve hře a na burze */
         .train {
@@ -162,23 +133,12 @@ body {
 </head>
 
 <body>
- <!-- Menu -->
-    <div id="menu" class="menu">
-        <!-- Položky menu -->
-        <a href="#">Domů</a>
-        <a href="#">Vlaky</a>
-        <a href="#">Garáž</a>
-        <a href="#">Questy</a>
-        <a href="#">O hře</a>
-    </div>
+
 
     <h1>Železniční magnát</h1>
 
-    <!-- Finanční stav a tlačítko -->
-    <div id="header" class="header">
-        <p>Dostupné finance: $<span id="totalMoney">1000</span></p>
-        <button onclick="toggleMenu()">Otevřít menu</button>
-    </div>
+    <div id="container">
+        <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
 
         <!-- Obecný kontejner pro vlaky -->
         <div class="train-container" id="trainMarket"></div>
@@ -351,12 +311,6 @@ body {
             return train;
         }
 
-        // Funkce pro otevření nebo zavření menu
-    function toggleMenu() {
-        const menu = document.getElementById('menu');
-        menu.classList.toggle('closed');
-    }
-        
         function displayTrains() {
     trainMarketElement.innerHTML = '';
     for (let i = 0; i < 3; i++) {
