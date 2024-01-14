@@ -554,10 +554,7 @@
     }
 }
 
-// Funkce pro odstranění splněného úkolu z aktuálních úkolů
-function removeCompletedQuest() {
-    activeQuest = null;
-    displayQuestOffer();
+
 // Function to check quest completion
 function checkQuestCompletion(train) {
     if (activeQuest && train && train.id === activeQuest.train.id) {
