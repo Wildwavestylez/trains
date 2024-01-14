@@ -517,7 +517,7 @@
             }
         }
 
-        function fulfillQuest() {
+       function fulfillQuest() {
     if (activeQuest) {
         const questTrain = activeQuest.train;
         const questQuantity = activeQuest.quantity;
@@ -541,6 +541,9 @@
             // Zkontrolovat, zda jsou k dispozici nové úkoly
             generateQuest();
 
+            // Odstranit splněný úkol z aktuálních úkolů
+            removeCompletedQuest();
+
             // Uložit změny do cookies po splnění úkolu
             saveToCookies();
         } else {
@@ -550,6 +553,11 @@
         alert(`Momentálně neplníš žádný úkol.`);
     }
 }
+
+// Funkce pro odstranění splněného úkolu z aktuálních úkolů
+function removeCompletedQuest() {
+    activeQuest = null;
+    displayQuestOffer();
 // Function to check quest completion
 function checkQuestCompletion(train) {
     if (activeQuest && train && train.id === activeQuest.train.id) {
