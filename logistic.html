@@ -66,15 +66,22 @@
             iconUrl: 'https://i.imgur.com/TDw3Eio.png',
             iconSize: [50, 50],
             iconAnchor: [25, 50],
-            popupAnchor: [0, -32]
+            popupAnchor: [0, -50]
         });
 
-        // Vytvoření markerů pro každé místo s ikonou zastávky
+        // Vytvoření markerů pro každé místo s ikonou zastávky a pop-upem
         locations.forEach(location => {
             const marker = L.marker([location.lat, location.lon], { icon: stopIcon }).addTo(map);
             marker.bindPopup(`<b>${location.name}</b><br>Zastávka nebo nádraží.`);
+            marker.on('mouseover', function () {
+                marker.openPopup();
+            });
+            marker.on('mouseout', function () {
+                marker.closePopup();
+            });
         });
     </script>
 </body>
 
 </html>
+
