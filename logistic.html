@@ -70,9 +70,9 @@
         let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
         polyline.bindPopup(line.name);
 
-        // Zastávky
+         // Zastávky
         line.stops.forEach(stop => {
-            L.marker(stop.location).addTo(map).bindPopup(stop.name);
+            L.marker(stop.location, { icon: getCustomStopIcon() }).addTo(map).bindPopup(stop.name);
         });
     });
 
@@ -90,6 +90,15 @@
 
     // Rychlost vlaku v km/h
     const trainSpeed = 70;
+
+        function getCustomStopIcon() {
+        return L.icon({
+            iconUrl: 'https://i.imgur.com/eyhlXYU.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, 0]
+        });
+    }
 
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
