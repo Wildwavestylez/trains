@@ -62,32 +62,18 @@ nav a:hover {
     background-color: #555;
 }
 
-        @media screen and (min-width: 600px) {
-            #container {
-                flex-direction: row; /* Pro širší obrazovky flex směr bude řádek */
-            }
-
-            .common-train {
-                width: 30%; /* Šířka bude 30% pro širší obrazovky */
-            }
-        }
-
-        /* Styly pro mobilní zařízení (obrazovky do 600px) */
-        @media screen and (max-width: 600px) {
-            #container {
+       @media screen and (max-width: 600px) {
+            /* Styly pro mobilní telefony */
+            nav {
                 flex-direction: column;
+                text-align: center;
             }
 
-            
-        /* Styl pro mobilní zařízení */
-    @media screen and (max-width: 600px) {
-        .common-train {
-            max-width: 100%; /* Upraví maximální šířku rámečku na 100% pro malé obrazovky */
-            #container {
-                flex-direction: column;
-             }
-        }
-    }
+            nav a {
+                margin: 5px;
+            }
+
+           
 
         body {
             font-family: Arial, sans-serif;
