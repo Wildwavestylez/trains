@@ -57,7 +57,17 @@
 
         // Vytvoření markeru pro Nádraží Strakonice
         const strakoniceStationMarker = L.marker([49.2551575, 13.9163047]).addTo(map);
-        strakoniceStationMarker.bindPopup("<b>Nádraží Strakonice</b><br>Železniční stanice v Strakonicích.").openPopup();
+        strakoniceStationMarker.bindPopup("<b>Nádraží Strakonice</b><br>Železniční stanice v Strakonicích.", { autoClose: false });
+
+        // Zobrazit popup při najetí myší na marker
+        strakoniceStationMarker.on('mouseover', function (e) {
+            this.openPopup();
+        });
+
+        // Zavřít popup při odjetí myší z markeru
+        strakoniceStationMarker.on('mouseout', function (e) {
+            this.closePopup();
+        });
     </script>
 </body>
 
