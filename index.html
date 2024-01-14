@@ -302,7 +302,7 @@
                 id: randomTrain.id,
                 image: randomTrain.image,
                 description: randomTrain.description,
-                price: Math.floor(randomTrain.basePrice * (Math.random() * 0.1 + 0.95)), // Cena o 5-10% vyšší
+                 price: randomTrain.basePrice,
             };
             return train;
         }
