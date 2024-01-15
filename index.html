@@ -417,40 +417,26 @@ function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13); // Přesunuto do funkce setView pro lepší čitelnost
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 // Zastávky vlaků
-   const lines = [
-    {
-        name: "Trať 198 Strakonice - Volary",
-        color: "blue",
-        stops: [
-            { name: "Strakonice", location: [49.2551575, 13.9163047] },
-            { name: "Radošovice", location: [49.2322158, 13.9018125] },
-            { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
-            { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
-            { name: "Hoštice", location: [49.1873397, 13.8930731] },
-            { name: "Volyně", location: [49.1701164, 13.8928975] },
-        ]
-    },
-    // Přidat další linky podle potřeby
-];
-
-function initializeMap() {
-    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    const zastavky = [
+        { lat: 49.2551575, lng: 13.9163047, name: 'Strakonice' },
+        { lat: 49.2322158, lng: 13.9018125, name: 'Radošovice' },
+        { lat: 49.2183647, lng: 13.8940200, name: 'Přední Zborovice' },
+        { lat: 49.2100447, lng: 13.8872928, name: 'Strunkovice nad Volyňkou' },
+        { lat: 49.1873397, lng: 13.8930731, name: 'Hoštice' },
+        { lat: 49.1701164, lng: 13.8928975, name: 'Volyně' },
+        // Přidejte další zastávky podle potřeby
+    ];
 
     // Přidání zastávek na mapu
-    lines.forEach(line => {
-        const polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
-        polyline.bindPopup(`<b>${line.name}</b>`).openPopup();
+    zastavky.forEach(zastavka => {
+        const marker = L.marker([zastavka.lat, zastavka.lng]).addTo(map);
+        marker.bindPopup(`<b>${zastavka.name}</b>`).openPopup();
     });
 
     // Další funkce mapy
     // ...
 }
-
-// Volání funkce pro inicializaci mapy
-initializeMap();
-
-    
+           
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
             menu.classList.toggle('show');
