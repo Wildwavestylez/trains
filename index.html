@@ -417,16 +417,7 @@ function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13); // Přesunuto do funkce setView pro lepší čitelnost
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 // Zastávky vlaků
-    const stops = [
-    { name: "Strakonice", location: [49.2551575, 13.9163047] },
-    { name: "Radošovice", location: [49.2322158, 13.9018125] },
-    { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
-    { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
-    { name: "Hoštice", location: [49.1873397, 13.8930731] },
-    { name: "Volyně", location: [49.1701164, 13.8928975] },
-];
-
-const lines = [
+   const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
@@ -447,11 +438,6 @@ function initializeMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     // Přidání zastávek na mapu
-    stops.forEach(stop => {
-        L.marker(stop.location).addTo(map).bindPopup(stop.name);
-    });
-
-    // Přidání linek na mapu
     lines.forEach(line => {
         const polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
         polyline.bindPopup(`<b>${line.name}</b>`).openPopup();
@@ -461,6 +447,8 @@ function initializeMap() {
     // ...
 }
 
+// Volání funkce pro inicializaci mapy
+initializeMap();
 
     
           function toggleMobileMenu() {
