@@ -85,8 +85,10 @@
     });
 
     let trainMarker = L.marker(lines[0].stops[0].location, { icon: trainIcon }).addTo(map);
-    let currentLineIndex = 0;
-    let currentStopIndex = 0;
+let currentLineIndex = 0;
+let currentStopIndex = 0;
+let isTrainStopped = false;
+let stopTimeElapsed = 0;
 
     // Rychlost vlaku v km/h
     const trainSpeed = 70;
@@ -110,34 +112,11 @@
         return degrees * Math.PI / 180;
     }
 
-    // Aktualizuje polohu vlaku na základě aktuálního času a rychlosti
-    function updateTrainPosition() {
-        const currentLine = lines[currentLineIndex];
-        const currentStop = currentLine.stops[currentStopIndex];
-        const nextStop = currentLine.stops[currentStopIndex + 1];
-
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
-
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
-
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                trainMarker.setLatLng([lat, lon]);
-            } else {
-                // Přesun na další zastávku
-                currentStopIndex++;
-                startTime = new Date();
-            }
-        }
-    }
-
-    // Nastavení intervalu pro aktualizaci polohy vlaku
-    let startTime = new Date();
-    setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
+   let trainMarker = L.marker(lines[0].stops[0].location, { icon: trainIcon }).addTo(map);
+let currentLineIndex = 0;
+let currentStopIndex = 0;
+let isTrainStopped = false;
+let stopTimeElapsed = 0;
 </script>
 
 </body>
