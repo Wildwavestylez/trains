@@ -50,10 +50,10 @@
                 { name: "Train 1", startingIndex: 0 },
                 { name: "Train 2", startingIndex: 6 },
                 { name: "Train 3", startingIndex: 9 },
-                { name: "Train 4", startingIndex: 13 }
+                { name: "Train 4", startingIndex: 21 }
             ],
             stops: [
-                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
+                { name: "Strakonice", location: [49.2551575, 13.9163047] },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
@@ -154,6 +154,10 @@
                         direction *= -1;
                     }
                 }
+            } else {
+                // Dosáhli jsme konce trasy, změňme směr pohybu
+                direction *= -1;
+                currentStopIndex += direction;
             }
         }, updateInterval);
     }
