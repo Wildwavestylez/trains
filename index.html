@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <title>Železniční Imperium</title>
     <style>
 
@@ -208,7 +209,7 @@
         </ul>
     <div>
             <a href="#" onclick="unlockQuestSection()">Staň se dodavatelem </a>
-            <a href="#" onclick="startRailwayCompany()">Staň se dopravcem</a>
+            <a href="#" onclick="toggleGameMap()">Staň se dopravcem</a>
         </div>
     </nav>
 
@@ -219,27 +220,35 @@
     <div id="container">
         <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
 
-        <!-- Obecný kontejner pro vlaky -->
-        <div class="train-container" id="trainMarket"></div>
-
-        <!-- Obecný kontejner pro Portfolio, Garáž a Quest -->
-        <div class="info-container">
-            <h2>Tvé vlaky určené pro prodej</h2>
-            <ul id="portfolio" class="portfolio"></ul>
-
-            <h2>Tvé depo</h2>
-            <ul id="garageList" class="portfolio"></ul>
-
-            <div id="questOffer">
-                <h2>Přijatý úkol</h2>
-                <p id="questInfo"></p>
-                <button onclick="fulfillQuest()">Odeslat vlaky zákazníkovi</button>
-            </div>
-        </div>
+       <div id="gameContainer">
+    <!-- Burza vlaků -->
+    <div id="trainMarket">
+        <h2>Burza vlaků</h2>
+        <div class="train-container"></div>
     </div>
 
+    <!-- Mapový kontejner -->
+    <div id="mapContainer" style="display: none; height: 400px;"></div>
+</div>
 
-    
+<!-- Společný kontejner pro Portfolio, Garáž a Quest -->
+<div class="info-container">
+    <h2>Tvé vlaky určené pro prodej</h2>
+    <ul id="portfolio" class="portfolio"></ul>
+
+    <h2>Tvé depo</h2>
+    <ul id="garageList" class="portfolio"></ul>
+
+    <div id="questOffer">
+        <h2>Přijatý úkol</h2>
+        <p id="questInfo"></p>
+        <button onclick="fulfillQuest()">Odeslat vlaky zákazníkovi</button>
+    </div>
+</div>
+
+
+    <!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         const trainMarketElement = document.getElementById('trainMarket');
         const portfolioElement = document.getElementById('portfolio');
@@ -252,6 +261,7 @@
         let garage = [];
         let activeQuest = null;
         let questSectionUnlocked = false;
+        let useGame = true;
         
 
              const trains = [
@@ -379,7 +389,33 @@
             { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
       
         ];
+          function toggleGameMap() {
+    useGame = !useGame;
+    if (useGame) {
+        switchToGameContainer();
+    } else {
+        switchToMapContainer();
+    }
+}
 
+function switchToGameContainer() {
+    document.getElementById('trainMarket').style.display = 'block';
+    document.getElementById('mapContainer').style.display = 'none';
+}
+
+function switchToMapContainer() {
+    document.getElementById('trainMarket').style.display = 'none';
+    document.getElementById('mapContainer').style.display = 'block';
+    initializeMap();
+}
+
+function initializeMap() {
+    // Inicializujte mapu Leaflet
+    const map = L.map('mapContainer').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // Přidejte další funkcionalitu mapy zde podle potřeby
+}
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
