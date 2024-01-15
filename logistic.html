@@ -1,79 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Železniční mapa</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        #container {
             display: flex;
             flex-direction: column;
             height: 100vh;
         }
 
-        #info-container {
+        #playerPanel {
+            flex: 1;
             padding: 10px;
-            background-color: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f0f0f0;
         }
 
-        #map-container {
-            flex-grow: 1;
-            position: relative;
-            height: 100%;
+        #map {
+            flex: 2;
+            height: 50%;
         }
     </style>
+    <title>Train Game</title>
 </head>
-
 <body>
 
-    <div id="container">
-        <div id="info-container">
-            <!-- Informace o financích a dalších věcech -->
-            <p>Dostupné finance: $<span id="totalMoney">1000</span></p>
-            <!-- Další informace zobrazené hráči -->
-        </div>
-        <div id="map-container"></div>
-    </div>
+<div id="playerPanel">
+    <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
+    <h2>Player Panel</h2>
+    <p>Portfolio: 1000 Kč</p>
+    <p>Kupony vlaků: 5</p>
+    <p>Vlaky v provozu: 2</p>
+    <!-- Doplnit další informace podle potřeby -->
+</div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        const map = L.map('map-container').setView([49.2551575, 13.9163047], 13);
+<div id="map"></div>
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Fiktivní data pro linky a zastávky
+    const lines = [
+        {
+            name: "Trať 198 Strakonice - Volary",
+            color: "blue",
+            stops: [
+                { name: "Strakonice", location: [49.261, 13.907] },
+                { name: "Radošovice", location: [49.2322158, 13.901812E] },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
+                { name: "Hoštice", location: [49.1873397, 13.8930731] }
+                { name: "Volyně", location: [49.1701164, 13.8928975] },
+            ]
+        },
+        // Další linky můžete přidávat podle potřeby
+    ];
 
-        // Seznam nádraží a zastávek s kategorií
-        const locations = [
-            { name: "Nádraží Strakonice", lat: 49.2551575, lon: 13.9163047, category: "A" },
-            { name: "Nádraží Radošovice", lat: 49.2322158, lon: 13.9018125, category: "B" },
-            { name: "Nádraží Přední Zborovice", lat: 49.2183647, lon: 13.8940200, category: "C" },
-            // Přidávejte další místa podle potřeby
-        ];
+    // Inicializace mapy Leaflet
+    const map = L.map('map').setView([51.0, 15.5], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-        // Ikony pro zastávky s různými kategoriemi
-        const icons = {
-            A: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] }),
-            B: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40] }),
-            C: L.icon({ iconUrl: 'https://i.imgur.com/TDw3Eio.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-        };
+    // Přidání link a jejich zastávek na mapu
+    lines.forEach(line => {
+        // Linka
+        let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
+        polyline.bindPopup(line.name);
 
-        // Vytvoření markerů pro každé místo s ikonou podle kategorie
-        locations.forEach(location => {
-            const marker = L.marker([location.lat, location.lon], { icon: icons[location.category] }).addTo(map);
-            marker.bindPopup(`<b>${location.name}</b><br>Kategorie: ${location.category}`);
+        // Zastávky
+        line.stops.forEach(stop => {
+            L.marker(stop.location).addTo(map).bindPopup(stop.name);
         });
-    </script>
-</body>
+    });
 
+    // Pohybující se ikona vlaku
+    let trainIcon = L.icon({
+        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
+        popupAnchor: [0, 0]
+    });
+
+    let trainMarker = L.marker(lines[0].stops[0].location, { icon: trainIcon }).addTo(map);
+    let currentLineIndex = 0;
+    let currentStopIndex = 0;
+
+    // Rychlost vlaku v km/h
+    const trainSpeed = 70;
+
+    // Vypočítá vzdálenost mezi dvěma zastávkami
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // poloměr Země v km
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // vzdálenost v km
+        return distance;
+    }
+
+    // Převádí stupně na radiány
+    function toRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    // Aktualizuje polohu vlaku na základě aktuálního času a rychlosti
+    function updateTrainPosition() {
+        const currentLine = lines[currentLineIndex];
+        const currentStop = currentLine.stops[currentStopIndex];
+        const nextStop = currentLine.stops[currentStopIndex + 1];
+
+        if (nextStop) {
+            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+
+            const currentTime = new Date();
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+
+            if (elapsedTime <= timeToNextStop) {
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                trainMarker.setLatLng([lat, lon]);
+            } else {
+                // Přesun na další zastávku
+                currentStopIndex++;
+                startTime = new Date();
+            }
+        }
+    }
+
+    // Nastavení intervalu pro aktualizaci polohy vlaku
+    let startTime = new Date();
+    setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
+</script>
+
+</body>
 </html>
