@@ -32,8 +32,8 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 5</p>
-    <p>Vlaky v provozu: 2</p>
+    <p>Kupony vlaků: 1</p>
+    <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
 
@@ -46,8 +46,14 @@
         {
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
+            trains: [
+                { name: "Train 1", startingIndex: 0 },
+                { name: "Train 2", startingIndex: 6 },
+                { name: "Train 3", startingIndex: 9 },
+                { name: "Train 4", startingIndex: 21 }
+            ],
             stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047] },
+                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
@@ -87,41 +93,74 @@
         let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
         polyline.bindPopup(line.name);
 
+        // Vlaky
+        line.trains.forEach(train => {
+            let trainIcon = L.icon({
+                iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+                iconSize: [50, 50],
+                iconAnchor: [25, 25],
+                popupAnchor: [0, 0]
+            });
+
+            let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+            trainMarker.bindPopup(train.name);
+
+            train.marker = trainMarker; // Uložení markeru do dat vlaku
+        });
+
         // Zastávky
         line.stops.forEach(stop => {
             L.marker(stop.location).addTo(map).bindPopup(stop.name);
         });
     });
 
-    // Pohybující se ikona vlaku
-    let trainIcon = L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [100, 100],
-        iconAnchor: [50, 50],
-        popupAnchor: [0, 0]
+    // Pohybující se ikony vlaků
+    const trainSpeed = 500; // Rychlost vlaku v km/h
+    const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
+
+    lines.forEach(line => {
+        line.trains.forEach(train => {
+            moveTrain(train, line);
+        });
     });
 
-    // Vytvoření markerů pro každý vlak na počátečních pozicích
-let trainMarkers = [
-    L.marker(lines[0].stops[0].location, { icon: trainIcons[0] }).addTo(map),
-    L.marker(lines[0].stops[lines[0].stops.length - 1].location, { icon: trainIcons[1] }).addTo(map),
-    L.marker(lines[0].stops.find(stop => stop.name === "Čkyně").location, { icon: trainIcons[2] }).addTo(map),
-    L.marker(lines[0].stops.find(stop => stop.name === "Vimperk").location, { icon: trainIcons[3] }).addTo(map),
-];
+    function moveTrain(train, line) {
+    let currentStopIndex = train.startingIndex;
+    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+    let startTime = new Date();
 
-// Počáteční indexy a směry pro každý vlak
-let trainIndices = [0, lines[0].stops.length - 1, lines[0].stops.findIndex(stop => stop.name === "Čkyně"), lines[0].stops.findIndex(stop => stop.name === "Vimperk")];
-let trainDirections = [1, -1, 1, -1];
+    setInterval(() => {
+        const currentStop = line.stops[currentStopIndex];
+        const nextStop = line.stops[currentStopIndex + direction];
 
-// Nastavení intervalu pro aktualizaci polohy vlaků
-setInterval(updateTrainPositions, 1000); // Každou sekundu aktualizuj polohy všech vlaků
+        if (nextStop) {
+            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
-// Funkce pro aktualizaci polohy všech vlaků
-function updateTrainPositions() {
-    for (let i = 0; i < trainMarkers.length; i++) {
-        updateTrainPosition(trainMarkers[i], trainIndices[i], trainDirections[i]);
-    }
+            const currentTime = new Date();
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+
+            if (elapsedTime <= timeToNextStop) {
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                train.marker.setLatLng([lat, lon]);
+            } else {
+                // Přesun na další/zpětnou zastávku
+                currentStopIndex += direction;
+                startTime = new Date();
+
+                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                    direction *= -1;
+                }
+            }
+        } else {
+            // Dosáhli jsme konce trati, změníme směr pohybu
+            direction *= -1;
+        }
+    }, updateInterval);
 }
+
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // poloměr Země v km
@@ -146,46 +185,6 @@ function updateTrainPositions() {
         return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
     }
 
-     function updateTrainPosition(trainMarker, currentIndex, direction) {
-    const currentLine = lines[0];
-    const currentStop = currentLine.stops[currentIndex];
-    const nextStop = currentLine.stops[currentIndex + direction];
-
-    if (nextStop) {
-        const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-        const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
-
-        const currentTime = new Date();
-        const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
-
-        if (elapsedTime <= timeToNextStop) {
-            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-            trainMarker.setLatLng([lat, lon]);
-        } else {
-            // Přesun na další/zpětnou zastávku
-            currentIndex += direction;
-            startTime = new Date();
-
-            // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-            if (currentIndex === 0 || currentIndex === currentLine.stops.length - 1) {
-                direction *= -1;
-            }
-       
-
-                // Přidáme náhodnou finanční částku do hráčova portfolia
-                const randomAmount = generateRandomAmount();
-                playerFinance += randomAmount;
-                document.getElementById('finance').innerText = `Portfolio: ${playerFinance} Kč`;
-            }
-        }
-    }
-
-    // Nastavení intervalu pro aktualizaci polohy vlaku
-    let startTime = new Date();
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let playerFinance = 1000; // Počáteční hodnota hráčova portfolia
-    setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
 </script>
 
 </body>
