@@ -133,6 +133,8 @@ let stopTimeElapsed = 0;
 
  
 
+let isGoingForward = true;
+
 function updateTrainPosition() {
     const currentLine = lines[currentLineIndex];
     const currentStop = currentLine.stops[currentStopIndex];
@@ -155,13 +157,6 @@ function updateTrainPosition() {
             if (!isTrainStopped) {
                 isTrainStopped = true;
                 stopTimeLeft = currentStop.stopTime;
-
-                // Přidání náhodné částky do pokladny
-                const randomAmount = Math.floor(Math.random() * (200 - 100 + 1) + 100);
-                finances += randomAmount;
-
-                // Aktualizace zobrazení financí
-                updateFinancesDisplay();
             } else {
                 // Čekání na konci zastávky
                 if (stopTimeLeft > 0) {
@@ -187,13 +182,6 @@ function updateTrainPosition() {
     }
 }
 
-// Funkce pro aktualizaci zobrazení financí
-function updateFinancesDisplay() {
-    const financesDisplay = document.getElementById('financesDisplay');
-    if (financesDisplay) {
-        financesDisplay.textContent = `Finance: ${finances} Kč`;
-    }
-}
 </script>
 
 </body>
