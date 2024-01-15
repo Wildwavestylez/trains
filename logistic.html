@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p>Portfolio: 1000 Kč</p>
-    <p>Kupony vlaků: 5</p>
+    <p>Kupony vlaků: 123</p>
     <p>Vlaky v provozu: 2</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -113,7 +113,9 @@ let stopTimeElapsed = 0;
         return degrees * Math.PI / 180;
     }
 
- function updateTrainPosition() {
+ let isGoingForward = true;
+
+function updateTrainPosition() {
     const currentLine = lines[currentLineIndex];
     const currentStop = currentLine.stops[currentStopIndex];
     const nextStop = currentLine.stops[currentStopIndex + (isGoingForward ? 1 : -1)];
@@ -126,15 +128,15 @@ let stopTimeElapsed = 0;
         const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
         if (elapsedTime <= timeToNextStop) {
-            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+            const progress = elapsedTime / timeToNextStop;
+            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * progress;
+            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * progress;
             trainMarker.setLatLng([lat, lon]);
         } else {
             // Přestávka na zastávce
             if (!isTrainStopped) {
                 isTrainStopped = true;
                 stopTimeLeft = currentStop.stopTime;
-                stopStartTime = new Date();
             } else {
                 // Čekání na konci zastávky
                 if (stopTimeLeft > 0) {
@@ -159,6 +161,7 @@ let stopTimeElapsed = 0;
         startTime = new Date();
     }
 }
+
 
 // Nastavení intervalu pro aktualizaci polohy vlaku
 let startTime = new Date();
