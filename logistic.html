@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 4</p>
+    <p>Kupony vlaků: 1</p>
     <p>Vlaky v provozu: 2</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -112,11 +112,10 @@
 
     // Funkce pro generování náhodné částky mezi 20 a 50 Kč
     function generateRandomAmount() {
-        return Math.floor(Math.random() * (50 - 20 + 1) + 20);
+        return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
     }
 
-    // Aktualizuje polohu vlaku na základě aktuálního času a rychlosti
-    function updateTrainPosition() {
+     function updateTrainPosition() {
         const currentLine = lines[currentLineIndex];
         const currentStop = currentLine.stops[currentStopIndex];
         const nextStop = currentLine.stops[currentStopIndex + direction];
@@ -140,12 +139,12 @@
                 // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                 if (currentStopIndex === 0 || currentStopIndex === currentLine.stops.length - 1) {
                     direction *= -1;
-
-                    // Přidání náhodné částky peněz při každé zastávce
-                    const financeElement = document.getElementById('finance');
-                    const randomAmount = generateRandomAmount();
-                    financeElement.textContent = `Finance: ${parseInt(financeElement.textContent.split(' ')[1]) + randomAmount} Kč`;
                 }
+
+                // Přidáme náhodnou finanční částku do hráčova portfolia
+                const randomAmount = generateRandomAmount();
+                playerFinance += randomAmount;
+                document.getElementById('finance').innerText = `Portfolio: ${playerFinance} Kč`;
             }
         }
     }
@@ -153,9 +152,8 @@
     // Nastavení intervalu pro aktualizaci polohy vlaku
     let startTime = new Date();
     let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let finance = 1000; // Počáteční finance
+    let playerFinance = 1000; // Počáteční hodnota hráčova portfolia
     setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
-
 </script>
 
 </body>
