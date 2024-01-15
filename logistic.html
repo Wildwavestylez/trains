@@ -103,9 +103,9 @@
     let trainMarker = L.marker(lines[0].stops[0].location, { icon: trainIcon }).addTo(map);
 let currentLineIndex = 0;
 let currentStopIndex = 0;
-let isTrainStopped = false;
-    let stopTimeLeft = 0;
-let stopTimeElapsed = 0;
+let startTime = new Date();  // Přidáno
+let isTrainStopped = false;  // Přidáno
+let stopTimeLeft = 0;  // Přidáno
     let isGoingForward = true;
     let finances = 1000; 
     
