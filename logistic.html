@@ -112,11 +112,44 @@ let stopTimeElapsed = 0;
         return degrees * Math.PI / 180;
     }
 
-   let trainMarker = L.marker(lines[0].stops[0].location, { icon: trainIcon }).addTo(map);
-let currentLineIndex = 0;
-let currentStopIndex = 0;
-let isTrainStopped = false;
-let stopTimeElapsed = 0;
+   // Aktualizuje polohu vlaku na základě aktuálního času a rychlosti
+function updateTrainPosition() {
+    const currentLine = lines[currentLineIndex];
+    const currentStop = currentLine.stops[currentStopIndex];
+    const nextStop = currentLine.stops[currentStopIndex + 1];
+
+    if (!isTrainStopped && nextStop) {
+        const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+        const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+
+        const currentTime = new Date();
+        const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+
+        if (elapsedTime <= timeToNextStop) {
+            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+            trainMarker.setLatLng([lat, lon]);
+        } else {
+            // Přesun na další zastávku
+            currentStopIndex++;
+            startTime = new Date();
+            stopTimeElapsed = 0; // Resetuj čas na zastávce
+            isTrainStopped = true; // Nastav vlak jako zastavený
+        }
+    } else {
+        // Vlak je zastavený
+        stopTimeElapsed += 1000; // Přidá 1 sekundu k času na zastávce
+
+        if (stopTimeElapsed >= 30000) { // 30 000 milisekund = 30 sekund
+            isTrainStopped = false; // Nastav vlak jako nezastavený
+            stopTimeElapsed = 0; // Resetuj čas na zastávce
+        }
+    }
+}
+
+// Nastavení intervalu pro aktualizaci polohy vlaku
+let startTime = new Date();
+setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
 </script>
 
 </body>
