@@ -140,19 +140,20 @@ let stopTimeElapsed = 0;
                     stopTimeLeft--;
                 } else {
                     // Přesun na další/zpětnou zastávku
-                    if (isGoingForward) {
-                        currentStopIndex++;
-                        if (currentStopIndex === currentLine.stops.length - 1) {
-                            // Vlak dosáhl konce trasy, otočení směru
-                            isGoingForward = false;
-                        }
-                    } else {
-                        currentStopIndex--;
-                        if (currentStopIndex === 0) {
-                            // Vlak dosáhl začátku trasy, otočení směru
-                            isGoingForward = true;
-                        }
-                    }
+                   if (isGoingForward) {
+    currentStopIndex++;
+    if (currentStopIndex === currentLine.stops.length - 1) {
+        // Vlak dosáhl konce trasy, otočení směru
+        isGoingForward = false;
+    }
+} else {
+    currentStopIndex--;
+    if (currentStopIndex === 0) {
+        // Vlak dosáhl začátku trasy, otočení směru
+        isGoingForward = true;
+    }
+}
+
 
                     startTime = new Date();
                     isTrainStopped = false;
