@@ -414,11 +414,23 @@ function switchToMapContainer() {
 }
 
 function initializeMap() {
-    // Inicializujte mapu Leaflet
-    const map = L.map('mapContainer').setView([51.505, -0.09], 13);
+    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13); // Přesunuto do funkce setView pro lepší čitelnost
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+// Zastávky vlaků
+    const zastavky = [
+        { lat: 49.2551575, lng: 13.9163047, name: 'Strakonice' },
+        { lat: 49.2183647, lng: 13.8940200, name: 'Radošovice' },
+        // Přidejte další zastávky podle potřeby
+    ];
 
-    // Přidejte další funkcionalitu mapy zde podle potřeby
+    // Přidání zastávek na mapu
+    zastavky.forEach(zastavka => {
+        const marker = L.marker([zastavka.lat, zastavka.lng]).addTo(map);
+        marker.bindPopup(`<b>${zastavka.name}</b>`).openPopup();
+    });
+
+    // Další funkce mapy
+    // ...
 }
            
           function toggleMobileMenu() {
