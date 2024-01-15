@@ -414,28 +414,50 @@ function switchToMapContainer() {
 }
 
 function initializeMap() {
-    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13); // Přesunuto do funkce setView pro lepší čitelnost
+    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-// Zastávky vlaků
-    const zastavky = [
-        { lat: 49.2551575, lng: 13.9163047, name: 'Strakonice' },
-        { lat: 49.2322158, lng: 13.9018125, name: 'Radošovice' },
-        { lat: 49.2183647, lng: 13.8940200, name: 'Přední Zborovice' },
-        { lat: 49.2100447, lng: 13.8872928, name: 'Strunkovice nad Volyňkou' },
-        { lat: 49.1873397, lng: 13.8930731, name: 'Hoštice' },
-        { lat: 49.1701164, lng: 13.8928975, name: 'Volyně' },
-        // Přidejte další zastávky podle potřeby
+
+    // Přidání tratí na mapu
+    const lines = [
+        {
+            name: "Trať 198 Strakonice - Volary",
+            color: "blue",
+            stops: [
+                { name: "Strakonice", location: [49.261, 13.907] },
+                { waypoint: true, location: [49.2538842, 13.9109283] },
+                { waypoint: true, location: [49.2499319, 13.9112306] },
+                { waypoint: true, location: [49.2487331, 13.9109997] },
+                { name: "Radošovice", location: [49.2322158, 13.901812] },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
+                // Další zastávky a waypointy přidávejte podle potřeby
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
+                { name: "Hoštice", location: [49.1873397, 13.8930731] },
+                { name: "Volyně", location: [49.1701164, 13.8928975] },
+            ]
+        },
+        // Přidat další tratě podle potřeby
     ];
 
-    // Přidání zastávek na mapu
-    zastavky.forEach(zastavka => {
-        const marker = L.marker([zastavka.lat, zastavka.lng]).addTo(map);
-        marker.bindPopup(`<b>${zastavka.name}</b>`).openPopup();
+    // Přidání tratí na mapu
+    lines.forEach(line => {
+        const lineCoordinates = line.stops.map(stop => stop.location);
+        const polyline = L.polyline(lineCoordinates, { color: line.color }).addTo(map);
+
+        // Přidání popisu zastávek na polyline
+        line.stops.forEach(stop => {
+            if (stop.name) {
+                const marker = L.marker(stop.location).addTo(map);
+                marker.bindPopup(`<b>${stop.name}</b>`).openPopup();
+            }
+        });
     });
 
     // Další funkce mapy
     // ...
 }
+
+// Spuštění inicializace mapy
+initializeMap();
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
