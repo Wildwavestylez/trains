@@ -59,7 +59,7 @@
     ];
 
     // Inicializace mapy Leaflet
-    const map = L.map('map').setView([51.0, 15.5], 8);
+    const map = L.map('map').setView([49.25, 13.91], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
@@ -79,8 +79,8 @@
     // Pohybující se ikona vlaku
     let trainIcon = L.icon({
         iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [64, 64],
-        iconAnchor: [32, 32],
+        iconSize: [100, 100],
+        iconAnchor: [50, 50],
         popupAnchor: [0, 0]
     });
 
@@ -89,7 +89,7 @@
     let currentStopIndex = 0;
 
     // Rychlost vlaku v km/h
-    const trainSpeed = 70;
+    const trainSpeed = 500;
 
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
