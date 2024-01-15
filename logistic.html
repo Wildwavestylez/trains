@@ -90,6 +90,7 @@ let currentStopIndex = 0;
 let isTrainStopped = false;
 let stopTimeElapsed = 0;
     let isGoingForward = true;
+    let cashBalance = 1000; 
 
     // Rychlost vlaku v km/h
     const trainSpeed = 500;
@@ -137,6 +138,11 @@ function updateTrainPosition() {
             if (!isTrainStopped) {
                 isTrainStopped = true;
                 stopTimeLeft = currentStop.stopTime;
+                
+                // Aktualizace stavu pokladny při zastavení
+                const income = Math.floor(Math.random() * (200 - 100 + 1)) + 100;
+                cashBalance += income;
+                console.log(`Přidáno $${income} do pokladny. Celkový stav: $${cashBalance}`);
             } else {
                 // Čekání na konci zastávky
                 if (stopTimeLeft > 0) {
