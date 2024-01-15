@@ -220,30 +220,31 @@
     <div id="container">
         <p> Dostupné finance: $<span id="totalMoney">1000</span></p>
 
-<div id="gameContainer">
-    <!-- Mapový kontejner -->
-    <div id="mapContainer" style="display: none; height: 400px;"></div>
-
-    <!-- Společný kontejner pro Portfolio, Garáž a Quest -->
-    <div class="info-container">
-        <h2>Tvé vlaky určené pro prodej</h2>
-        <ul id="portfolio" class="portfolio"></ul>
-
-        <h2>Tvé depo</h2>
-        <ul id="garageList" class="portfolio"></ul>
-
-        <div id="questOffer">
-            <h2>Přijatý úkol</h2>
-            <p id="questInfo"></p>
-            <button onclick="fulfillQuest()">Odeslat vlaky zákazníkovi</button>
-        </div>
+<<div id="gameContainer">
+    <!-- Burza vlaků -->
+    <div id="trainMarket">
+        <h2>Burza vlaků</h2>
+        <div class="train-container"></div>
     </div>
 
     <!-- Mapový kontejner -->
     <div id="mapContainer" style="display: none; height: 400px;"></div>
 </div>
 
+<!-- Společný kontejner pro Portfolio, Garáž a Quest -->
+<div class="info-container">
+    <h2>Tvé vlaky určené pro prodej</h2>
+    <ul id="portfolio" class="portfolio"></ul>
 
+    <h2>Tvé depo</h2>
+    <ul id="garageList" class="portfolio"></ul>
+
+    <div id="questOffer">
+        <h2>Přijatý úkol</h2>
+        <p id="questInfo"></p>
+        <button onclick="fulfillQuest()">Odeslat vlaky zákazníkovi</button>
+    </div>
+</div>
 
 
     <!-- Leaflet JavaScript -->
@@ -388,7 +389,7 @@
             { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
       
         ];
-         function toggleGameMap() {
+        function toggleGameMap() {
     useGame = !useGame;
     if (useGame) {
         switchToGameContainer();
@@ -398,25 +399,20 @@
 }
 
 function switchToGameContainer() {
+    document.getElementById('trainMarket').style.display = 'block';
     document.getElementById('mapContainer').style.display = 'none';
-    document.getElementById('gameContainer').style.display = 'block';
-    
 }
 
 function switchToMapContainer() {
-    document.getElementById('gameContainer').style.display = 'none';
+    document.getElementById('trainMarket').style.display = 'none';
     document.getElementById('mapContainer').style.display = 'block';
     initializeMap();
 }
 
-
-
-// Funkce pro inicializaci mapy Leaflet (upravte podle potřeb)
 function initializeMap() {
+    // Inicializujte mapu Leaflet
     const map = L.map('mapContainer').setView([51.505, -0.09], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    // Přidejte další funkcionalitu mapy zde podle potřeby
-}
 
     // Přidejte další funkcionalitu mapy zde podle potřeby
 }
