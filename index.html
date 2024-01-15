@@ -414,18 +414,48 @@ function switchToMapContainer() {
 }
 
 function initializeMap() {
-    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13); // Přesunuto do funkce setView pro lepší čitelnost
+    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-// Zastávky vlaků
-    const zastavky = [
-        { lat: 49.2551575, lng: 13.9163047, name: 'Strakonice' },
-        { lat: 49.2322158, lng: 13.9018125, name: 'Radošovice' },
-        { lat: 49.2183647, lng: 13.8940200, name: 'Přední Zborovice' },
-        { lat: 49.2100447, lng: 13.8872928, name: 'Strunkovice nad Volyňkou' },
-        { lat: 49.1873397, lng: 13.8930731, name: 'Hoštice' },
-        { lat: 49.1701164, lng: 13.8928975, name: 'Volyně' },
-        // Přidejte další zastávky podle potřeby
+
+    // Definice linek
+    const lines = [
+        {
+            name: "Trať 198 Strakonice - Volary",
+            color: "blue",
+            stops: [
+                { name: "Strakonice", location: [49.2551575, 13.9163047] },
+                { waypoint: true, location: [49.2538842, 13.9109283] },
+                { name: "Radošovice", location: [49.2322158, 13.9018125] },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
+                { name: "Hoštice", location: [49.1873397, 13.8930731] },
+                { name: "Volyně", location: [49.1701164, 13.8928975] },
+                { name: "Nišovice", location: [49.1502839, 13.9059867] },
+                { name: "Malenice", location: [49.1237908, 13.8832197] },
+                { name: "Lčovice", location: [49.1090089, 13.8666047] },
+                { name: "Čkyně", location: [49.1111489, 13.8291083] },
+            ]
+        },
+        // Přidávejte další linky podle potřeby
     ];
+
+    // Přidání linek na mapu
+    lines.forEach(line => {
+        const polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
+        
+        // Ověření, zda se jedná o zastávku nebo průjezdní bod
+        line.stops.forEach(stop => {
+            if (stop.waypoint) {
+                L.circle(stop.location, { radius: 100, color: 'red' }).addTo(map); // Přidání kruhu pro průjezdní bod
+            } else {
+                L.marker(stop.location).addTo(map).bindPopup(`<b>${stop.name}</b>`).openPopup(); // Přidání značky pro zastávku
+            }
+        });
+    });
+}
+
+ 
+
 
     // Přidání zastávek na mapu
     zastavky.forEach(zastavka => {
