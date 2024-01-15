@@ -97,8 +97,8 @@
         line.trains.forEach(train => {
             let trainIcon = L.icon({
                 iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-                iconSize: [50, 50],
-                iconAnchor: [25, 25],
+                iconSize: [100, 100],
+                iconAnchor: [50, 50],
                 popupAnchor: [0, 0]
             });
 
@@ -152,16 +152,27 @@
                     // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                         direction *= -1;
+                         // Přidáme náhodnou finanční částku do hráčova portfolia
+                        const randomAmount = generateRandomAmount();
+                        updatePlayerFinance(randomAmount);
                     }
                 }
             } else {
                 // Dosáhli jsme konce trasy, změňme směr pohybu
                 direction *= -1;
                 currentStopIndex += direction;
+                 // Přidáme náhodnou finanční částku do hráčova portfolia
+                const randomAmount = generateRandomAmount();
+                updatePlayerFinance(randomAmount);
             }
         }, updateInterval);
     }
 
+    function updatePlayerFinance(amount) {
+        playerFinance += amount;
+        document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+    }
+    
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // poloměr Země v km
