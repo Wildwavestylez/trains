@@ -400,7 +400,7 @@
 function switchToGameContainer() {
     document.getElementById('mapContainer').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
-    initializeGame(); // Funkce pro inicializaci hry, pokud je potřeba
+    
 }
 
 function switchToMapContainer() {
@@ -409,13 +409,7 @@ function switchToMapContainer() {
     initializeMap();
 }
 
-// Funkce pro inicializaci hry (upravte podle potřeb)
-function initializeGame() {
-    displayPortfolio();
-    displayGarage();
-    displayQuestOffer();
-    updateTotalMoney();
-}
+
 
 // Funkce pro inicializaci mapy Leaflet (upravte podle potřeb)
 function initializeMap() {
