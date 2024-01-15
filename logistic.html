@@ -110,11 +110,10 @@
         return degrees * Math.PI / 180;
     }
 
-    // Aktualizuje polohu vlaku na základě aktuálního času a rychlosti
     function updateTrainPosition() {
         const currentLine = lines[currentLineIndex];
         const currentStop = currentLine.stops[currentStopIndex];
-        const nextStop = currentLine.stops[currentStopIndex + 1];
+        const nextStop = currentLine.stops[currentStopIndex + direction];
 
         if (nextStop) {
             const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
@@ -128,16 +127,23 @@
                 const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
                 trainMarker.setLatLng([lat, lon]);
             } else {
-                // Přesun na další zastávku
-                currentStopIndex++;
+                // Přesun na další/zpětnou zastávku
+                currentStopIndex += direction;
                 startTime = new Date();
+
+                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                if (currentStopIndex === 0 || currentStopIndex === currentLine.stops.length - 1) {
+                    direction *= -1;
+                }
             }
         }
     }
 
     // Nastavení intervalu pro aktualizaci polohy vlaku
     let startTime = new Date();
+    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
     setInterval(updateTrainPosition, 1000); // Každou sekundu aktualizuj polohu vlaku
+</script>
 </script>
 
 </body>
