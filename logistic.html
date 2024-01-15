@@ -113,7 +113,7 @@ let stopTimeElapsed = 0;
         return degrees * Math.PI / 180;
     }
 
-  unction updateTrainPosition() {
+  function updateTrainPosition() {
     const currentLine = lines[currentLineIndex];
     const currentStop = currentLine.stops[currentStopIndex];
     const nextStop = currentLine.stops[currentStopIndex + (isGoingForward ? 1 : -1)];
