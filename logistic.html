@@ -50,7 +50,7 @@
                 { name: "Train 1", startingIndex: 0 },
                 { name: "Train 2", startingIndex: 6 },
                 { name: "Train 3", startingIndex: 9 },
-                { name: "Train 4", startingIndex: 21 }
+                { name: "Train 4", startingIndex: 13 }
             ],
             stops: [
                  { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -125,41 +125,38 @@
     });
 
     function moveTrain(train, line) {
-    let currentStopIndex = train.startingIndex;
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
+        let currentStopIndex = train.startingIndex;
+        let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+        let startTime = new Date();
 
-    setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = line.stops[currentStopIndex + direction];
+        setInterval(() => {
+            const currentStop = line.stops[currentStopIndex];
+            const nextStop = line.stops[currentStopIndex + direction];
 
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+            if (nextStop) {
+                const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+                const currentTime = new Date();
+                const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                train.marker.setLatLng([lat, lon]);
-            } else {
-                // Přesun na další/zpětnou zastávku
-                currentStopIndex += direction;
-                startTime = new Date();
+                if (elapsedTime <= timeToNextStop) {
+                    const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                    const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                    train.marker.setLatLng([lat, lon]);
+                } else {
+                    // Přesun na další/zpětnou zastávku
+                    currentStopIndex += direction;
+                    startTime = new Date();
 
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                    direction *= -1;
+                    // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                    if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                        direction *= -1;
+                    }
                 }
             }
-        } else {
-            // Dosáhli jsme konce trati, změníme směr pohybu
-            direction *= -1;
-        }
-    }, updateInterval);
-}
+        }, updateInterval);
+    }
 
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
