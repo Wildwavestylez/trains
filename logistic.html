@@ -113,7 +113,7 @@ let stopTimeElapsed = 0;
         return degrees * Math.PI / 180;
     }
 
-  function updateTrainPosition() {
+ function updateTrainPosition() {
     const currentLine = lines[currentLineIndex];
     const currentStop = currentLine.stops[currentStopIndex];
     const nextStop = currentLine.stops[currentStopIndex + (isGoingForward ? 1 : -1)];
@@ -134,6 +134,7 @@ let stopTimeElapsed = 0;
             if (!isTrainStopped) {
                 isTrainStopped = true;
                 stopTimeLeft = currentStop.stopTime;
+                stopStartTime = new Date();
             } else {
                 // Čekání na konci zastávky
                 if (stopTimeLeft > 0) {
@@ -151,6 +152,11 @@ let stopTimeElapsed = 0;
                 }
             }
         }
+    } else {
+        // Vlak dosáhl konce trasy, restart
+        currentStopIndex = isGoingForward ? 0 : currentLine.stops.length - 1;
+        isGoingForward = !isGoingForward;
+        startTime = new Date();
     }
 }
 
