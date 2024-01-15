@@ -155,21 +155,10 @@ function updateTrainPosition() {
                 isTrainStopped = true;
                 stopTimeLeft = currentStop.stopTime;
 
-                // Ověření odemčení zastávky
-                if (!unlockedStops.includes(currentStop.name)) {
-                    // Pokud zastávka není odemčená, zkontroluj, zda hráč může odemknout
-                    if (unlockedStops.length < 2) {
-                        // První dvě zastávky odemknuté automaticky
-                        unlockedStops.push(currentStop.name);
-                    } else {
-                        // Ostatní zastávky - hráč musí zaplatit poplatek
-                        const unlockFee = 2500;  // Poplatek za odemknutí zastávky
-                        if (finances >= unlockFee) {
-                            finances -= unlockFee;
-                            unlockedStops.push(currentStop.name);
-                        }
-                    }
-                }
+                // Přidání náhodné částky do pokladny
+                const randomAmount = Math.floor(Math.random() * (200 - 100 + 1) + 100);
+                finances += randomAmount;
+
                 // Aktualizace zobrazení financí
                 updateFinancesDisplay();
             } else {
@@ -196,40 +185,14 @@ function updateTrainPosition() {
         startTime = new Date();
     }
 }
-// Přidání event listeneru pro kliknutí na zastávku
-map.on('click', function (e) {
-    const clickedStop = findNearestStop(e.latlng, lines[currentLineIndex].stops);
-    if (clickedStop) {
-        handleStopClick(clickedStop);
-    }
-});
 
-// Funkce pro zpracování kliknutí na zastávku
-function handleStopClick(stop) {
-    if (!unlockedStops.includes(stop.name)) {
-        // Pokud zastávka není odemčená, zkontroluj, zda hráč může odemknout
-        if (unlockedStops.length < 2) {
-            // První dvě zastávky odemknuté automaticky
-            unlockedStops.push(stop.name);
-            alert(`Zastávka ${stop.name} byla odemčena.`);
-        } else {
-            // Ostatní zastávky - hráč musí zaplatit poplatek
-            const unlockFee = 2500;  // Poplatek za odemknutí zastávky
-            if (finances >= unlockFee) {
-                finances -= unlockFee;
-                unlockedStops.push(stop.name);
-                alert(`Zastávka ${stop.name} byla odemčena za poplatek ${unlockFee} Kč.`);
-                // Aktualizace zobrazení financí
-                updateFinancesDisplay();
-            } else {
-                alert(`Nemáte dostatek peněz na odemknutí zastávky.`);
-            }
-        }
-    } else {
-        alert(`Zastávka ${stop.name} již byla odemčena.`);
+// Funkce pro aktualizaci zobrazení financí
+function updateFinancesDisplay() {
+    const financesDisplay = document.getElementById('financesDisplay');
+    if (financesDisplay) {
+        financesDisplay.textContent = `Finance: ${finances} Kč`;
     }
 }
-
 </script>
 
 </body>
