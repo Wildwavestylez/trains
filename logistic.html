@@ -111,33 +111,38 @@
     }
 
     function updateTrainPosition() {
-        const currentLine = lines[currentLineIndex];
-        const currentStop = currentLine.stops[currentStopIndex];
-        const nextStop = currentLine.stops[currentStopIndex + direction];
+    const currentLine = lines[currentLineIndex];
+    const currentStop = currentLine.stops[currentStopIndex];
+    const nextStop = currentLine.stops[currentStopIndex + direction];
 
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+    if (nextStop) {
+        const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+        let timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+        // Zvýšení času pozdržení ve stanici
+        if (currentStopIndex !== 0 && currentStopIndex !== currentLine.stops.length - 1) {
+            timeToNextStop += 5 / 3600; // 5 sekund ve stanici
+        }
 
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                trainMarker.setLatLng([lat, lon]);
-            } else {
-                // Přesun na další/zpětnou zastávku
-                currentStopIndex += direction;
-                startTime = new Date();
+        const currentTime = new Date();
+        const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                if (currentStopIndex === 0 || currentStopIndex === currentLine.stops.length - 1) {
-                    direction *= -1;
-                }
+        if (elapsedTime <= timeToNextStop) {
+            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+            trainMarker.setLatLng([lat, lon]);
+        } else {
+            // Přesun na další/zpětnou zastávku
+            currentStopIndex += direction;
+            startTime = new Date();
+
+            // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+            if (currentStopIndex === 0 || currentStopIndex === currentLine.stops.length - 1) {
+                direction *= -1;
             }
         }
     }
+}
 
     // Nastavení intervalu pro aktualizaci polohy vlaku
     let startTime = new Date();
