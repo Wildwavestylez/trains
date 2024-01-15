@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="financesDisplay">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 655</p>
+    <p>Kupony vlaků: 333</p>
     <p>Vlaky v provozu: 2</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -104,6 +104,7 @@
 let currentLineIndex = 0;
 let currentStopIndex = 0;
 let isTrainStopped = false;
+    let stopTimeLeft = 0;
 let stopTimeElapsed = 0;
     let isGoingForward = true;
     let finances = 1000; 
