@@ -89,6 +89,7 @@ let currentLineIndex = 0;
 let currentStopIndex = 0;
 let isTrainStopped = false;
 let stopTimeElapsed = 0;
+    let isGoingForward = true;
 
     // Rychlost vlaku v km/h
     const trainSpeed = 150;
@@ -112,7 +113,7 @@ let stopTimeElapsed = 0;
         return degrees * Math.PI / 180;
     }
 
-   function updateTrainPosition() {
+  function updateTrainPosition() {
     const currentLine = lines[currentLineIndex];
     const currentStop = currentLine.stops[currentStopIndex];
     const nextStop = currentLine.stops[currentStopIndex + 1];
@@ -138,8 +139,21 @@ let stopTimeElapsed = 0;
                 if (stopTimeLeft > 0) {
                     stopTimeLeft--;
                 } else {
-                    // Přesun na další zastávku
-                    currentStopIndex++;
+                    // Přesun na další/zpětnou zastávku
+                    if (isGoingForward) {
+                        currentStopIndex++;
+                        if (currentStopIndex === currentLine.stops.length - 1) {
+                            // Vlak dosáhl konce trasy, otočení směru
+                            isGoingForward = false;
+                        }
+                    } else {
+                        currentStopIndex--;
+                        if (currentStopIndex === 0) {
+                            // Vlak dosáhl začátku trasy, otočení směru
+                            isGoingForward = true;
+                        }
+                    }
+
                     startTime = new Date();
                     isTrainStopped = false;
                 }
@@ -147,6 +161,7 @@ let stopTimeElapsed = 0;
         }
     }
 }
+
 
 
 // Nastavení intervalu pro aktualizaci polohy vlaku
