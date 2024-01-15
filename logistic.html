@@ -133,13 +133,12 @@ let stopTimeElapsed = 0;
             // Přestávka na zastávce
             if (!isTrainStopped) {
                 isTrainStopped = true;
+                stopTimeLeft = currentStop.stopTime;
                 stopStartTime = new Date();
             } else {
                 // Čekání na konci zastávky
-                const stopElapsedTime = (currentTime - stopStartTime) / 1000 / 60 / 60; // v hodinách
-
-                if (stopElapsedTime * 60 < currentStop.stopTime) {
-                    // Stále čekáme na konci zastávky
+                if (stopTimeLeft > 0) {
+                    stopTimeLeft--;
                 } else {
                     // Přesun na další/zpětnou zastávku
                     currentStopIndex += isGoingForward ? 1 : -1;
@@ -160,7 +159,6 @@ let stopTimeElapsed = 0;
         startTime = new Date();
     }
 }
-
 
 // Nastavení intervalu pro aktualizaci polohy vlaku
 let startTime = new Date();
