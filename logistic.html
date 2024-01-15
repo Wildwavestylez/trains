@@ -41,6 +41,7 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
+ let playerFinance = 1000;
     // Fiktivní data pro linky a zastávky
     const lines = [
         {
@@ -48,8 +49,8 @@
             color: "blue",
             trains: [
                 { name: "Train 1", startingIndex: 0 },
-                { name: "Train 2", startingIndex: 6 },
-                { name: "Train 3", startingIndex: 9 },
+                { name: "Train 2", startingIndex: 13 },
+                { name: "Train 3", startingIndex: 17 },
                 { name: "Train 4", startingIndex: 21 }
             ],
             stops: [
@@ -97,8 +98,8 @@
         line.trains.forEach(train => {
             let trainIcon = L.icon({
                 iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-                iconSize: [100, 100],
-                iconAnchor: [50, 50],
+                iconSize: [50, 50],
+                iconAnchor: [25, 25],
                 popupAnchor: [0, 0]
             });
 
@@ -152,27 +153,17 @@
                     // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                         direction *= -1;
-                         // Přidáme náhodnou finanční částku do hráčova portfolia
-                        const randomAmount = generateRandomAmount();
-                        updatePlayerFinance(randomAmount);
+                        giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
                     }
                 }
             } else {
                 // Dosáhli jsme konce trasy, změňme směr pohybu
                 direction *= -1;
                 currentStopIndex += direction;
-                 // Přidáme náhodnou finanční částku do hráčova portfolia
-                const randomAmount = generateRandomAmount();
-                updatePlayerFinance(randomAmount);
             }
         }, updateInterval);
     }
 
-    function updatePlayerFinance(amount) {
-        playerFinance += amount;
-        document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-    }
-    
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // poloměr Země v km
@@ -194,9 +185,15 @@
 
     // Funkce pro generování náhodné částky mezi 20 a 50 Kč
     function generateRandomAmount() {
-        return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+        return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
     }
 
+    // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
+   function giveRandomMoneyToPlayer() {
+        const randomAmount = generateRandomAmount();
+        playerFinance += randomAmount;
+        document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+}
 </script>
 
 </body>
