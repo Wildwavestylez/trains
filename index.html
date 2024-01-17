@@ -467,19 +467,34 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-   lines.forEach(line => {
+  lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
         let trainMarker;
         let currentPositionIndex = 0;
+        let totalDistance = 0;
 
         function moveTrain() {
             const currentPosition = latLngs[currentPositionIndex];
             trainMarker.setLatLng(currentPosition);
 
             if (currentPositionIndex < latLngs.length - 1) {
-                currentPositionIndex++;
+                const nextPosition = latLngs[currentPositionIndex + 1];
+                const distance = currentPosition.distanceTo(nextPosition);
+
+                totalDistance += distance;
+
+                // Rychlost vlaku v metrech za sekundu (60 km/h)
+                const speed = 60 * 1000 / 3600;
+
+                // Čas potřebný na přesun mezi dvěma zastávkami (v sekundách)
+                const time = distance / speed;
+
+                if (totalDistance >= distance) {
+                    currentPositionIndex++;
+                    totalDistance = 0;
+                }
             } else {
                 // Vlak dojel na konec trati, resetuje se na začátek
                 currentPositionIndex = 0;
