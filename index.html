@@ -474,61 +474,7 @@ function initializeMap() {
     });
 }
 
-function moveTrain(line) {
-    let currentStopIndex = 0;
-    let currentPosition = line.stops[currentStopIndex].location;
-    const trainIcon = L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-        popupAnchor: [0, -16],
-    });
-    const trainMarker = L.marker(currentPosition, { icon: trainIcon }).addTo(map);
 
-    function updateTrainPosition() {
-        const nextStopIndex = (currentStopIndex + 1) % line.stops.length;
-        const nextStop = line.stops[nextStopIndex].location;
-        const distance = calculateDistance(currentPosition, nextStop);
-        const speed = 60 / 3600; // 60 km/h to m/s
-
-        const duration = (distance / speed) * 1000; // in milliseconds
-        const stopDuration = Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000; // Random stop duration between 3 to 5 seconds
-
-        L.DomEvent.on(trainMarker, 'moveend', function () {
-            setTimeout(() => {
-                currentStopIndex = nextStopIndex;
-            }, stopDuration);
-        });
-
-        trainMarker.moveTo(nextStop, { duration: duration, easeLinearity: 1 });
-        currentPosition = nextStop;
-    }
-
-    setInterval(updateTrainPosition, 1000); // Update position every second
-}
-
-function calculateDistance(coord1, coord2) {
-    const lat1 = coord1[0];
-    const lon1 = coord1[1];
-    const lat2 = coord2[0];
-    const lon2 = coord2[1];
-
-    const R = 6371e3; // Earth radius in meters
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-        Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c;
-}
-
-// Použití funkce pro pohyb vlaku na trati
-moveTrain(lines[0]);
 
            
           function toggleMobileMenu() {
