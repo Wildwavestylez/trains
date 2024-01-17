@@ -413,7 +413,6 @@ function switchToMapContainer() {
     initializeMap();
 }
 
-        
 function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -433,15 +432,13 @@ function initializeMap() {
                 { name: "Waypoint7", location: [49.2418611, 13.9076397], waypoint: true },
                 { name: "Waypoint8", location: [49.2411678, 13.9079836], waypoint: true },
                 { name: "Waypoint9", location: [49.2407028, 13.9086097], waypoint: true },
-                { name: "A", location: [49.2400197, 13.9101729], waypoint: true },
-                { name: "B", location: [49.2395864, 13.9107151], waypoint: true },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
                 // Další zastávky a waypointy
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
                 { name: "Hoštice", location: [49.1873397, 13.8930731] },
                 { name: "Volyně", location: [49.1701164, 13.8928975] },
-                                { name: "Nišovice", location: [49.1502839, 13.9059867] },
+                { name: "Nišovice", location: [49.1502839, 13.9059867] },
                 { name: "Malenice", location: [49.1237908, 13.8832197] },
                 { name: "Lčovice", location: [49.1090089, 13.8666047] },
                 { name: "Čkyně", location: [49.1111489, 13.8291083] },
@@ -464,8 +461,7 @@ function initializeMap() {
     ];
 
     lines.forEach(line => {
-        const latLngs = line.stops.map(stop => L.latLng(stop.location[0],
- stop.location[1]));
+        const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
         line.stops.forEach(stop => {
@@ -478,115 +474,6 @@ function initializeMap() {
     });
 }
 
-function initializeTrainMovement() {
-    const trainSpeed = 60; // Rychlost vlaku v km/h
-    const updateInterval = 1000; // Interval pro aktualizaci polohy vlaku v milisekundách
-    const stopDuration = 3000; // Doba zastavení na zastávce v milisekundách (3 sekundy)
-
-    const trainLine = lines[0]; // Předpokládáme, že vlak pojede po první lince
-
-    let currentPosition = 0; // Index aktuální zastávky
-    let totalDistance = 0; // Celková vzdálenost mezi zastávkami
-
-    // Spočítá celkovou vzdálenost mezi zastávkami
-    for (let i = 0; i < trainLine.stops.length - 1; i++) {
-        const lat1 = trainLine.stops[i].location[0];
-        const lon1 = trainLine.stops[i].location[1];
-        const lat2 = trainLine.stops[i + 1].location[0];
-        const lon2 = trainLine.stops[i + 1].location[1];
-
-        totalDistance += calculateDistance(lat1, lon1, lat2, lon2);
-    }
-
-    // Funkce pro pohyb vlaku
-    async function moveTrain() {
-        const currentStop = trainLine.stops[currentPosition];
-        const nextStop = trainLine.stops[currentPosition + 1];
-
-        const distanceToNextStop = calculateDistance(
-            currentStop.location[0],
-            currentStop.location[1],
-            nextStop.location[0],
-            nextStop.location[1]
-        );
-
-        const travelTime = (distanceToNextStop / trainSpeed) * 60 * 60 * 1000; // Čas cesty v milisekundách
-
-        // Aktualizuje polohu vlaku každou vteřinu
-        for (let time = 0; time <= travelTime; time += updateInterval) {
-            const percentageCompleted = time / travelTime;
-            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * percentageCompleted;
-            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * percentageCompleted;
-
-            // Aktualizuje polohu vlaku na mapě nebo dělá cokoliv jiného s polohou
-            updateTrainLocation(lat, lon);
-
-            await sleep(updateInterval); // Čeká na další aktualizaci
-        }
-
-        // Zastaví vlak na zastávce
-        await sleep(stopDuration);
-
-        // Přesune se na další zastávku
-        currentPosition++;
-
-        // Pokud jsme na konci linky, vrátíme se na začátek
-        if (currentPosition === trainLine.stops.length - 1) {
-            currentPosition = 0;
-        }
-
-        // Rekurzivně volá sám sebe pro pohyb na další zastávku
-        moveTrain();
-    }
-
-    // Spustí pohyb vlaku
-    moveTrain();
-}
-
-// Funkce pro výpočet vzdálenosti mezi dvěma body pomocí haversine vzorce
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Poloměr Země v km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Vzdálenost v km
-    return distance;
-}
-
-// Funkce pro převod stupňů na radiány
-function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-}
-
-// Funkce pro čekání (asynchronní)
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-const trainIcon = L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png', // Umístění souboru s ikonou vlaku
-        iconSize: [75, 75], // Velikost ikony
-        iconAnchor: [16, 16], // Bod, kde bude ikona umístěna vůči zadaným souřadnicím
-    });
-
-    const trainMarker = L.marker([0, 0], { icon: trainIcon }).addTo(map); // Vytvoří marker vlaku na mapě
-
-    // Funkce pro aktualizaci polohy vlaku
-    function updateTrainLocation(lat, lon) {
-        trainMarker.setLatLng([lat, lon]); // Nastaví novou pozici markeru
-        // Můžete přidat další kód pro aktualizaci dalších informací nebo akcí s polohou vlaku
-        console.log(`Vlak se nachází na pozici: ${lat}, ${lon}`);
-    }
-// Funkce pro aktualizaci polohy vlaku (přizpůsobte podle vašich potřeb)
-function updateTrainLocation(lat, lon) {
-    // Zde aktualizujte polohu vlaku na mapě nebo proveďte další akce s polohou
-    console.log(`Vlak se nachází na pozici: ${lat}, ${lon}`);
-}
-
-// Spustí inicializaci pohybu vlaku
-initializeTrainMovement();
 
            
           function toggleMobileMenu() {
