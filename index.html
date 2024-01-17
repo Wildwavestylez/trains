@@ -413,6 +413,7 @@ function switchToMapContainer() {
     initializeMap();
 }
 
+        
 function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -477,56 +478,115 @@ function initializeMap() {
     });
 }
 
-function moveTrainAlongLine(line, speedKmh) {
-    const polyline = L.polyline(line.stops.map(stop => L.latLng(stop.location[0], stop.location[1])));
-    const trainIcon = L.icon({
-        iconUrl: 'path-to-train-icon.png', // Změňte na skutečnou cestu k ikoně vlaku
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-    });
+function initializeTrainMovement() {
+    const trainSpeed = 60; // Rychlost vlaku v km/h
+    const updateInterval = 1000; // Interval pro aktualizaci polohy vlaku v milisekundách
+    const stopDuration = 3000; // Doba zastavení na zastávce v milisekundách (3 sekundy)
 
-    const trainMarker = L.marker(polyline.getLatLngs()[0], { icon: trainIcon }).addTo(map);
+    const trainLine = lines[0]; // Předpokládáme, že vlak pojede po první lince
 
-    let currentIndex = 0;
-    let totalDistance = 0;
-    let lastTimestamp;
+    let currentPosition = 0; // Index aktuální zastávky
+    let totalDistance = 0; // Celková vzdálenost mezi zastávkami
 
-    function animateTrain(timestamp) {
-        if (!lastTimestamp) {
-            lastTimestamp = timestamp;
-        }
+    // Spočítá celkovou vzdálenost mezi zastávkami
+    for (let i = 0; i < trainLine.stops.length - 1; i++) {
+        const lat1 = trainLine.stops[i].location[0];
+        const lon1 = trainLine.stops[i].location[1];
+        const lat2 = trainLine.stops[i + 1].location[0];
+        const lon2 = trainLine.stops[i + 1].location[1];
 
-        const timeDelta = timestamp - lastTimestamp;
-        lastTimestamp = timestamp;
-
-        const distanceToNextStop = polyline.getLatLngs()[currentIndex].distanceTo(polyline.getLatLngs()[currentIndex + 1]);
-        const distancePerFrame = (speedKmh * 1000 * timeDelta) / 3600;
-
-        totalDistance += distancePerFrame;
-
-        if (totalDistance >= distanceToNextStop) {
-            totalDistance = 0;
-            currentIndex++;
-
-            if (currentIndex === polyline.getLatLngs().length - 1) {
-                // Vlak dosáhl konce linky, resetujeme
-                currentIndex = 0;
-            }
-        }
-
-        const newPosition = polyline.getLatLngs()[currentIndex].interpolateOnLine(totalDistance / distanceToNextStop);
-        trainMarker.setLatLng(newPosition);
-
-        setTimeout(() => {
-            animateTrain(requestAnimationFrame(animateTrain));
-        }, 1000); // Změňte tuto hodnotu na požadovaný interval aktualizace polohy vlaku
+        totalDistance += calculateDistance(lat1, lon1, lat2, lon2);
     }
 
-    animateTrain(performance.now());
+    // Funkce pro pohyb vlaku
+    async function moveTrain() {
+        const currentStop = trainLine.stops[currentPosition];
+        const nextStop = trainLine.stops[currentPosition + 1];
+
+        const distanceToNextStop = calculateDistance(
+            currentStop.location[0],
+            currentStop.location[1],
+            nextStop.location[0],
+            nextStop.location[1]
+        );
+
+        const travelTime = (distanceToNextStop / trainSpeed) * 60 * 60 * 1000; // Čas cesty v milisekundách
+
+        // Aktualizuje polohu vlaku každou vteřinu
+        for (let time = 0; time <= travelTime; time += updateInterval) {
+            const percentageCompleted = time / travelTime;
+            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * percentageCompleted;
+            const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * percentageCompleted;
+
+            // Aktualizuje polohu vlaku na mapě nebo dělá cokoliv jiného s polohou
+            updateTrainLocation(lat, lon);
+
+            await sleep(updateInterval); // Čeká na další aktualizaci
+        }
+
+        // Zastaví vlak na zastávce
+        await sleep(stopDuration);
+
+        // Přesune se na další zastávku
+        currentPosition++;
+
+        // Pokud jsme na konci linky, vrátíme se na začátek
+        if (currentPosition === trainLine.stops.length - 1) {
+            currentPosition = 0;
+        }
+
+        // Rekurzivně volá sám sebe pro pohyb na další zastávku
+        moveTrain();
+    }
+
+    // Spustí pohyb vlaku
+    moveTrain();
 }
 
-// Použití funkce pro linku "Trať 198 Strakonice - Volary" s rychlostí 60 km/h
-moveTrainAlongLine(lines[0], 60);
+// Funkce pro výpočet vzdálenosti mezi dvěma body pomocí haversine vzorce
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Poloměr Země v km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Vzdálenost v km
+    return distance;
+}
+
+// Funkce pro převod stupňů na radiány
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
+
+// Funkce pro čekání (asynchronní)
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+const trainIcon = L.icon({
+        iconUrl: 'https://i.imgur.com/jXoYbZs.png', // Umístění souboru s ikonou vlaku
+        iconSize: [75, 75], // Velikost ikony
+        iconAnchor: [16, 16], // Bod, kde bude ikona umístěna vůči zadaným souřadnicím
+    });
+
+    const trainMarker = L.marker([0, 0], { icon: trainIcon }).addTo(map); // Vytvoří marker vlaku na mapě
+
+    // Funkce pro aktualizaci polohy vlaku
+    function updateTrainLocation(lat, lon) {
+        trainMarker.setLatLng([lat, lon]); // Nastaví novou pozici markeru
+        // Můžete přidat další kód pro aktualizaci dalších informací nebo akcí s polohou vlaku
+        console.log(`Vlak se nachází na pozici: ${lat}, ${lon}`);
+    }
+// Funkce pro aktualizaci polohy vlaku (přizpůsobte podle vašich potřeb)
+function updateTrainLocation(lat, lon) {
+    // Zde aktualizujte polohu vlaku na mapě nebo proveďte další akce s polohou
+    console.log(`Vlak se nachází na pozici: ${lat}, ${lon}`);
+}
+
+// Spustí inicializaci pohybu vlaku
+initializeTrainMovement();
 
            
           function toggleMobileMenu() {
