@@ -467,32 +467,34 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
- lines.forEach(line => {
+  lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
+
+        // Vytvoření linky
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        let trainMarker = null;
-        let currentIndex = 0;
+        // Inicializace vlaku na první zastávce
+        const trainMarker = L.Marker.movingMarker([latLngs[0]], [30000], { icon: trainIcon }).addTo(map);
 
-        function moveTrain() {
-            if (currentIndex < latLngs.length) {
-                const currentStop = line.stops[currentIndex];
-                const nextStop = line.stops[currentIndex + 1];
-                const distance = currentStop.waypoint ? 0 : latLngs[currentIndex].distanceTo(latLngs[currentIndex + 1]);
-                const duration = (distance / 60) * 60 * 1000; // Rychlost vlaku 60 km/h
+        // Zastavky na lince
+        line.stops.forEach(stop => {
+            const stopMarker = L.marker([stop.location[0], stop.location[1]])
+                .bindPopup(`<b>${stop.name}</b>`)
+                .addTo(map);
 
-                trainMarker.setIconAngle(latLngs[currentIndex].bearingTo(latLngs[currentIndex + 1]));
+            // Nastavení akce při dosažení zastávky
+            stopMarker.on('click', function () {
+                trainMarker.pause();
+                setTimeout(function () {
+                    trainMarker.start();
+                }, 5000); // Zastaví na zastávce po dobu 5 sekund
+            });
+        });
 
-                trainMarker
-                    .moveTo(latLngs[currentIndex], duration)
-                    .on('end', () => {
-                        setTimeout(() => {
-                            currentIndex++;
-                            moveTrain();
-                        }, 3000); // Zastavení na zastávce po dobu 3 vteřin
-                    });
-            }
-        }
+        // Spuštění animace vlaku
+        trainMarker.start();
+    });
+}
 
         // Vytvoření markeru vlaku na začátku linky
         trainMarker = L.Marker.movingMarker([latLngs[0]], [], { icon: trainIcon }).addTo(map);
