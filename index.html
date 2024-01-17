@@ -477,6 +477,56 @@ function initializeMap() {
     });
 }
 
+function moveTrainAlongLine(line, speedKmh) {
+    const polyline = L.polyline(line.stops.map(stop => L.latLng(stop.location[0], stop.location[1])));
+    const trainIcon = L.icon({
+        iconUrl: 'path-to-train-icon.png', // Změňte na skutečnou cestu k ikoně vlaku
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+    });
+
+    const trainMarker = L.marker(polyline.getLatLngs()[0], { icon: trainIcon }).addTo(map);
+
+    let currentIndex = 0;
+    let totalDistance = 0;
+    let lastTimestamp;
+
+    function animateTrain(timestamp) {
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
+        }
+
+        const timeDelta = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+
+        const distanceToNextStop = polyline.getLatLngs()[currentIndex].distanceTo(polyline.getLatLngs()[currentIndex + 1]);
+        const distancePerFrame = (speedKmh * 1000 * timeDelta) / 3600;
+
+        totalDistance += distancePerFrame;
+
+        if (totalDistance >= distanceToNextStop) {
+            totalDistance = 0;
+            currentIndex++;
+
+            if (currentIndex === polyline.getLatLngs().length - 1) {
+                // Vlak dosáhl konce linky, resetujeme
+                currentIndex = 0;
+            }
+        }
+
+        const newPosition = polyline.getLatLngs()[currentIndex].interpolateOnLine(totalDistance / distanceToNextStop);
+        trainMarker.setLatLng(newPosition);
+
+        setTimeout(() => {
+            animateTrain(requestAnimationFrame(animateTrain));
+        }, 1000); // Změňte tuto hodnotu na požadovaný interval aktualizace polohy vlaku
+    }
+
+    animateTrain(performance.now());
+}
+
+// Použití funkce pro linku "Trať 198 Strakonice - Volary" s rychlostí 60 km/h
+moveTrainAlongLine(lines[0], 60);
 
            
           function toggleMobileMenu() {
