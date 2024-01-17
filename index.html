@@ -460,21 +460,41 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-    lines.forEach(line => {
+   lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        line.stops.forEach(stop => {
-            if (!stop.waypoint) {
-                const marker = L.marker([stop.location[0], stop.location[1]])
-                    .bindPopup(`<b>${stop.name}</b>`)
-                    .addTo(map);
+        let trainMarker;
+        let currentPositionIndex = 0;
+
+        function moveTrain() {
+            const currentPosition = latLngs[currentPositionIndex];
+            trainMarker.setLatLng(currentPosition);
+
+            if (currentPositionIndex < latLngs.length - 1) {
+                currentPositionIndex++;
+            } else {
+                // Vlak dojel na konec trati, resetuje se na začátek
+                currentPositionIndex = 0;
             }
-        });
+        }
+
+        function simulateTrain() {
+            trainMarker = L.marker(latLngs[0], { icon: trainIcon }).addTo(map);
+            setInterval(moveTrain, 1000); // Aktualizovat polohu vlaku každou vteřinu
+
+            line.stops.forEach(stop => {
+                if (!stop.waypoint) {
+                    const marker = L.marker([stop.location[0], stop.location[1]])
+                        .bindPopup(`<b>${stop.name}</b>`)
+                        .addTo(map);
+                }
+            });
+        }
+
+        simulateTrain();
     });
 }
-
-
 
            
           function toggleMobileMenu() {
