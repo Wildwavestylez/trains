@@ -471,53 +471,50 @@ function initializeMap() {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        let trainMarker;
-        let currentPositionIndex = 0;
-        let totalDistance = 0;
+        const trainMarker = L.marker([line.stops[0].location[0], line.stops[0].location[1]], { icon: trainIcon }).addTo(map);
+
+        let currentIndex = 0;
+        let isStopping = false;
 
         function moveTrain() {
-            const currentPosition = latLngs[currentPositionIndex];
-            trainMarker.setLatLng(currentPosition);
+            if (!isStopping) {
+                const currentStop = line.stops[currentIndex];
+                const nextStop = line.stops[currentIndex + 1];
 
-            if (currentPositionIndex < latLngs.length - 1) {
-                const nextPosition = latLngs[currentPositionIndex + 1];
-                const distance = currentPosition.distanceTo(nextPosition);
+                const distance = currentStop.location[0] - nextStop.location[0];
+                const duration = (distance / 60) * 60 * 1000; // 60 km/h
 
-                totalDistance += distance;
-
-                // Rychlost vlaku v metrech za sekundu (60 km/h)
-                const speed = 60 * 1000 / 3600;
-
-                // Čas potřebný na přesun mezi dvěma zastávkami (v sekundách)
-                const time = distance / speed;
-
-                if (totalDistance >= distance) {
-                    currentPositionIndex++;
-                    totalDistance = 0;
-                }
-            } else {
-                // Vlak dojel na konec trati, resetuje se na začátek
-                currentPositionIndex = 0;
+                trainMarker
+                    .animate({ 
+                        latlngs: [
+                            [nextStop.location[0], nextStop.location[1]],
+                        ],
+                    }, {
+                        duration,
+                        easing: 'linear',
+                        step: function (now, fx) {
+                            if (fx.prop === 'latlngs') {
+                                const latlng = now[0];
+                                trainMarker.setLatLng([latlng.lat, latlng.lng]);
+                            }
+                        },
+                        complete: function () {
+                            currentIndex++;
+                            if (currentIndex < line.stops.length - 1) {
+                                isStopping = true;
+                                setTimeout(() => {
+                                    isStopping = false;
+                                    moveTrain();
+                                }, Math.random() * (5000 - 3000) + 3000); // 3-5 seconds stop
+                            }
+                        }
+                    });
             }
         }
 
-        function simulateTrain() {
-            trainMarker = L.marker(latLngs[0], { icon: trainIcon }).addTo(map);
-            setInterval(moveTrain, 1000); // Aktualizovat polohu vlaku každou vteřinu
-
-            line.stops.forEach(stop => {
-                if (!stop.waypoint) {
-                    const marker = L.marker([stop.location[0], stop.location[1]])
-                        .bindPopup(`<b>${stop.name}</b>`)
-                        .addTo(map);
-                }
-            });
-        }
-
-        simulateTrain();
+        moveTrain();
     });
 }
-
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
