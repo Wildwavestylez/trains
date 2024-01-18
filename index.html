@@ -456,39 +456,44 @@ function initializeMap() {
         let currentStopIndex = 0;
         let trainMarker = L.marker(latLngs[currentStopIndex], { icon: trainIcon }).addTo(map);
 
-        let currentTime = 0;
-        const speed = 60 / 60 / 60 / 1000; // Rychlost v km/ms
-
         setInterval(() => {
-            if (currentTime < 1) {
+            if (currentStopIndex < latLngs.length - 1) {
                 const start = latLngs[currentStopIndex];
                 const end = latLngs[currentStopIndex + 1];
-                const interpolatedLatLng = interpolateLatLng(start, end, currentTime);
+                const distance = start.distanceTo(end);
+                const duration = (distance / 60) * 1000 * 60 * 60; // 60 km/h
 
-                trainMarker.setLatLng(interpolatedLatLng);
-                currentTime += speed;
+                let startTime = Date.now();
+                let endTime = startTime + duration;
 
-                setTimeout(() => {
-                    // Zastavení na zastávce
-                    // Můžete přidat další logiku nebo akce, které se mají provést při zastavení
-                }, 3000); // 3 sekundy zastavení na zastávce
-            } else {
-                currentTime = 0;
-                currentStopIndex++;
+                function moveTrain() {
+                    let currentTime = Date.now();
+                    let progress = (currentTime - startTime) / (endTime - startTime);
 
-                if (currentStopIndex >= latLngs.length - 1) {
-                    // Vlak dosáhl konce trasy
-                    clearInterval();
+                    if (progress < 1) {
+                        let lat = start.lat + (end.lat - start.lat) * progress;
+                        let lng = start.lng + (end.lng - start.lng) * progress;
+
+                        trainMarker.setLatLng([lat, lng]);
+
+                        requestAnimationFrame(moveTrain);
+                    } else {
+                        currentStopIndex++;
+                        setTimeout(() => {
+                            // Zastavení na zastávce
+                            trainMarker.setPopupContent(line.stops[currentStopIndex].name).openPopup();
+                            requestAnimationFrame(moveTrain);
+                        }, 3000); // 3 sekundy zastavení na zastávce
+                    }
                 }
-            }
-        }, 1000 / 60); // Aktualizace polohy 60x za sekundu
-    });
 
-    function interpolateLatLng(start, end, t) {
-        const lat = start.lat + t * (end.lat - start.lat);
-        const lng = start.lng + t * (end.lng - start.lng);
-        return L.latLng(lat, lng);
-    }
+                moveTrain();
+            } else {
+                // Vlak dosáhl konce trasy
+                clearInterval();
+            }
+        }, 1000); // Aktualizace polohy každou vteřinu
+    });
 }
 
            
