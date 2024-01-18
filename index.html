@@ -209,7 +209,7 @@
         </ul>
     <div>
             <a href="#" onclick="unlockQuestSection()">Staň se dodavatelem </a>
-            <a href="logistic.html" ">Staň se dopravcem</a>
+            <a href="#" onclick="toggleContent()">Staň se dopravcem</a>
         </div>
     </nav>
 
@@ -225,7 +225,8 @@
     </div>
 
     <!-- Mapový kontejner -->
-    <div id="mapContainer" style="display: none; height: 400px;"></div>
+   <div id="logisticContainer" style="display: none;">
+   <iframe src="logistic.html" width="100%" height="500px"></iframe> 
 </div>
 
 <!-- Společný kontejner pro Portfolio, Garáž a Quest -->
@@ -393,25 +394,21 @@
             { id: 117, image: 'https://i.imgur.com/Z7cXwFx.png', description: 'ŽSSR 193 - Siemens Vectron Národný dopravca', basePrice: 48500 },
       
         ];
-      function toggleGameMap() {
-    useGame = !useGame;
-    if (useGame) {
-        switchToGameContainer();
+     function toggleContent() {
+    const trainMarketElement = document.getElementById('trainMarket');
+    const logisticContainer = document.getElementById('logisticContainer');
+
+    if (trainMarketElement.style.display === 'none') {
+        // Pokud je aktuálně skrytá burza vlaků, zobrazíme ji a schováme logisticContainer
+        trainMarketElement.style.display = 'block';
+        logisticContainer.style.display = 'none';
     } else {
-        switchToMapContainer();
+        // Pokud je aktuálně zobrazená burza vlaků, skryjeme ji a zobrazíme logisticContainer
+        trainMarketElement.style.display = 'none';
+        logisticContainer.style.display = 'block';
     }
 }
 
-function switchToGameContainer() {
-    document.getElementById('trainMarket').style.display = 'block';
-    document.getElementById('mapContainer').style.display = 'none';
-}
-
-function switchToMapContainer() {
-    document.getElementById('trainMarket').style.display = 'none';
-    document.getElementById('mapContainer').style.display = 'block';
-    initializeMap();
-}
 
 function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
