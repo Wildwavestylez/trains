@@ -447,65 +447,65 @@ function initializeMap() {
     // Linka "Trať 198"
     const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
 
-   / Přidání ikon pro každou stanici
+      // Přidání ikon pro každou stanici
     stanice.forEach(stanice => {
         const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
         marker.bindPopup(`<b>${stanice.name}</b>`).openPopup();
         trasa198.addLatLng(stanice.location); // Přidání každé stanice do linky
     });
 
-    // Pohyb vlaku
+    // Ikona vlaku
     const trainIcon = createTrainIcon();
-    const train = L.marker(stanice[0].location, { icon: trainIcon }).addTo(map);
-    let trainSpeed = 80; // Rychlost vlaku v km/h
-    let currentPosition = 0;
 
-    // Funkce pro pohyb vlaku
+    // Vlak na trati
+    const vlak = L.marker(stanice[0].location, { icon: trainIcon }).addTo(map);
+
+    // Pohyb vlaku po trati
+    let currentStationIndex = 0;
+    const speed = 80; // Rychlost vlaku v km/h
+
     function moveTrain() {
-        const distanceToNextStation = map.distance(train.getLatLng(), stanice[currentPosition + 1].location);
-        const timeToNextStation = (distanceToNextStation / trainSpeed) * 60 * 60 * 1000; // Čas v milisekundách
+        const currentStation = stanice[currentStationIndex];
+        const nextStation = stanice[currentStationIndex + 1];
 
-        train
-            .setIcon(createTrainIcon())
-            .animate(
-                stanice[currentPosition + 1].location,
+        if (nextStation) {
+            const distance = map.distance(currentStation.location, nextStation.location);
+            const time = (distance / speed) * 1000 * 60 * 60; // Čas v ms (1 hodina = 60 minut = 60 * 60 * 1000 ms)
+            
+            // Pohyb vlaku od jedné stanice k další
+            vlak.animate(
+                [
+                    { latlng: currentStation.location, offset: 0 },
+                    { latlng: nextStation.location, offset: 1 }
+                ],
                 {
-                    duration: timeToNextStation,
+                    duration: time,
                     easing: 'linear',
                     step: function (pos) {
-                        // Aktualizovat ikonu vlaku během animace
-                        train.setIcon(createRotatedTrainIcon(pos * 360));
+                        const latlng = L.latLng(pos.latlng);
+                        vlak.setLatLng(latlng);
                     },
                     complete: function () {
-                        // Přesunout vlak na další stanici po dokončení animace
-                        currentPosition++;
-                        if (currentPosition < stanice.length - 1) {
-                            moveTrain();
-                        } else {
-                            // Vlak dojel na konečnou stanici, resetovat pozici
-                            currentPosition = 0;
-                            moveTrain();
-                        }
-                    },
+                        currentStationIndex++;
+                        moveTrain(); // Rekurzivní volání pro pohyb k další stanici
+                    }
                 }
             );
+        }
     }
 
-    // Spustit pohyb vlaku
     moveTrain();
 }
 
-function createRotatedTrainIcon(rotation) {
+function createTrainIcon() {
     return L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-        popupAnchor: [0, -16],
-        rotationAngle: rotation,
-        rotationOrigin: 'center center',
+        iconUrl: 'https://i.imgur.com/jXoYbZs.png', // Cesta k ikoně vlaku
+        iconSize: [32, 32], // Velikost ikony
+        iconAnchor: [16, 16] // Umístění kotvy ikony
     });
 }
- function createStationIcon() {
+
+function createStationIcon() {
     return L.icon({
         iconUrl: 'https://i.imgur.com/TDw3Eio.png', // Nahraďte cestu k ikoně zastávky
         iconSize: [32, 32], // Velikost ikony
@@ -513,8 +513,6 @@ function createRotatedTrainIcon(rotation) {
         popupAnchor: [0, -32] // Umístění vyskakovacího okna ikony
     });
 }
-
-
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
