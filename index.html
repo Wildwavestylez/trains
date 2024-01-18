@@ -447,55 +447,64 @@ function initializeMap() {
     // Linka "Trať 198"
     const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
 
-  // Poloha vlaku
-let trainPositionIndex = 0; // Index aktuální zastávky
-let trainSpeed = 70 / 3600; // Rychlost vlaku v km/s (70 km/h převedeno na km/s)
+  // Přidání ikon pro každou stanici
+    stanice.forEach(stanice => {
+        const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
+        marker.bindPopup(`<b>${stanice.name}</b>`).openPopup();
+        trasa198.addLatLng(stanice.location); // Přidání každé stanice do linky
+    });
 
-// Funkce pro aktualizaci polohy vlaku
-function updateTrainPosition() {
-    const currentStation = stanice[trainPositionIndex];
-    const nextStation = stanice[trainPositionIndex + 1];
+    // Pohyb vlaku
+    const trainIcon = createTrainIcon();
+    const train = L.marker(stanice[0].location, { icon: trainIcon }).addTo(map);
+    let trainSpeed = 80; // Rychlost vlaku v km/h
+    let currentPosition = 0;
 
-    if (!currentStation || !nextStation) {
-        return; // Pokud jsme na konci trasy, zastavíme aktualizaci
+    // Funkce pro pohyb vlaku
+    function moveTrain() {
+        const distanceToNextStation = map.distance(train.getLatLng(), stanice[currentPosition + 1].location);
+        const timeToNextStation = (distanceToNextStation / trainSpeed) * 60 * 60 * 1000; // Čas v milisekundách
+
+        train
+            .setIcon(createTrainIcon())
+            .animate(
+                stanice[currentPosition + 1].location,
+                {
+                    duration: timeToNextStation,
+                    easing: 'linear',
+                    step: function (pos) {
+                        // Aktualizovat ikonu vlaku během animace
+                        train.setIcon(createRotatedTrainIcon(pos * 360));
+                    },
+                    complete: function () {
+                        // Přesunout vlak na další stanici po dokončení animace
+                        currentPosition++;
+                        if (currentPosition < stanice.length - 1) {
+                            moveTrain();
+                        } else {
+                            // Vlak dojel na konečnou stanici, resetovat pozici
+                            currentPosition = 0;
+                            moveTrain();
+                        }
+                    },
+                }
+            );
     }
 
-    const distance = map.distance(currentStation.location, nextStation.location);
-    const travelTime = distance / trainSpeed; // Čas potřebný k ujetí vzdálenosti
-
-    let elapsed = 0;
-
-    const intervalId = setInterval(() => {
-        elapsed += 1; // Každý interval přidává 1 sekundu k uplynulému času
-
-        if (elapsed >= travelTime) {
-            clearInterval(intervalId); // Zastavení intervalu po dosažení cíle
-            trainPositionIndex++; // Přesun na další zastávku
-            updateTrainPosition(); // Rekurzivně voláme funkci pro další úsek cesty
-        }
-
-        const newPosition = map.interpolate(currentStation.location, nextStation.location, elapsed / travelTime);
-        trainMarker.setLatLng(newPosition);
-    }, 1000); // Aktualizace každou sekundu
+    // Spustit pohyb vlaku
+    moveTrain();
 }
 
-// Funkce pro vytvoření ikony vlaku
-function createTrainIcon() {
+function createRotatedTrainIcon(rotation) {
     return L.icon({
         iconUrl: 'https://i.imgur.com/jXoYbZs.png',
         iconSize: [32, 32],
         iconAnchor: [16, 16],
-        popupAnchor: [0, -16]
+        popupAnchor: [0, -16],
+        rotationAngle: rotation,
+        rotationOrigin: 'center center',
     });
 }
-
-// Přidání ikony vlaku na mapu
-const trainMarker = L.marker(stanice[0].location, { icon: createTrainIcon() }).addTo(map);
-
-// Spustit simulaci pohybu vlaku
-updateTrainPosition();
-
-// ... (další části kódu)
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
