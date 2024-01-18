@@ -450,6 +450,21 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
+
+    lines.forEach(line => {
+        const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
+        const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
+
+        line.stops.forEach(stop => {
+            if (!stop.waypoint) {
+                const marker = L.marker([stop.location[0], stop.location[1]])
+                    .bindPopup(`<b>${stop.name}</b>`)
+                    .addTo(map);
+            }
+        });
+    });
+}
+
      const train = {
         name: "Vlak 1",
         speed: 60, // Rychlost vlaku v km/h
