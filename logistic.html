@@ -47,10 +47,10 @@
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
             trains: [
-                { name: "Train 1", startingIndex: 0 },
-                { name: "Train 2", startingIndex: 6 },
-                { name: "Train 3", startingIndex: 9 },
-                { name: "Train 4", startingIndex: 21 }
+                { name: "Train 1", startingIndex: 0, reverse: false },
+                { name: "Train 2", startingIndex: 9, reverse: false },
+                { name: "Train 3", startingIndex: 13, reverse: true },
+                { name: "Train 4", startingIndex: 21, reverse: false }
             ],
             stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -125,8 +125,9 @@
     });
 
     function moveTrain(train, line) {
-        let currentStopIndex = train.startingIndex;
-        let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+    let currentStopIndex = train.startingIndex;
+    let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+    let startTime = new Date();
         let startTime = new Date();
 
         setInterval(() => {
