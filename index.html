@@ -447,7 +447,7 @@ function initializeMap() {
     // Linka "Trať 198"
     const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
 
-  // Přidání ikon pro každou stanici
+    // Přidání ikon pro každou stanici
     stanice.forEach(stanice => {
         const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
         marker.bindPopup(`<b>${stanice.name}</b>`).openPopup();
