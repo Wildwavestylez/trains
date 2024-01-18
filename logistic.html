@@ -131,13 +131,10 @@
     let direction = train.direction; // Získání směru pohybu pro konkrétní vlak
     let startTime = new Date();
 
-    setInterval(() => {
+    
+        setInterval(() => {
         const currentStop = line.stops[currentStopIndex];
         const nextStop = line.stops[currentStopIndex + direction];
-
-        setInterval(() => {
-            const currentStop = line.stops[currentStopIndex];
-            const nextStop = line.stops[currentStopIndex + direction];
 
             if (nextStop) {
                 const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
@@ -168,7 +165,7 @@
             }
         }, updateInterval);
     }
-}
+
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // poloměr Země v km
