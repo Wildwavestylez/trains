@@ -408,21 +408,27 @@ function switchToGameContainer() {
 }
 
 function switchToMapContainer() {
+    // Skryj hru
     document.getElementById('trainMarket').style.display = 'none';
-    document.getElementById('mapContainer').style.display = 'block';
+    
+    // Získání odkazu na mapContainer
+    var mapContainer = document.getElementById('mapContainer');
 
-    // Načtení obsahu z "logistic.html" a vložení do kontejneru
-    fetch('logistic.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('mapContainer').innerHTML = data;
-            // Inicializace mapy nebo další akce po načtení obsahu
+    // Načtení obsahu z "logistic.html" pomocí AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'logistic.html', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Vložení načteného obsahu do mapContainer
+            mapContainer.innerHTML = xhr.responseText;
+
+            // Inicializace mapy nebo jakékoli další akce
             initializeMap();
-        })
-        .catch(error => {
-            console.error('Chyba při načítání obsahu:', error);
-        });
+        }
+    };
+    xhr.send();
 }
+
 
 function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
