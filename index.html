@@ -447,6 +447,9 @@ function initializeMap() {
     // Linka "Trať 198"
     const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
 
+        // Linka "Trať 198"
+    const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
+
     // Přidání ikon pro každou stanici
     stanice.forEach(stanice => {
         const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
@@ -454,55 +457,16 @@ function initializeMap() {
         trasa198.addLatLng(stanice.location); // Přidání každé stanice do linky
     });
 
-    // Pohyb vlaku
-    const trainIcon = createTrainIcon();
-    const train = L.marker(stanice[0].location, { icon: trainIcon }).addTo(map);
-    let trainSpeed = 80; // Rychlost vlaku v km/h
-    let currentPosition = 0;
-
-    // Funkce pro pohyb vlaku
-    function moveTrain() {
-        const distanceToNextStation = map.distance(train.getLatLng(), stanice[currentPosition + 1].location);
-        const timeToNextStation = (distanceToNextStation / trainSpeed) * 60 * 60 * 1000; // Čas v milisekundách
-
-        train
-            .setIcon(createTrainIcon())
-            .animate(
-                stanice[currentPosition + 1].location,
-                {
-                    duration: timeToNextStation,
-                    easing: 'linear',
-                    step: function (pos) {
-                        // Aktualizovat ikonu vlaku během animace
-                        train.setIcon(createRotatedTrainIcon(pos * 360));
-                    },
-                    complete: function () {
-                        // Přesunout vlak na další stanici po dokončení animace
-                        currentPosition++;
-                        if (currentPosition < stanice.length - 1) {
-                            moveTrain();
-                        } else {
-                            // Vlak dojel na konečnou stanici, resetovat pozici
-                            currentPosition = 0;
-                            moveTrain();
-                        }
-                    },
-                }
-            );
-    }
-
-    // Spustit pohyb vlaku
-    moveTrain();
+    // Další funkce mapy
+    // ...
 }
 
-function createRotatedTrainIcon(rotation) {
+function createStationIcon() {
     return L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-        popupAnchor: [0, -16],
-        rotationAngle: rotation,
-        rotationOrigin: 'center center',
+        iconUrl: 'path-to-your-station-icon.png', // Nahraďte cestu k ikoně zastávky
+        iconSize: [32, 32], // Velikost ikony
+        iconAnchor: [16, 32], // Umístění kotvy ikony
+        popupAnchor: [0, -32] // Umístění vyskakovacího okna ikony
     });
 }
 
