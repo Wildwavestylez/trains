@@ -125,15 +125,15 @@
         });
     });
 
-    function moveTrain(train, line) {
+function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
     let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
     let startTime = new Date();
-        
 
-        setInterval(() => {
-            const currentStop = line.stops[currentStopIndex];
-            const nextStop = line.stops[currentStopIndex + direction];
+    setInterval(() => {
+        const currentStop = line.stops[currentStopIndex];
+        const nextStop = line.stops[currentStopIndex + direction];
+
 
             if (nextStop) {
                 const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
