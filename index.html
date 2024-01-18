@@ -417,43 +417,92 @@ function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    const lines = [
-        {
-            name: "Trať 198 Strakonice - Volary",
-            color: "blue",
-            stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047] },
-                { name: "Waypoint1", location: [49.2543767, 13.9122300], waypoint: true },
-                { name: "Waypoint2", location: [49.2539036, 13.9109550], waypoint: true },
-                { name: "Waypoint3", location: [49.2528869, 13.9102331], waypoint: true },
-                { name: "Waypoint4", location: [49.2502842, 13.9111611], waypoint: true },
-                { name: "Waypoint5", location: [49.2490167, 13.9111544], waypoint: true },
-                { name: "Waypoint6", location: [49.2425075, 13.9077450], waypoint: true },
-                { name: "Waypoint7", location: [49.2418611, 13.9076397], waypoint: true },
-                { name: "Waypoint8", location: [49.2411678, 13.9079836], waypoint: true },
-                { name: "Waypoint9", location: [49.2407028, 13.9086097], waypoint: true },
+    // Stanice na trati 198
+    const stanice = [
+{ name: "Strakonice", location: [49.2551575, 13.9163047] },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
-                // Další zastávky a waypointy
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
                 { name: "Hoštice", location: [49.1873397, 13.8930731] },
                 { name: "Volyně", location: [49.1701164, 13.8928975] },
-            ]
-        },
-        // Další linky můžete přidat podle potřeby
+                { name: "Nišovice", location: [49.1502839, 13.9059867] },
+                { name: "Malenice", location: [49.1237908, 13.8832197] },
+                { name: "Lčovice", location: [49.1090089, 13.8666047] },
+                { name: "Čkyně", location: [49.1111489, 13.8291083] },
+                { name: "Bohumilice v Čechách, zastávka", location: [49.0975800, 13.8137817] },
+                { name: "Bohumilice v Čechách", location: [49.0927086, 13.8010150] },
+                { name: "Vimperk", location: [49.0555267, 13.7907544] },
+                { name: "Vimperk, zastávka", location: [49.0487633, 13.7639522] },
+                { name: "Lipka", location: [49.0202103, 13.7354764] },
+                { name: "Kubova Huť", location: [48.9830017, 13.7747478] },
+                { name: "Horní Vltavice", location: [48.9625625, 13.7746514] },
+                { name: "Zátoň", location: [48.9509200, 13.8030072] },
+                { name: "Zátoň - Boubín", location: [48.9515725, 13.8224831] },
+                { name: "Lenora", location: [48.9283675, 13.7969542] },
+                { name: "Lenora zastávka", location: [48.9233969, 13.8026581] },
+                { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
+                { name: "Volary", location: [48.9070969, 13.8833131] },
     ];
 
-    lines.forEach(line => {
-        const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
-        const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
+    // Linka "Trať 198"
+    const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
 
-        line.stops.forEach(stop => {
-            if (!stop.waypoint) {
-                const marker = L.marker([stop.location[0], stop.location[1]])
-                    .bindPopup(`<b>${stop.name}</b>`)
-                    .addTo(map);
-            }
-        });
+    // Přidání ikon pro každou stanici
+    stanice.forEach(stanice => {
+        const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
+        marker.bindPopup(`<b>${stanice.name}</b>`).openPopup();
+        trasa198.addLatLng(stanice.location); // Přidání každé stanice do linky
+    });
+
+    // Pohyb vlaku
+    const trainIcon = createTrainIcon();
+    const train = L.marker(stanice[0].location, { icon: trainIcon }).addTo(map);
+    let trainSpeed = 80; // Rychlost vlaku v km/h
+    let currentPosition = 0;
+
+    // Funkce pro pohyb vlaku
+    function moveTrain() {
+        const distanceToNextStation = map.distance(train.getLatLng(), stanice[currentPosition + 1].location);
+        const timeToNextStation = (distanceToNextStation / trainSpeed) * 60 * 60 * 1000; // Čas v milisekundách
+
+        train
+            .setIcon(createTrainIcon())
+            .animate(
+                stanice[currentPosition + 1].location,
+                {
+                    duration: timeToNextStation,
+                    easing: 'linear',
+                    step: function (pos) {
+                        // Aktualizovat ikonu vlaku během animace
+                        train.setIcon(createRotatedTrainIcon(pos * 360));
+                    },
+                    complete: function () {
+                        // Přesunout vlak na další stanici po dokončení animace
+                        currentPosition++;
+                        if (currentPosition < stanice.length - 1) {
+                            moveTrain();
+                        } else {
+                            // Vlak dojel na konečnou stanici, resetovat pozici
+                            currentPosition = 0;
+                            moveTrain();
+                        }
+                    },
+                }
+            );
+    }
+
+    // Spustit pohyb vlaku
+    moveTrain();
+}
+
+function createRotatedTrainIcon(rotation) {
+    return L.icon({
+        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -16],
+        rotationAngle: rotation,
+        rotationOrigin: 'center center',
     });
 }
 
