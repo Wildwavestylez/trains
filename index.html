@@ -443,18 +443,93 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-    lines.forEach(line => {
+   lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        line.stops.forEach(stop => {
+        line.stops.forEach((stop, index) => {
+            const marker = L.marker([stop.location[0], stop.location[1]])
+                .bindPopup(`<b>${stop.name}</b>`)
+                .addTo(map);
+
             if (!stop.waypoint) {
-                const marker = L.marker([stop.location[0], stop.location[1]])
-                    .bindPopup(`<b>${stop.name}</b>`)
-                    .addTo(map);
+                setInterval(() => {
+                    moveTrain(trainIcon, map, polyline, index);
+                }, 1000);
             }
         });
     });
+}
+
+function moveTrain(icon, map, polyline, currentIndex) {
+    const speedKmh = 60;
+    const intervalSeconds = 1;
+    const distanceToNextStop = getDistance(
+        polyline.getLatLngs()[currentIndex].lat,
+        polyline.getLatLngs()[currentIndex].lng,
+        polyline.getLatLngs()[currentIndex + 1].lat,
+        polyline.getLatLngs()[currentIndex + 1].lng
+    );
+
+    const distancePerInterval = (speedKmh * 1000) / (60 * 60) * intervalSeconds; // vzdálenost, kterou vlak ujede za interval
+
+    if (distanceToNextStop > distancePerInterval) {
+        const newLatLng = getNewLatLng(
+            polyline.getLatLngs()[currentIndex].lat,
+            polyline.getLatLngs()[currentIndex].lng,
+            polyline.getLatLngs()[currentIndex + 1].lat,
+            polyline.getLatLngs()[currentIndex + 1].lng,
+            distancePerInterval
+        );
+
+        polyline.getLatLngs()[currentIndex] = newLatLng;
+        map.setView(newLatLng, map.getZoom());
+
+        if (!map.hasLayer(icon)) {
+            icon.addTo(map);
+        }
+
+        icon.setLatLng(newLatLng);
+    } else {
+        // Vlak dosáhl následující zastávky, zastaví na 3-5 sekund
+        setTimeout(() => {
+            // Přeskočí na další zastávku
+            currentIndex++;
+            moveTrain(icon, map, polyline, currentIndex);
+        }, getRandomInt(3000, 5000));
+    }
+}
+
+function getNewLatLng(lat1, lon1, lat2, lon2, distance) {
+    const bearing = getBearing(lat1, lon1, lat2, lon2);
+    const R = 6371; // poloměr Země v km
+
+    const lat1Rad = toRadians(lat1);
+    const lon1Rad = toRadians(lon1);
+
+    const newLat = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / R) +
+        Math.cos(lat1Rad) * Math.sin(distance / R) * Math.cos(bearing));
+    const newLon = lon1Rad + Math.atan2(Math.sin(bearing) * Math.sin(distance / R) * Math.cos(lat1Rad),
+        Math.cos(distance / R) - Math.sin(lat1Rad) * Math.sin(newLat));
+
+    return { lat: toDegrees(newLat), lng: toDegrees(newLon) };
+}
+
+function getBearing(lat1, lon1, lat2, lon2) {
+    const dLon = toRadians(lon2 - lon1);
+    const x = Math.sin(dLon) * Math.cos(toRadians(lat2));
+    const y = Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -
+        Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(dLon);
+    const bearing = Math.atan2(x, y);
+    return (toDegrees(bearing) + 360) % 360;
+}
+
+function toDegrees(radians) {
+    return radians * 180 / Math.PI;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
