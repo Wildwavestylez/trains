@@ -127,9 +127,13 @@
     });
 
     function moveTrain(train, line) {
-        let currentStopIndex = train.startingIndex;
-        let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-        let startTime = new Date();
+    let currentStopIndex = train.startingIndex;
+    let direction = train.direction; // Získání směru pohybu pro konkrétní vlak
+    let startTime = new Date();
+
+    setInterval(() => {
+        const currentStop = line.stops[currentStopIndex];
+        const nextStop = line.stops[currentStopIndex + direction];
 
         setInterval(() => {
             const currentStop = line.stops[currentStopIndex];
