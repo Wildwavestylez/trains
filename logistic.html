@@ -54,7 +54,9 @@ const lines = [
             { name: "Train 1", startingIndex: 0, reverse: false },
             { name: "Train 2", startingIndex: 8, reverse: false },
             { name: "Train 3", startingIndex: 14, reverse: true },
-            { name: "Train 4", startingIndex: 21, reverse: false }
+            { name: "Train 4", startingIndex: 21, reverse: false },
+            { name: "Train 5", startingIndex: 7, reverse: true },
+            { name: "Train 4", startingIndex: 15, reverse: false }
         ],
         stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -81,6 +83,35 @@ const lines = [
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },
         ]
+    }, 
+
+        {
+        name: "Trať 031 Pardubice  - Jaroměř",    
+        color: "red",
+        trains: [
+            { name: "Train 7", startingIndex: 0, reverse: false },
+            { name: "Train 8", startingIndex: 14, reverse: false },
+            { name: "Train 9", startingIndex: 7, reverse: true },
+            
+        ],
+        stops: [
+              { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
+                { name: "Pardubice - Rosice nad Laben", location: [50.0454825N, 15.7424669E] },
+                { name: "Pardubice - Semtín", location: [50.0614931, 15.7479144] },
+                { name: "Stéblová obec", location: [50.0928917, 15.7523633] },
+                { name: "Stéblová", location: [50.1044083, 15.7576503] },
+                { name: "Čeperka", location: [50.1314736, 15.7699281] },
+                { name: "Opatovice nad Labem", location: [50.1562539, 15.7839042] },
+                { name: "Opatovice nad Labem - Pohřebačka", location: [50.1653747, 15.7890414] },
+                { name: "Hradec Králové, Hlavní nádraží", location: [50.2140617, 15.8101597] },
+                { name: "Předměřice nad Labem", location: [50.2526511, 15.8177967] },
+                { name: "Lochenice", location: [50.2729417, 15.8245219] },
+                { name: "Smiřice", location: [50.3005256, 15.8582047] },
+                { name: "Černožice", location: [50.3155061, 15.8695822] },
+                { name: "Semonice", location: [50.3316458, 15.8774558] },
+                { name: "Jaroměř", location: [50.3417397, 15.9101000] },
+               
+        ]
     },
     // Další linky můžete přidávat podle potřeby
 ];
@@ -91,7 +122,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Přidání link a jejich zastávek na mapu
 lines.forEach(line => {
     // Linka
     let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
