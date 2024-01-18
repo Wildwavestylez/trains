@@ -417,6 +417,12 @@ function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+    const trainIcon = L.icon({
+        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+    });
+
     const lines = [
         {
             name: "Trať 198 Strakonice - Volary",
@@ -438,7 +444,7 @@ function initializeMap() {
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
                 { name: "Hoštice", location: [49.1873397, 13.8930731] },
                 { name: "Volyně", location: [49.1701164, 13.8928975] },
-                 { name: "Nišovice", location: [49.1502839, 13.9059867] },
+                { name: "Nišovice", location: [49.1502839, 13.9059867] },
                 { name: "Malenice", location: [49.1237908, 13.8832197] },
                 { name: "Lčovice", location: [49.1090089, 13.8666047] },
                 { name: "Čkyně", location: [49.1111489, 13.8291083] },
@@ -456,131 +462,37 @@ function initializeMap() {
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },
             ]
-            trains: [
-            { name: "Vlak 1", startingIndex: 0 },
-        { name: "Vlak 2", startingIndex: 5 },
-        { name: "Vlak 3", startingIndex: 9 },
-        { name: "Vlak 4", startingIndex: 14 },
-        { name: "Vlak 5", startingIndex: 22 },
-            // Další vlaky...
-        ],
-    },
-    // Další linky můžete přidat podle potřeby
-];
         },
         // Další linky můžete přidat podle potřeby
     ];
 
-    // Inicializace mapy Leaflet
-const map = L.map('map').setView([49.25, 13.91], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
+    lines.forEach(line => {
+        const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
+        const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-// Přidání link a jejich zastávek na mapu
-lines.forEach(line => {
-    const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
-    const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
+        let currentStopIndex = 0;
+        let trainMarker = L.marker(latLngs[currentStopIndex], { icon: trainIcon }).addTo(map);
 
-    line.stops.forEach(stop => {
-        if (!stop.waypoint) {
-            const marker = L.marker([stop.location[0], stop.location[1]])
-                .bindPopup(`<b>${stop.name}</b>`)
-                .addTo(map);
+        setInterval(() => {
+            if (currentStopIndex < latLngs.length - 1) {
+                const start = latLngs[currentStopIndex];
+                const end = latLngs[currentStopIndex + 1];
+                const distance = start.distanceTo(end);
+                const duration = (distance / 60) * 1000 * 60 * 60; // 60 km/h
 
-            // Vytvoření ikony vlaku
-            let trainIcon = L.icon({
-                iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-                iconSize: [50, 50],
-                iconAnchor: [25, 25],
-                popupAnchor: [0, 0]
-            });
+                trainMarker.setLatLng(end);
+                currentStopIndex++;
 
-            line.trains.forEach(train => {
-                // Vytvoření markeru vlaku na startovní pozici
-                let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-                trainMarker.bindPopup(train.name);
-
-                // Uložení markeru do dat vlaku
-                train.marker = trainMarker;
-            });
-
-            // Pohybující se ikony vlaků
-            line.trains.forEach(train => {
-                moveTrain(train, line);
-            });
-        }
-    });
-});
-
-function moveTrain(train, line) {
-    let currentStopIndex = train.startingIndex;
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
-
-    setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = line.stops[currentStopIndex + direction];
-
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
-
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
-
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                train.marker.setLatLng([lat, lon]);
+                setTimeout(() => {
+                    // Zastavení na zastávce
+                    // Můžete přidat další logiku nebo akce, které se mají provést při zastavení
+                }, 3000); // 3 sekundy zastavení na zastávce
             } else {
-                // Přesun na další/zpětnou zastávku
-                currentStopIndex += direction;
-                startTime = new Date();
-
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                    direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
-                }
+                // Vlak dosáhl konce trasy
+                clearInterval();
             }
-        } else {
-            // Dosáhli jsme konce trasy, změňme směr pohybu
-            direction *= -1;
-            currentStopIndex += direction;
-        }
-    }, updateInterval);
-}
-
-// Funkce pro výpočet vzdálenosti mezi dvěma body
-function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Průměr Země v kilometrech
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Vzdálenost v kilometrech
-    return distance;
-}
-
-// Převod stupňů na radiány
-function toRadians(degrees) {
-    return degrees * Math.PI / 180;
-}
-
-// Funkce pro generování náhodné částky mezi 20 a 50 Kč
-function generateRandomAmount() {
-    return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
-}
-
-// Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-function giveRandomMoneyToPlayer() {
-    const randomAmount = generateRandomAmount();
-    playerFinance += randomAmount;
-    document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+        }, 1000); // Aktualizace polohy každou vteřinu
+    });
 }
 
            
