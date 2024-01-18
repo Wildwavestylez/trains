@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 785</p>
+    <p>Kupony vlaků: 1</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -41,18 +41,16 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
- let playerFinance = 1000;
     // Fiktivní data pro linky a zastávky
     const lines = [
         {
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
             trains: [
-                { name: "Train 1", startingIndex: 0, },
-                { name: "Train 2", startingIndex: 8, },
-                { name: "Train 3", startingIndex: 14,},
-                { name: "Train 4", startingIndex: 16, },
-                { name: "Train 5", startingIndex: 21, },
+                { name: "Train 1", startingIndex: 0 },
+                { name: "Train 2", startingIndex: 6 },
+                { name: "Train 3", startingIndex: 9 },
+                { name: "Train 4", startingIndex: 21 }
             ],
             stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -127,14 +125,13 @@
     });
 
     function moveTrain(train, line) {
-    let currentStopIndex = train.startingIndex;
-    let direction = train.direction; // Získání směru pohybu pro konkrétní vlak
-    let startTime = new Date();
+        let currentStopIndex = train.startingIndex;
+        let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+        let startTime = new Date();
 
-    
         setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = line.stops[currentStopIndex + direction];
+            const currentStop = line.stops[currentStopIndex];
+            const nextStop = line.stops[currentStopIndex + direction];
 
             if (nextStop) {
                 const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
@@ -155,7 +152,6 @@
                     // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                         direction *= -1;
-                        giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
                     }
                 }
             } else {
@@ -187,15 +183,9 @@
 
     // Funkce pro generování náhodné částky mezi 20 a 50 Kč
     function generateRandomAmount() {
-        return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+        return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
     }
 
-    // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-   function giveRandomMoneyToPlayer() {
-        const randomAmount = generateRandomAmount();
-        playerFinance += randomAmount;
-        document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-}
 </script>
 
 </body>
