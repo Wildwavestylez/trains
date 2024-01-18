@@ -466,35 +466,49 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-    lines.forEach(line => {
+       lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        let currentStopIndex = 0;
-        let trainMarker = L.marker(latLngs[currentStopIndex], { icon: trainIcon }).addTo(map);
+        let currentLatLngIndex = 0;
+        let trainMarker = L.marker(latLngs[currentLatLngIndex], { icon: trainIcon }).addTo(map);
 
-        setInterval(() => {
-            if (currentStopIndex < latLngs.length - 1) {
-                const start = latLngs[currentStopIndex];
-                const end = latLngs[currentStopIndex + 1];
+        const animateTrain = () => {
+            if (currentLatLngIndex < latLngs.length - 1) {
+                const start = latLngs[currentLatLngIndex];
+                const end = latLngs[currentLatLngIndex + 1];
                 const distance = start.distanceTo(end);
                 const duration = (distance / 60) * 1000 * 60 * 60; // 60 km/h
 
-                trainMarker.setLatLng(end);
-                currentStopIndex++;
+                trainMarker
+                    .setLatLng(start)
+                    .setIconAngle(getBearing(start, end));
+
+                currentLatLngIndex++;
+
+                trainMarker._icon.style.transition = `transform ${duration}ms linear`;
+                trainMarker._icon.style.transform = `translate(${end.x - start.x}px, ${end.y - start.y}px)`;
 
                 setTimeout(() => {
-                    // Zastavení na zastávce
-                    // Můžete přidat další logiku nebo akce, které se mají provést při zastavení
-                }, 3000); // 3 sekundy zastavení na zastávce
+                    animateTrain();
+                }, duration);
             } else {
                 // Vlak dosáhl konce trasy
-                clearInterval();
             }
-        }, 1000); // Aktualizace polohy každou vteřinu
+        };
+
+        animateTrain();
     });
 }
 
+function getBearing(start, end) {
+    const x = end.x - start.x;
+    const y = end.y - start.y;
+    return (Math.atan2(y, x) * 180) / Math.PI;
+}
+
+// Inicializace mapy
+initializeMap();
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
