@@ -408,37 +408,14 @@ function switchToGameContainer() {
 }
 
 function switchToMapContainer() {
-    // Skryj hru
     document.getElementById('trainMarket').style.display = 'none';
-    
-    // Získání odkazu na mapContainer
-    var mapContainer = document.getElementById('mapContainer');
-
-    // Načtení obsahu z "logistic.html" pomocí AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'logistic.html', true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            // Vložení načteného obsahu do mapContainer
-            mapContainer.innerHTML = xhr.responseText;
-
-            // Inicializace mapy nebo jakékoli další akce
-            initializeMap();
-        }
-    };
-    xhr.send();
+    document.getElementById('mapContainer').style.display = 'block';
+    initializeMap();
 }
-
 
 function initializeMap() {
     const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    const trainIcon = L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-    });
 
     const lines = [
         {
@@ -466,52 +443,20 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-     lines.forEach(line => {
+    lines.forEach(line => {
         const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
         const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
 
-        let currentStopIndex = 0;
-        let trainMarker = L.marker(latLngs[currentStopIndex], { icon: trainIcon }).addTo(map);
-
-        setInterval(() => {
-            if (currentStopIndex < latLngs.length - 1) {
-                const start = latLngs[currentStopIndex];
-                const end = latLngs[currentStopIndex + 1];
-                const distance = start.distanceTo(end);
-                const duration = (distance / 60) * 1000 * 60 * 60; // 60 km/h
-
-                let startTime = Date.now();
-                let endTime = startTime + duration;
-
-                function moveTrain() {
-                    let currentTime = Date.now();
-                    let progress = (currentTime - startTime) / (endTime - startTime);
-
-                    if (progress < 1) {
-                        let lat = start.lat + (end.lat - start.lat) * progress;
-                        let lng = start.lng + (end.lng - start.lng) * progress;
-
-                        trainMarker.setLatLng([lat, lng]);
-
-                        requestAnimationFrame(moveTrain);
-                    } else {
-                        currentStopIndex++;
-                        setTimeout(() => {
-                            // Zastavení na zastávce
-                            trainMarker.setPopupContent(line.stops[currentStopIndex].name).openPopup();
-                            requestAnimationFrame(moveTrain);
-                        }, 3000); // 3 sekundy zastavení na zastávce
-                    }
-                }
-
-                moveTrain();
-            } else {
-                // Vlak dosáhl konce trasy
-                clearInterval();
+        line.stops.forEach(stop => {
+            if (!stop.waypoint) {
+                const marker = L.marker([stop.location[0], stop.location[1]])
+                    .bindPopup(`<b>${stop.name}</b>`)
+                    .addTo(map);
             }
-        }, 1000); // Aktualizace polohy každou vteřinu
+        });
     });
 }
+
 
            
           function toggleMobileMenu() {
