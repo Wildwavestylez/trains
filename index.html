@@ -597,49 +597,6 @@ function toggleContainer() {
         switchToTrainContainer();
     }
 }
-function initializeMap() {
-    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    const lines = [
-        {
-            name: "Trať 198 Strakonice - Volary",
-            color: "blue",
-            stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047] },
-                { name: "Waypoint1", location: [49.2543767, 13.9122300], waypoint: true },
-                { name: "Waypoint2", location: [49.2539036, 13.9109550], waypoint: true },
-                { name: "Waypoint3", location: [49.2528869, 13.9102331], waypoint: true },
-                { name: "Waypoint4", location: [49.2502842, 13.9111611], waypoint: true },
-                { name: "Waypoint5", location: [49.2490167, 13.9111544], waypoint: true },
-                { name: "Waypoint6", location: [49.2425075, 13.9077450], waypoint: true },
-                { name: "Waypoint7", location: [49.2418611, 13.9076397], waypoint: true },
-                { name: "Waypoint8", location: [49.2411678, 13.9079836], waypoint: true },
-                { name: "Waypoint9", location: [49.2407028, 13.9086097], waypoint: true },
-                { name: "Radošovice", location: [49.2322158, 13.901812] },
-                { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
-                // Další zastávky a waypointy
-                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
-                { name: "Hoštice", location: [49.1873397, 13.8930731] },
-                { name: "Volyně", location: [49.1701164, 13.8928975] },
-            ]
-        },
-        // Další linky můžete přidat podle potřeby
-    ];
-
-    lines.forEach(line => {
-        const latLngs = line.stops.map(stop => L.latLng(stop.location[0], stop.location[1]));
-        const polyline = L.polyline(latLngs, { color: line.color }).addTo(map);
-
-        line.stops.forEach(stop => {
-            if (!stop.waypoint) {
-                const marker = L.marker([stop.location[0], stop.location[1]])
-                    .bindPopup(`<b>${stop.name}</b>`)
-                    .addTo(map);
-            }
-        });
-    });
-}
 
 
            
