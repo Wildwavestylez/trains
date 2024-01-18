@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,38 +26,37 @@
     </style>
     <title>Train Game</title>
 </head>
-
 <body>
 
-    <div id="playerPanel">
-        <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
-        <h2>Player Panel</h2>
-        <p id="finance">Finance: 1000 Kč</p>
-        <p>Kupony vlaků: 1</p>
-        <p>Vlaky v provozu: 4</p>
-        <!-- Doplnit další informace podle potřeby -->
-    </div>
+<div id="playerPanel">
+    <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
+    <h2>Player Panel</h2>
+    <p id="finance">Finance: 1000 Kč</p>
+    <p>Kupony vlaků: 3</p>
+    <p>Vlaky v provozu: 4</p>
+    <!-- Doplnit další informace podle potřeby -->
+</div>
 
-    <div id="map"></div>
+<div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        let playerFinance = 1000;
-        const trainSpeed = 500; // Rychlost vlaku v km/h
-        const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+let playerFinance = 1000;
+const trainSpeed = 500; // Rychlost vlaku v km/h
+const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
 
-        // Fiktivní data pro linky a zastávky
-        const lines = [
-            {
-                name: "Trať 198 Strakonice - Volary",
-                color: "blue",
-                trains: [
-                    { name: "Train 1", startingIndex: 0, reverse: false },
-                    { name: "Train 2", startingIndex: 8, reverse: false },
-                    { name: "Train 3", startingIndex: 14, reverse: true },
-                    { name: "Train 4", startingIndex: 21, reverse: false }
-                ],
-                stops: [
+// Fiktivní data pro linky a zastávky
+const lines = [
+    {
+        name: "Trať 198 Strakonice - Volary",
+        color: "blue",
+        trains: [
+            { name: "Train 1", startingIndex: 0, reverse: false },
+            { name: "Train 2", startingIndex: 8, reverse: false },
+            { name: "Train 3", startingIndex: 14, reverse: true },
+            { name: "Train 4", startingIndex: 21, reverse: false }
+        ],
+        stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
@@ -80,126 +78,126 @@
                 { name: "Zátoň - Boubín", location: [48.9515725, 13.8224831] },
                 { name: "Lenora", location: [48.9283675, 13.7969542] },
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581] },
-                { name: "Soumarský Most", location: [48.9080047, 13.8287611] 
+                { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },
-                ]
-            },
-            // Další linky můžete přidávat podle potřeby
-        ];
+        ]
+    },
+    // Další linky můžete přidávat podle potřeby
+];
 
-        // Inicializace mapy Leaflet
-        const map = L.map('map').setView([49.25, 13.91], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+// Inicializace mapy Leaflet
+const map = L.map('map').setView([49.25, 13.91], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-        // Přidání link a jejich zastávek na mapu
-        lines.forEach(line => {
-            // Linka
-            let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
-            polyline.bindPopup(line.name);
+// Přidání link a jejich zastávek na mapu
+lines.forEach(line => {
+    // Linka
+    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
+    polyline.bindPopup(line.name);
 
-            // Vlaky
-            line.trains.forEach(train => {
-                let trainIcon = L.icon({
-                    iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-                    iconSize: [100, 100],
-                    iconAnchor: [50, 50],
-                    popupAnchor: [0, 0]
-                });
-
-                let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-                trainMarker.bindPopup(train.name);
-
-                train.marker = trainMarker; // Uložení markeru do dat vlaku
-            });
-
-            // Zastávky
-            line.stops.forEach(stop => {
-                L.marker(stop.location).addTo(map).bindPopup(stop.name);
-            });
+    // Vlaky
+    line.trains.forEach(train => {
+        let trainIcon = L.icon({
+            iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+            iconSize: [100, 100],
+            iconAnchor: [50, 50],
+            popupAnchor: [0, 0]
         });
 
-        // Pohybující se ikony vlaků
-        lines.forEach(line => {
-            line.trains.forEach(train => {
-                moveTrain(train, line);
-            });
-        });
+        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+        trainMarker.bindPopup(train.name);
 
-        // Funkce pro generování náhodné částky mezi 20 a 50 Kč
-        function generateRandomAmount() {
-            return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
-        }
+        train.marker = trainMarker; // Uložení markeru do dat vlaku
+    });
 
-        // Nová funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-        function giveRandomMoneyToPlayer() {
-            const randomAmount = generateRandomAmount();
-            playerFinance += randomAmount;
-            document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-        }
+    // Zastávky
+    line.stops.forEach(stop => {
+        L.marker(stop.location).addTo(map).bindPopup(stop.name);
+    });
+});
 
-        // Změny v moveTrain funkci
-        function moveTrain(train, line) {
-            let currentStopIndex = train.startingIndex;
-            let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-            let startTime = new Date();
+// Pohybující se ikony vlaků
+lines.forEach(line => {
+    line.trains.forEach(train => {
+        moveTrain(train, line);
+    });
+});
 
-            setInterval(() => {
-                const currentStop = line.stops[currentStopIndex];
-                const nextStop = line.stops[currentStopIndex + direction];
+// Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
+function giveRandomMoneyToPlayer() {
+    const randomAmount = generateRandomAmount();
+    playerFinance += randomAmount;
+    document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+}
 
-                if (nextStop) {
-                    const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-                    const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+function generateRandomAmount() {
+    return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+}
 
-                    const currentTime = new Date();
-                    const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+// Změny v moveTrain funkci
+function moveTrain(train, line) {
+    let currentStopIndex = train.startingIndex;
+    let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+    let startTime = new Date();
 
-                    if (elapsedTime <= timeToNextStop) {
-                        const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                        const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                        train.marker.setLatLng([lat, lon]);
-                    } else {
-                        // Přesun na další/zpětnou zastávku
-                        currentStopIndex += direction;
-                        startTime = new Date();
+    setInterval(() => {
+        const currentStop = line.stops[currentStopIndex];
+        const nextStop = line.stops[currentStopIndex + direction];
 
-                        // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                        if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                            direction *= -1;
-                            giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
-                        }
-                    }
-                } else {
-                    // Dosáhli jsme konce trasy, změňme směr pohybu
+        if (nextStop) {
+            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+
+            const currentTime = new Date();
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+
+            if (elapsedTime <= timeToNextStop) {
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                train.marker.setLatLng([lat, lon]);
+            } else {
+                // Přesun na další/zpětnou zastávku
+                currentStopIndex += direction;
+                startTime = new Date();
+
+                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                     direction *= -1;
-                    currentStopIndex += direction;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
+                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
                 }
-            }, updateInterval);
+            }
+        } else {
+            // Dosáhli jsme konce trasy, změňme směr pohybu
+            direction *= -1;
+            currentStopIndex += direction;
+            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
         }
+    }, updateInterval);
+}
 
-        // Vypočítá vzdálenost mezi dvěma zastávkami
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // poloměr Země v km
-            const dLat = toRadians(lat2 - lat1);
-            const dLon = toRadians(lon2 - lon1);
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            const distance = R * c; // vzdálenost v km
-            return distance;
-        }
+// Vypočítá vzdálenost mezi dvěma zastávkami
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // poloměr Země v km
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // vzdálenost v km
+    return distance;
+}
 
-        // Převádí stupně na radiány
-        function toRadians(degrees) {
-            return degrees * Math.PI / 180;
-        }
-    </script>
+// Převádí stupně na radiány
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+</script>
 
 </body>
-
 </html>
+
