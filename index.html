@@ -410,7 +410,18 @@ function switchToGameContainer() {
 function switchToMapContainer() {
     document.getElementById('trainMarket').style.display = 'none';
     document.getElementById('mapContainer').style.display = 'block';
-    initializeMap();
+
+    // Načtení obsahu z "logistic.html" a vložení do kontejneru
+    fetch('logistic.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('mapContainer').innerHTML = data;
+            // Inicializace mapy nebo další akce po načtení obsahu
+            initializeMap();
+        })
+        .catch(error => {
+            console.error('Chyba při načítání obsahu:', error);
+        });
 }
 
 function initializeMap() {
