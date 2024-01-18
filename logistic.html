@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 11</p>
+    <p>Kupony vlaků: 5</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -51,14 +51,23 @@ const lines = [
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
         trains: [
-            { name: "Train 1", startingIndex: 0, reverse: false },
-            { name: "Train 2", startingIndex: 8, reverse: false },
-            { name: "Train 3", startingIndex: 14, reverse: true },
-            { name: "Train 4", startingIndex: 21, reverse: false },
-            { name: "Train 5", startingIndex: 7, reverse: true },
-            { name: "Train 6", startingIndex: 15, reverse: false }
+            { name: "Train 1", startingIndex: 0, reverse: false, waypoints: ["AA", "AB"] },
+            { name: "Train 2", startingIndex: 8, reverse: false, waypoints: [] },
+            { name: "Train 3", startingIndex: 14, reverse: true, waypoints: ["AC", "AD"] },
+            { name: "Train 4", startingIndex: 21, reverse: false, waypoints: [] },
+            { name: "Train 5", startingIndex: 7, reverse: true, waypoints: ["AE", "AF"] },
+            { name: "Train 6", startingIndex: 15, reverse: false, waypoints: [] }
         ],
-        
+        stops: [
+            { name: "Strakonice", location: [49.2551575, 13.9163047] },
+            { Waypoint: "AA", location: [49.2543889, 13.9122608] },
+            { Waypoint: "AB", location: [49.2540131, 13.9111300] },
+            { Waypoint: "AC", location: [49.2536539, 13.9106439] },
+            { Waypoint: "AD", location: [49.2531497, 13.9102975] }
+               
+                { name: "Radošovice", location: [49.2322158, 13.901812] },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
                 { name: "Hoštice", location: [49.1873397, 13.8930731] },
                 { name: "Volyně", location: [49.1701164, 13.8928975] },
                 { name: "Nišovice", location: [49.1502839, 13.9059867] },
@@ -78,36 +87,6 @@ const lines = [
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581] },
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },
-        ]
-    }, 
-
-        {
-        name: "Trať 031 Pardubice  - Jaroměř",    
-        color: "red",
-        trains: [
-            { name: "Train 7", startingIndex: 0, reverse: false },
-            { name: "Train 8", startingIndex: 14, reverse: false },
-            { name: "Train 9", startingIndex: 7, reverse: true },
-            
-        ],
-        stops: [
-              { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
-                { name: "Pardubice - Rosice nad Laben", location: [50.0454825, 15.7424669] },
-                { name: "Pardubice - Semtín", location: [50.0614931, 15.7479144] },
-                { name: "Stéblová obec", location: [50.0928917, 15.7523633] },
-                { name: "Stéblová", location: [50.1044083, 15.7576503] },
-                { name: "Čeperka", location: [50.1314736, 15.7699281] },
-                { name: "Opatovice nad Labem", location: [50.1562539, 15.7839042] },
-                { name: "Opatovice nad Labem - Pohřebačka", location: [50.1653747, 15.7890414] },
-                { name: "Hradec Králové, Hlavní nádraží", location: [50.2140617, 15.8101597] },
-                { name: "Předměřice nad Labem", location: [50.2526511, 15.8177967] },
-                { name: "Lochenice", location: [50.2729417, 15.8245219] },
-                { name: "Smiřice", location: [50.3005256, 15.8582047] },
-                { name: "Černožice", location: [50.3155061, 15.8695822] },
-                { name: "Semonice", location: [50.3316458, 15.8774558] },
-                { name: "Jaroměř", location: [50.3417397, 15.9101000] },
-               
-        ]
     },
     // Další linky můžete přidávat podle potřeby
 ];
@@ -140,7 +119,12 @@ lines.forEach(line => {
 
     // Zastávky
     line.stops.forEach(stop => {
-        L.marker(stop.location).addTo(map).bindPopup(stop.name);
+        if (stop.name) {
+            L.marker(stop.location).addTo(map).bindPopup(stop.name);
+        } else {
+            // Waypoint nebude viditelný na mapě a nezobrazí vlak
+            L.circleMarker(stop.location, { radius: 0 }).addTo(map);
+        }
     });
 });
 
@@ -159,7 +143,7 @@ function giveRandomMoneyToPlayer() {
 }
 
 function generateRandomAmount() {
-    return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+    return Math.floor(Math.random() * (50 - 20 + 1)) + 20;
 }
 
 // Změny v moveTrain funkci
@@ -222,8 +206,8 @@ function toRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
+
 </script>
 
 </body>
 </html>
-
