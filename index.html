@@ -451,9 +451,9 @@ function initializeMap() {
     ];
 
      const train = {
-        name: "Vlak 123",
+        name: "Vlak 1",
         speed: 60, // Rychlost vlaku v km/h
-        startingIndex: 0, // Index zastávky, kde vlak začíná
+        startingIndex: 0, // Index zastávky, od které vlak začíná
     };
 
     let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
@@ -462,11 +462,18 @@ function initializeMap() {
     function moveTrain() {
         let currentIndex = train.startingIndex;
         setInterval(() => {
-            currentIndex = (currentIndex + 1) % line.stops.length;
-            const newPosition = line.stops[currentIndex].location;
-            trainMarker.setLatLng(newPosition);
-            map.setView(newPosition, 13);
-        }, 1000 * (1 / (train.speed / 3600))); // Aktualizace polohy každou sekundu
+            if (currentIndex < line.stops.length - 1) {
+                currentIndex++;
+                const startPosition = line.stops[currentIndex - 1].location;
+                const endPosition = line.stops[currentIndex].location;
+                const distance = map.distance(startPosition, endPosition); // Vzdálenost mezi zastávkami v metrech
+                const duration = (distance / (train.speed * 1000 / 3600)) * 1000; // Čas v milisekundách
+
+                trainMarker.setLatLng(endPosition);
+                trainMarker.closePopup();
+                trainMarker.bindPopup(line.stops[currentIndex].name).openPopup();
+            }
+        }, 1000); // Aktualizace polohy každou sekundu
     }
 
     moveTrain();
