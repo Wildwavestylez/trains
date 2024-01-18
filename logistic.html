@@ -154,6 +154,7 @@
                     // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                         direction *= -1;
+                        giveRandomMoneyToPlayer()
                     }
                 }
             } else {
