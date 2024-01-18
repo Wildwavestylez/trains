@@ -466,11 +466,7 @@ function initializeMap() {
         // Další linky můžete přidat podle potřeby
     ];
 
-      // Inicializace mapy Leaflet
-const map = L.map('map').setView([49.25, 13.91], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
+      
 
 // Přidání link a jejich zastávek na mapu
 lines.forEach(line => {
