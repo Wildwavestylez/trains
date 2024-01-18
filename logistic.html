@@ -151,19 +151,19 @@ function moveTrain(train, line) {
                     currentStopIndex += direction;
                     startTime = new Date();
 
-                    // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                    if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                        direction *= -1;
-                        giveRandomMoneyToPlayer()
-                    }
+                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                    direction *= -1;
+                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
                 }
-            } else {
-                // Dosáhli jsme konce trasy, změňme směr pohybu
-                direction *= -1;
-                currentStopIndex += direction;
             }
-        }, updateInterval);
-    }
+        } else {
+            // Dosáhli jsme konce trasy, změňme směr pohybu
+            direction *= -1;
+            currentStopIndex += direction;
+            giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+        }
+    }, updateInterval);
+}
 
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
