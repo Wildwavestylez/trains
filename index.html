@@ -413,15 +413,8 @@ function switchToMapContainer() {
     initializeMap();
 }
 
-function initializeMap() {
-    const map = L.map('mapContainer').setView([49.2551575, 13.9163047], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    const trainIcon = L.icon({
-        iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-    });
+  
 
     const lines = [
         {
@@ -467,102 +460,111 @@ function initializeMap() {
     ];
 
       
+// Inicializace mapy Leaflet
+    const map = L.map('map').setView([49.25, 13.91], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-// Přidání link a jejich zastávek na mapu
-lines.forEach(line => {
-    // Linka
-    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
-    polyline.bindPopup(line.name);
 
-    // Vlaky
-    line.trains.forEach(train => {
-        let trainIcon = L.icon({
-            iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-            iconSize: [100, 100],
-            iconAnchor: [50, 50],
-            popupAnchor: [0, 0]
+    // Přidání link a jejich zastávek na mapu
+    lines.forEach(line => {
+        // Linka
+        let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
+        polyline.bindPopup(line.name);
+
+        // Vlaky
+        line.trains.forEach(train => {
+            let trainIcon = L.icon({
+                iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+                iconSize: [100, 100],
+                iconAnchor: [50, 50],
+                popupAnchor: [0, 0]
+            });
+
+            let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+            trainMarker.bindPopup(train.name);
+
+            train.marker = trainMarker; // Uložení markeru do dat vlaku
         });
 
-        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-        trainMarker.bindPopup(train.name);
-
-        train.marker = trainMarker; // Uložení markeru do dat vlaku
+        // Zastávky
+        line.stops.forEach(stop => {
+            L.marker(stop.location).addTo(map).bindPopup(stop.name);
+        });
     });
 
-    // Zastávky
-    line.stops.forEach(stop => {
-        L.marker(stop.location).addTo(map).bindPopup(stop.name);
+    // Pohybující se ikony vlaků
+    const trainSpeed = 60; // Rychlost vlaku v km/h
+    const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
+
+    lines.forEach(line => {
+        line.trains.forEach(train => {
+            moveTrain(train, line);
+        });
     });
-});
 
-// Pohybující se ikony vlaků
-const trainSpeed = 60; // Rychlost vlaku v km/h
-const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
+    function moveTrain(train, line) {
+        let currentStopIndex = train.startingIndex;
+        let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+        let startTime = new Date();
 
-lines.forEach(line => {
-    line.trains.forEach(train => {
-        moveTrain(train, line);
-    });
-});
+        setInterval(() => {
+            const currentStop = line.stops[currentStopIndex];
+            const nextStop = line.stops[currentStopIndex + direction];
 
-function moveTrain(train, line) {
-    let currentStopIndex = train.startingIndex;
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
+            if (nextStop) {
+                const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
-    setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = line.stops[currentStopIndex + direction];
+                const currentTime = new Date();
+                const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+                if (elapsedTime <= timeToNextStop) {
+                    const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                    const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                    train.marker.setLatLng([lat, lon]);
+                } else {
+                    // Přesun na další/zpětnou zastávku
+                    currentStopIndex += direction;
+                    startTime = new Date();
 
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
-
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                train.marker.setLatLng([lat, lon]);
-            } else {
-                // Přesun na další/zpětnou zastávku
-                currentStopIndex += direction;
-                startTime = new Date();
-
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                    direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                    // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                    if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                        direction *= -1;
+                        giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                    }
                 }
+            } else {
+                // Dosáhli jsme konce trasy, změňme směr pohybu
+                direction *= -1;
+                currentStopIndex += direction;
             }
-        } else {
-            // Dosáhli jsme konce trasy, změňme směr pohybu
-            direction *= -1;
-            currentStopIndex += direction;
-        }
-    }, updateInterval);
+        }, updateInterval);
+    }
+
+    // Vypočítá vzdálenost mezi dvěma zastávkami
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // poloměr Země v km
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // vzdálenost v km
+        return distance;
+    }
+
+    // Převádí stupně na radiány
+    function toRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
 }
 
-// Vypočítá vzdálenost mezi dvěma zastávkami
-function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // poloměr Země v km
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // vzdálenost v km
-    return distance;
-}
-
-// Převádí stupně na radiány
-function toRadians(degrees) {
-    return degrees * Math.PI / 180;
-}
-
+// Inicializace mapy
+initializeMap();
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
