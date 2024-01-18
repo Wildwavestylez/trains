@@ -445,30 +445,26 @@ function initializeMap() {
     ];
 
 
-        // Linka "Trať 198"
-    const trasa198 = L.polyline([], { color: 'blue' }).addTo(map);
+     // Vytvoření polyline (linky) pro trať 198
+    const trasa198Polyline = L.polyline(trasa198.map(station => station.location), { color: 'blue' }).addTo(map);
 
-    // Přidání ikon pro každou stanici
-    stanice.forEach(stanice => {
-        const marker = L.marker(stanice.location, { icon: createStationIcon() }).addTo(map);
-        marker.bindPopup(`<b>${stanice.name}</b>`).openPopup();
-        trasa198.addLatLng(stanice.location); // Přidání každé stanice do linky
+    // Přidání zastávek na mapu
+    trasa198.forEach(station => {
+        const marker = L.marker(station.location, { icon: zastavkaIcon }).addTo(map);
+        marker.bindPopup(`<b>${station.name}</b>`).openPopup();
     });
 
     // Další funkce mapy
     // ...
 }
 
-function createStationIcon() {
-    return L.icon({
-        iconUrl: 'https://i.imgur.com/TDw3Eio.png', // Nahraďte cestu k ikoně zastávky
-        iconSize: [50, 50], // Velikost ikony
-        iconAnchor: [25, 32], // Umístění kotvy ikony
-        popupAnchor: [0, -32] // Umístění vyskakovacího okna ikony
-    });
-}
-
-
+// Ikona zastávky
+const zastavkaIcon = L.icon({
+    iconUrl: 'linka k ikoně zastávky',  // Nahraďte skutečnou cestou k ikoně zastávky
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+});
            
           function toggleMobileMenu() {
             const menu = document.querySelector('nav ul');
