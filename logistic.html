@@ -134,8 +134,7 @@ function moveTrain(train, line) {
         const currentStop = line.stops[currentStopIndex];
         const nextStop = line.stops[currentStopIndex + direction];
 
-
-            if (nextStop) {
+        if (nextStop) {
                 const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
                 const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
@@ -151,19 +150,20 @@ function moveTrain(train, line) {
                     currentStopIndex += direction;
                     startTime = new Date();
 
-                     if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                    direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
-                }
+if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                direction *= -1;
+                giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
             }
         } else {
             // Dosáhli jsme konce trasy, změňme směr pohybu
             direction *= -1;
             currentStopIndex += direction;
-            giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
         }
     }, updateInterval);
 }
+
+
 
     // Vypočítá vzdálenost mezi dvěma zastávkami
     function getDistance(lat1, lon1, lat2, lon2) {
