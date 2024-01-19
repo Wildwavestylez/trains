@@ -181,16 +181,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
     // Funkce pro aktualizaci viditelnosti linek na mapě
+// Funkce pro aktualizaci viditelnosti linek na mapě
 function updateVisibleLines() {
     lines.forEach(line => {
-        line.polyline.removeFrom(map); // Odstranit existující linku z mapy
         if (line.visible) {
             // Zobrazit linku na mapě
             line.polyline.addTo(map);
+        } else {
+            // Skrýt linku na mapě
+            line.polyline.removeFrom(map);
         }
     });
 }
-
 
 lines.forEach(line => {
     // Linka
