@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 55</p>
+    <p>Kupony vlaků: 15</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -154,6 +154,7 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
+// Inicializace mapy Leaflet
 const map = L.map('map').setView([49.25, 13.91], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -164,18 +165,6 @@ lines.forEach(line => {
     line.hidden = true;
     availableLines.push(line);
 });
-
-
-
-
-
-        const trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon });
-        trainMarker.bindPopup(train.name);
-        trainsGroup.addLayer(trainMarker);
-
-        train.marker = trainMarker; // Uložení markeru do dat vlaku
-    });
-}
 
 // Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
@@ -261,6 +250,8 @@ function moveTrain(train, line) {
 
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
+
+
 
 
     
