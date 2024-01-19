@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 17</p>
+    <p>Kupony vlaků: 52</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -166,14 +166,15 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
-// Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za 1000 Kč. Chcete ji koupit?`)) {
-        if (playerFinance >= 1000) {
-            playerFinance -= 1000;
+    const offerPrice = (randomLineIndex + 1) * 1000; // Cena nabídky od herního drážního úřadu
+
+    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+        if (playerFinance >= offerPrice) {
+            playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
 
             offerLine.hidden = false;
@@ -214,6 +215,7 @@ function showRandomOffer() {
     }
 }
 
+    
 // Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
