@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 39</p>
+    <p>Kupony vlaků: 58</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -42,16 +42,16 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
 let playerFinance = 1000;
+let availableLines = []; // Seznam dostupných linek
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
 const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
-    
+
 // Fiktivní data pro linky a zastávky
 const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
-         visible: false,
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
@@ -90,7 +90,6 @@ const lines = [
         {
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
-             visible: false,
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
             { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
@@ -120,7 +119,6 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
-           visible: false,
         trains: [
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
@@ -151,74 +149,62 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
-    function generateOffer() {
-    const randomLineIndex = Math.floor(Math.random() * lines.length);
-    const offerLine = lines[randomLineIndex];
+// Skrytí linek na začátku hry
+lines.forEach(line => {
+    line.hidden = true;
+    availableLines.push(line);
+});
 
-    if (!offerLine.visible) {
-        const offerAmount = 1000; // Cena za provozování linky
-        const playerDecision = confirm(`Herní drážní úřad nabízí linku: ${offerLine.name} za ${offerAmount} Kč. Přijmete nabídku?`);
+// Inicializace mapy Leaflet
+const map = L.map('map').setView([49.25, 13.91], 11);
+// ... (Zbytek kódu zůstává stejný)
 
-        if (playerDecision) {
-            // Hráč přijal nabídku, odečtěte peníze a zobrazte linku na mapě
-            if (playerFinance >= offerAmount) {
-                playerFinance -= offerAmount;
-                document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+// Funkce pro zobrazování nabídek od herního drážního úřadu
+function showRandomOffer() {
+    const randomLineIndex = Math.floor(Math.random() * availableLines.length);
+    const offerLine = availableLines[randomLineIndex];
 
-                offerLine.visible = true;
-                updateVisibleLines(); // Funkce, která aktualizuje viditelnost linek na mapě
-            } else {
-                alert("Nemáte dostatek financí k přijetí nabídky.");
-            }
+    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za 1000 Kč. Chcete ji koupit?`)) {
+        if (playerFinance >= 1000) {
+            playerFinance -= 1000;
+            document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+
+            offerLine.hidden = false;
+            availableLines.splice(randomLineIndex, 1);
+
+            // Přidání ikon a logiky pro nově zakoupenou linku (kód zůstává stejný, jen se zobrazí)
+            let polyline = L.polyline(offerLine.stops.map(stop => stop.location), { color: offerLine.color }).addTo(map);
+            polyline.bindPopup(offerLine.name);
+
+            offerLine.trains.forEach(train => {
+                let trainIcon = L.icon({
+                    iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+                    iconSize: [100, 100],
+                    iconAnchor: [50, 50],
+                    popupAnchor: [0, 0]
+                });
+
+                let trainMarker = L.marker(offerLine.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+                trainMarker.bindPopup(train.name);
+
+                train.marker = trainMarker;
+                moveTrain(train, offerLine);
+            });
+
+            offerLine.stops.forEach(stop => {
+                L.marker(stop.location).addTo(map).bindPopup(stop.name);
+            });
+        } else {
+            alert("Nemáte dostatek financí na nákup linky.");
         }
     }
 }
 
-// Inicializace mapy Leaflet
-const map = L.map('map').setView([49.25, 13.91], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
-
-    // Funkce pro aktualizaci viditelnosti linek na mapě
-// Funkce pro aktualizaci viditelnosti linek na mapě
-function updateVisibleLines() {
-    lines.forEach(line => {
-        if (line.visible) {
-            // Zobrazit linku na mapě
-            line.polyline.addTo(map);
-        } else {
-            // Skrýt linku na mapě
-            line.polyline.removeFrom(map);
-        }
-    });
-}
-
-lines.forEach(line => {
-    // Linka
-    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
-    polyline.bindPopup(line.name);
-
-    line.trains.forEach(train => {
-    let trainIcon = L.icon({
-        iconUrl: train.image, // Použijte specifický obrázek pro každý vlak
-        iconSize: [100, 100],
-        iconAnchor: [50, 50],
-        popupAnchor: [0, 0]
-    });
-
-    let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-    trainMarker.bindPopup(train.name);
-
-    train.marker = trainMarker; // Uložení markeru do dat vlaku
-});
+// Spuštění nabídek od herního drážního úřadu každou minutu
+setInterval(showRandomOffer, offerInterval);
 
 
-    // Zastávky
-    line.stops.forEach(stop => {
-        L.marker(stop.location).addTo(map).bindPopup(stop.name);
-    });
-});
+   
 
 // Pohybující se ikony vlaků
 lines.forEach(line => {
@@ -278,9 +264,6 @@ function moveTrain(train, line) {
         }
     }, updateInterval);
 }
-    
-// Pravidelně generovat nabídky od herního drážního úřadu
-setInterval(generateOffer, offerInterval);
 
 // Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
