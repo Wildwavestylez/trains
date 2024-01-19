@@ -182,14 +182,14 @@ lines.forEach(line => {
     });
 
     // Zastávky
-    line.stops.forEach(stop => {
-    if (stop.Waypoint) {
-        // Pokud je to waypoint, přidat do polyline
-        polyline.addLatLng(stop.location);
-    } else {
-        // Pokud je to zastávka, přidat marker
-        L.marker(stop.location).addTo(map).bindPopup(stop.name);
-    }
+   line.stops.forEach(stop => {
+if (stop.Waypoint) {
+    // Pokud je to waypoint, přidat do polyline
+    polyline.addLatLng(stop.location);
+} else {
+    // Pokud je to zastávka, přidat marker
+    L.marker(stop.location).addTo(map).bindPopup(stop.name);
+}
 });
 
 // Pohybující se ikony vlaků
