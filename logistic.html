@@ -22,14 +22,14 @@
         #map {
             flex: 2;
             height: 50%;
+        }
 
-            #toggleElements {
+          .train-line {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
+            bottom: 0;
+            left: 0;
+            padding: 10px;
             background-color: white;
-            padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -42,21 +42,14 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 43</p>
+    <p>Kupony vlaků: 78</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
 
 <div id="map"></div>
 <div id="map"></div>
-<div id="toggleElements">
-    <label for="toggleStops">Zastávky</label>
-    <input type="checkbox" id="toggleStops" checked>
-    <label for="toggleLines">Linky</label>
-    <input type="checkbox" id="toggleLines" checked>
-    <label for="toggleTrains">Vlaky</label>
-    <input type="checkbox" id="toggleTrains" checked>
-</div>
+
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -179,36 +172,9 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
-    // Skupiny pro zastávky, linky a vlaky
-const stopsGroup = L.layerGroup().addTo(map);
-const linesGroup = L.layerGroup().addTo(map);
-const trainsGroup = L.layerGroup().addTo(map);
 
-// Funkce pro přidání zastávek
-function addStopsToMap(line) {
-    line.stops.forEach(stop => {
-        const marker = L.marker(stop.location);
-        marker.bindPopup(stop.name);
-        stopsGroup.addLayer(marker);
-    });
-}
 
-// Funkce pro přidání linek
-function addLinesToMap(line) {
-    const polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color });
-    polyline.bindPopup(line.name);
-    linesGroup.addLayer(polyline);
-}
 
-// Funkce pro přidání vlaků
-function addTrainsToMap(line) {
-    line.trains.forEach(train => {
-        const trainIcon = L.icon({
-            iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-            iconSize: [100, 100],
-            iconAnchor: [50, 50],
-            popupAnchor: [0, 0]
-        });
 
         const trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon });
         trainMarker.bindPopup(train.name);
@@ -303,23 +269,12 @@ function moveTrain(train, line) {
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
-  // Ovládání zobrazení/zakrytí zastávek, linek a vlaků na mapě
-document.getElementById('toggleStops').addEventListener('change', function() {
-    stopsGroup.eachLayer(layer => {
-        layer.setStyle({ display: this.checked ? 'block' : 'none' });
-    });
-});
-
-document.getElementById('toggleLines').addEventListener('change', function() {
-    linesGroup.eachLayer(layer => {
-        layer.setStyle({ display: this.checked ? 'block' : 'none' });
-    });
-});
-
-document.getElementById('toggleTrains').addEventListener('change', function() {
-    trainsGroup.eachLayer(layer => {
-        layer.setStyle({ display: this.checked ? 'block' : 'none' });
-    });
+  lines.forEach(line => {
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'train-line';
+    lineDiv.style.backgroundColor = line.color;
+    lineDiv.textContent = line.name;
+    document.body.appendChild(lineDiv);
 });
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
