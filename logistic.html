@@ -32,7 +32,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 72</p>
+    <p>Kupony vlaků: 11</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -60,14 +60,6 @@ const lines = [
         ],
          stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
-                { waypoint: "AA", location: [49.2543897, 13.9122572] },
-                { waypoint: "AB", location: [49.2539806, 13.9110986] },
-                { waypoint: "AC", location: [49.2532972, 13.9103603] },
-                { waypoint: "AD", location: [49.2523133, 13.9102433] },
-                { waypoint: "AE", location: [49.2500394, 13.9112014] },
-                { waypoint: "AF", location: [49.2493972, 13.9112133] },
-                { waypoint: "AG", location: [49.2488983, 13.9111189] },
-                { waypoint: "AH", location: [49.2424917, 13.9077383] },
                 { name: "Radošovice", location: [49.2322158, 13.901812] },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200] },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928] },
@@ -182,14 +174,9 @@ lines.forEach(line => {
     });
 
     // Zastávky
-   line.stops.forEach(stop => {
-if (stop.waypoint) {
-    // Pokud je to waypoint, přidat do polyline
-    polyline.addLatLng(stop.location);
-} else {
-    // Pokud je to zastávka, přidat marker
-    L.marker(stop.location).addTo(map).bindPopup(stop.name);
-}
+    line.stops.forEach(stop => {
+        L.marker(stop.location).addTo(map).bindPopup(stop.name);
+    });
 });
 
 // Pohybující se ikony vlaků
@@ -228,14 +215,9 @@ function moveTrain(train, line) {
             const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
             if (elapsedTime <= timeToNextStop) {
-                if (nextStop.Waypoint) {
-                    // Přeskoč waypoint
-                    train.marker.setLatLng([nextStop.location[0], nextStop.location[1]]);
-                } else {
-                    const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                    const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                    train.marker.setLatLng([lat, lon]);
-                }
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                train.marker.setLatLng([lat, lon]);
             } else {
                 // Přesun na další/zpětnou zastávku
                 currentStopIndex += direction;
@@ -255,8 +237,6 @@ function moveTrain(train, line) {
         }
     }, updateInterval);
 }
-
-
 
 // Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -281,3 +261,5 @@ function toRadians(degrees) {
 
 </body>
 </html>
+
+ChatGPT
