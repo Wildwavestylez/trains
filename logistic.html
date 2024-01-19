@@ -24,15 +24,7 @@
             height: 50%;
         }
 
-           #toggleStations, #toggleLines {
-            margin-top: 10px;
-            padding: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-        }
+          
         
     </style>
     <title>Train Game</title>
@@ -43,15 +35,13 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 23</p>
+    <p>Kupony vlaků: 15</p>
     <p>Vlaky v provozu: 4</p>
-  <div id="map"></div>
-<button id="toggleStations" onclick="toggleStations()">Toggle Stations</button>
-<button id="toggleLines" onclick="toggleLines()">Toggle Lines</button>
+    <!-- Doplnit další informace podle potřeby -->
 </div>
 
 <div id="map"></div>
-
+<div id="map"></div>
 
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -170,37 +160,11 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Skrytí linek a zastávek na začátku hry
+// Skrytí linek na začátku hry
 lines.forEach(line => {
     line.hidden = true;
     availableLines.push(line);
-
-    // Přidání barevné linky
-    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color, opacity: 0 }).addTo(map);
-    line.polyline = polyline;
-
-    // Přidání ikon zastávek
-    line.stops.forEach(stop => {
-        let stopMarker = L.marker(stop.location, { opacity: 0 }).addTo(map).bindPopup(stop.name);
-        stop.marker = stopMarker;
-    });
 });
-
-// Funkce pro zobrazení/skrytí zastávek
-function toggleStations() {
-    lines.forEach(line => {
-        line.stops.forEach(stop => {
-            stop.marker.setOpacity(stop.marker.options.opacity === 0 ? 1 : 0);
-        });
-    });
-}
-
-// Funkce pro zobrazení/skrytí linek
-function toggleLines() {
-    lines.forEach(line => {
-        line.polyline.setStyle({ opacity: line.polyline.options.opacity === 0 ? 0.5 : 0 });
-    });
-}
 
 // Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
