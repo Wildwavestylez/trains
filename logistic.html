@@ -22,6 +22,16 @@
         #map {
             flex: 2;
             height: 50%;
+
+            #toggleElements {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
     <title>Train Game</title>
@@ -38,6 +48,13 @@
 </div>
 
 <div id="map"></div>
+<div id="map"></div>
+<div id="toggleElements">
+    <label for="toggleStops">Zastávky</label>
+    <input type="checkbox" id="toggleStops" checked>
+    <label for="toggleLines">Linky</label>
+    <input type="checkbox" id="toggleLines" checked>
+</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -245,7 +262,19 @@ function moveTrain(train, line) {
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
-   
+   document.getElementById('toggleStops').addEventListener('change', function() {
+    const stops = document.querySelectorAll('.leaflet-marker-icon');
+    stops.forEach(stop => {
+        stop.style.display = this.checked ? 'block' : 'none';
+    });
+});
+
+document.getElementById('toggleLines').addEventListener('change', function() {
+    const lines = document.querySelectorAll('.leaflet-objects-pane path');
+    lines.forEach(line => {
+        line.style.display = this.checked ? 'block' : 'none';
+    });
+});
 
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
