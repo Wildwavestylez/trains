@@ -42,7 +42,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 12</p>
+    <p>Kupony vlaků: 64</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -54,6 +54,8 @@
     <input type="checkbox" id="toggleStops" checked>
     <label for="toggleLines">Linky</label>
     <input type="checkbox" id="toggleLines" checked>
+    <label for="toggleTrains">Vlaky</label>
+    <input type="checkbox" id="toggleTrains" checked>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -276,6 +278,16 @@ document.getElementById('toggleLines').addEventListener('change', function() {
         line.style.display = this.checked ? 'block' : 'none';
     });
 });
+
+    
+document.getElementById('toggleTrains').addEventListener('change', function() {
+    const trains = document.querySelectorAll('.leaflet-marker-icon');
+    trains.forEach(train => {
+        train.style.display = this.checked ? 'block' : 'none';
+    });
+});
+
+    
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
     const randomAmount = generateRandomAmount();
