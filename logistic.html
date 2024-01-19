@@ -44,12 +44,14 @@
 let playerFinance = 1000;
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-
+const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
+    
 // Fiktivní data pro linky a zastávky
 const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
+         visible: false,
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
@@ -88,6 +90,7 @@ const lines = [
         {
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
+             visible: false,
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
             { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
@@ -117,6 +120,7 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
+           visible: false,
         trains: [
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
@@ -147,11 +151,46 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
+    function generateOffer() {
+    const randomLineIndex = Math.floor(Math.random() * lines.length);
+    const offerLine = lines[randomLineIndex];
+
+    if (!offerLine.visible) {
+        const offerAmount = 1000; // Cena za provozování linky
+        const playerDecision = confirm(`Herní drážní úřad nabízí linku: ${offerLine.name} za ${offerAmount} Kč. Přijmete nabídku?`);
+
+        if (playerDecision) {
+            // Hráč přijal nabídku, odečtěte peníze a zobrazte linku na mapě
+            if (playerFinance >= offerAmount) {
+                playerFinance -= offerAmount;
+                document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+
+                offerLine.visible = true;
+                updateVisibleLines(); // Funkce, která aktualizuje viditelnost linek na mapě
+            } else {
+                alert("Nemáte dostatek financí k přijetí nabídky.");
+            }
+        }
+    }
+}
+
 // Inicializace mapy Leaflet
 const map = L.map('map').setView([49.25, 13.91], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
+
+    // Funkce pro aktualizaci viditelnosti linek na mapě
+function updateVisibleLines() {
+    lines.forEach(line => {
+        line.polyline.removeFrom(map); // Odstranit existující linku z mapy
+        if (line.visible) {
+            // Zobrazit linku na mapě
+            line.polyline.addTo(map);
+        }
+    });
+}
+
 
 lines.forEach(line => {
     // Linka
@@ -237,6 +276,9 @@ function moveTrain(train, line) {
         }
     }, updateInterval);
 }
+    
+// Pravidelně generovat nabídky od herního drážního úřadu
+setInterval(generateOffer, offerInterval);
 
 // Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
