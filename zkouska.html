@@ -51,12 +51,12 @@ const lines = [
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
         trains: [
-            { name: "Train 1", startingIndex: 0, reverse: false },
-            { name: "Train 2", startingIndex: 8, reverse: false },
-            { name: "Train 3", startingIndex: 14, reverse: true },
-            { name: "Train 4", startingIndex: 21, reverse: false },
-            { name: "Train 5", startingIndex: 7, reverse: true },
-            { name: "Train 6", startingIndex: 15, reverse: false }
+            { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
+            { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
+            { name: "Train 3", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
+            { name: "Train 4", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
+            { name: "Train 5", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
+            { name: "Train 6", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 }
         ],
          stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -89,10 +89,10 @@ const lines = [
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
         trains: [
-            { name: "Train 7", startingIndex: 0, reverse: false },
-            { name: "Train 8", startingIndex: 14, reverse: false },
-            { name: "Train 9", startingIndex: 7, reverse: true },
-            { name: "Train 10", startingIndex: 7, reverse: false },
+            { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 9", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 10", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
         ],
         stops: [
               { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
@@ -118,10 +118,10 @@ const lines = [
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
         trains: [
-            { name: "Train 11", startingIndex: 0, reverse: false },
-            { name: "Train 12", startingIndex: 15, reverse: false },
-            { name: "Train 13", startingIndex: 7, reverse: true },
-            { name: "Train 14", startingIndex: 7, reverse: false },
+            { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
+            { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
+            { name: "Train 13", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
+            { name: "Train 14", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             
         ],
         stops: [
@@ -158,20 +158,20 @@ lines.forEach(line => {
     let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
     polyline.bindPopup(line.name);
 
-    // Vlaky
     line.trains.forEach(train => {
-        let trainIcon = L.icon({
-            iconUrl: 'https://i.imgur.com/jXoYbZs.png',
-            iconSize: [100, 100],
-            iconAnchor: [50, 50],
-            popupAnchor: [0, 0]
-        });
-
-        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-        trainMarker.bindPopup(train.name);
-
-        train.marker = trainMarker; // Uložení markeru do dat vlaku
+    let trainIcon = L.icon({
+        iconUrl: train.image, // Použijte specifický obrázek pro každý vlak
+        iconSize: [100, 100],
+        iconAnchor: [50, 50],
+        popupAnchor: [0, 0]
     });
+
+    let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+    trainMarker.bindPopup(train.name);
+
+    train.marker = trainMarker; // Uložení markeru do dat vlaku
+});
+
 
     // Zastávky
     line.stops.forEach(stop => {
@@ -209,7 +209,7 @@ function moveTrain(train, line) {
 
         if (nextStop) {
             const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+           const timeToNextStop = distanceToNextStop / train.maxSpeed; // v hodinách
 
             const currentTime = new Date();
             const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
