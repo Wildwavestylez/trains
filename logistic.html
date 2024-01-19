@@ -42,7 +42,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 64</p>
+    <p>Kupony vlaků: 43</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -179,6 +179,45 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
+    // Skupiny pro zastávky, linky a vlaky
+const stopsGroup = L.layerGroup().addTo(map);
+const linesGroup = L.layerGroup().addTo(map);
+const trainsGroup = L.layerGroup().addTo(map);
+
+// Funkce pro přidání zastávek
+function addStopsToMap(line) {
+    line.stops.forEach(stop => {
+        const marker = L.marker(stop.location);
+        marker.bindPopup(stop.name);
+        stopsGroup.addLayer(marker);
+    });
+}
+
+// Funkce pro přidání linek
+function addLinesToMap(line) {
+    const polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color });
+    polyline.bindPopup(line.name);
+    linesGroup.addLayer(polyline);
+}
+
+// Funkce pro přidání vlaků
+function addTrainsToMap(line) {
+    line.trains.forEach(train => {
+        const trainIcon = L.icon({
+            iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+            iconSize: [100, 100],
+            iconAnchor: [50, 50],
+            popupAnchor: [0, 0]
+        });
+
+        const trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon });
+        trainMarker.bindPopup(train.name);
+        trainsGroup.addLayer(trainMarker);
+
+        train.marker = trainMarker; // Uložení markeru do dat vlaku
+    });
+}
+
 // Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
@@ -264,29 +303,24 @@ function moveTrain(train, line) {
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
-   // Ovládání zobrazení/zakrytí zastávek a linek na mapě
+  // Ovládání zobrazení/zakrytí zastávek, linek a vlaků na mapě
 document.getElementById('toggleStops').addEventListener('change', function() {
-    const stops = document.querySelectorAll('.leaflet-marker-icon');
-    stops.forEach(stop => {
-        stop.style.display = this.checked ? 'block' : 'none';
+    stopsGroup.eachLayer(layer => {
+        layer.setStyle({ display: this.checked ? 'block' : 'none' });
     });
 });
 
 document.getElementById('toggleLines').addEventListener('change', function() {
-    const lines = document.querySelectorAll('.leaflet-objects-pane path');
-    lines.forEach(line => {
-        line.style.display = this.checked ? 'block' : 'none';
+    linesGroup.eachLayer(layer => {
+        layer.setStyle({ display: this.checked ? 'block' : 'none' });
     });
 });
 
-    
 document.getElementById('toggleTrains').addEventListener('change', function() {
-    const trains = document.querySelectorAll('.leaflet-marker-icon');
-    trains.forEach(train => {
-        train.style.display = this.checked ? 'block' : 'none';
+    trainsGroup.eachLayer(layer => {
+        layer.setStyle({ display: this.checked ? 'block' : 'none' });
     });
 });
-
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
