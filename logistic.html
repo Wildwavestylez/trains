@@ -24,15 +24,8 @@
             height: 50%;
         }
 
-          .train-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 10px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+          
+        
     </style>
     <title>Train Game</title>
 </head>
@@ -42,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 78</p>
+    <p>Kupony vlaků: 55</p>
     <p>Vlaky v provozu: 4</p>
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -269,13 +262,7 @@ function moveTrain(train, line) {
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
-  lines.forEach(line => {
-    const lineDiv = document.createElement('div');
-    lineDiv.className = 'train-line';
-    lineDiv.style.backgroundColor = line.color;
-    lineDiv.textContent = line.name;
-    document.body.appendChild(lineDiv);
-});
+
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
