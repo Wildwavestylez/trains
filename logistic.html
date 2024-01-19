@@ -149,7 +149,6 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
-// Inicializace mapy Leaflet
 const map = L.map('map').setView([49.25, 13.91], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -202,17 +201,51 @@ function showRandomOffer() {
     }
 }
 
+// Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
+function moveTrain(train, line) {
+    let currentStopIndex = train.startingIndex;
+    let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+    let startTime = new Date();
+
+    setInterval(() => {
+        const currentStop = line.stops[currentStopIndex];
+        const nextStop = line.stops[currentStopIndex + direction];
+
+        if (nextStop) {
+            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+
+            const currentTime = new Date();
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+
+            if (elapsedTime <= timeToNextStop) {
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                train.marker.setLatLng([lat, lon]);
+            } else {
+                // Přesun na další/zpětnou zastávku
+                currentStopIndex += direction;
+                startTime = new Date();
+
+                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                    direction *= -1;
+                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                }
+            }
+        } else {
+            // Dosáhli jsme konce trasy, změňme směr pohybu
+            direction *= -1;
+            currentStopIndex += direction;
+            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
+        }
+    }, updateInterval);
+}
+
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
    
-
-// Pohybující se ikony vlaků
-lines.forEach(line => {
-    line.trains.forEach(train => {
-        moveTrain(train, line);
-    });
-});
 
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
