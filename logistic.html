@@ -198,8 +198,15 @@ function showRandomOffer() {
                 moveTrain(train, offerLine);
             });
 
+            let stopIcon = L.icon({
+                iconUrl: 'https://i.imgur.com/EDFZjPX.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, 0]
+            });
+
             offerLine.stops.forEach(stop => {
-                L.marker(stop.location).addTo(map).bindPopup(stop.name);
+                L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
             });
         } else {
             alert("Nemáte dostatek financí na nákup linky.");
