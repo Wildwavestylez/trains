@@ -149,15 +149,17 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
+// Inicializace mapy Leaflet
+const map = L.map('map').setView([49.25, 13.91], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
 // Skrytí linek na začátku hry
 lines.forEach(line => {
     line.hidden = true;
     availableLines.push(line);
 });
-
-// Inicializace mapy Leaflet
-const map = L.map('map').setView([49.25, 13.91], 11);
-// ... (Zbytek kódu zůstává stejný)
 
 // Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
@@ -202,7 +204,6 @@ function showRandomOffer() {
 
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
-
 
    
 
