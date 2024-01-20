@@ -58,6 +58,7 @@ const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
+        category: "A", 
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
@@ -96,6 +97,7 @@ const lines = [
         {
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
+        category: "A", 
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
             { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
@@ -125,6 +127,7 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
+        category: "A", 
         trains: [
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
@@ -156,6 +159,7 @@ const lines = [
           {
         name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
         color: "green",
+        category: "A", 
         trains: [
             { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
             { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
@@ -177,6 +181,7 @@ const lines = [
     {
         name: "Trať 010 Kolín - Česká Třebová",    
         color: "yellow",
+        category: "B", 
         trains: [
             { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
             { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
@@ -224,25 +229,75 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Skrytí linek na začátku hry
-lines.forEach(line => {
-    line.hidden = true;
+// Funkce pro generování náhodné ceny a výdělku podle kategorie
+function generateRandomPriceAndEarnings(category, isFirstLine) {
+    let price, earnings;
+    switch (category) {
+        case "A":
+            if (isFirstLine) {
+                price = 1000;
+            } else {
+                price = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+            }
+            earnings = Math.floor(Math.random() * (200 - 100 + 1)) + 100;
+            break;
+        case "B":
+            price = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+            earnings = Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+            break;
+        case "C":
+            price = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000;
+            earnings = Math.floor(Math.random() * (800 - 500 + 1)) + 500;
+            break;
+        case "D":
+            price = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000;
+            earnings = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
+            break;
+        default:
+            price = 1000;
+            earnings = 100;
+    }
+    return { price, earnings };
+}
+
+// Nastavení kategorií, cen a výdělků pro jednotlivé linky
+lines.forEach((line, index) => {
+    const isFirstLine = index === 0;
+    const { price, earnings } = generateRandomPriceAndEarnings(line.category, isFirstLine);
+    line.price = price;
+    line.earnings = earnings;
     availableLines.push(line);
 });
 
-// Funkce pro zobrazování nabídek od herního drážního úřadu
+
+// Funkce pro zobrazení náhodné nabídky od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    const offerPrice = offerBasePrice + (randomLineIndex * 1000); // Cena nabídky od herního drážního úřadu
+    // Cena nabídky od herního drážního úřadu závisí na kategorii linky
+    let offerPrice;
+    switch (offerLine.category) {
+        case "A":
+            offerPrice = offerLine.price + (randomLineIndex * 1000); // Cena nabídky začíná od 1000
+            break;
+        case "B":
+            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // Cena pro kategorii B: 5000 - 10000
+            break;
+        case "C":
+            offerPrice = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000; // Cena pro kategorii C: 15000 - 20000
+            break;
+        case "D":
+            offerPrice = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000; // Cena pro kategorii D: 30000 - 50000
+            break;
+        default:
+            offerPrice = 1000; // Defaultní cena
+    }
 
     if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-
-            offerBasePrice += 1000; // Aktualizace základní ceny nabídky
 
             offerLine.hidden = false;
             availableLines.splice(randomLineIndex, 1);
@@ -262,22 +317,10 @@ function showRandomOffer() {
                 let trainMarker = L.marker(offerLine.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
                 trainMarker.bindPopup(train.name);
 
-                train.marker = trainMarker;
-                moveTrain(train, offerLine);
-            });
-
-            let stopIcon = L.icon({
-                iconUrl: 'https://i.imgur.com/EDFZjPX.png',
-                iconSize: [2, 2],
-                iconAnchor: [1, 1],
-                popupAnchor: [0, 0]
-            });
-
-            offerLine.stops.forEach(stop => {
-                L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
+                train.marker = trainMarker; // Uložení markeru do dat vlaku
             });
         } else {
-            alert("Nemáte dostatek financí na nákup linky.");
+            alert("Nemáte dostatek financí na zakoupení této linky.");
         }
     }
 }
