@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 11</p>
+    <p>Kupony vlaků: 99</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -229,7 +229,6 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
-
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
@@ -279,9 +278,8 @@ function showRandomOffer() {
     }
 }
 
-
-
-
+    
+// Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
     let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
@@ -293,7 +291,7 @@ function moveTrain(train, line) {
 
         if (nextStop) {
             const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / train.maxSpeed; // v hodinách
+            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
 
             const currentTime = new Date();
             const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
@@ -326,6 +324,8 @@ function moveTrain(train, line) {
 setInterval(showRandomOffer, offerInterval);
 
 
+
+
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer() {
@@ -338,7 +338,8 @@ function generateRandomAmount() {
     return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
 }
 
-/
+
+
 // Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // poloměr Země v km
