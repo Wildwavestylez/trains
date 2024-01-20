@@ -51,7 +51,8 @@ let availableLines = []; // Seznam dostupných linek
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
 const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
-
+let offerBasePrice = 1000; // Základní cena nabídky
+    
 // Fiktivní data pro linky a zastávky
 const lines = [
     {
@@ -229,11 +230,12 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
+// Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    const offerPrice = (randomLineIndex + 1) * 1000; // Cena nabídky od herního drážního úřadu
+    const offerPrice = offerBasePrice + (randomLineIndex * 1000); // Cena nabídky od herního drážního úřadu
 
     if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
@@ -264,8 +266,8 @@ function showRandomOffer() {
 
             let stopIcon = L.icon({
                 iconUrl: 'https://i.imgur.com/EDFZjPX.png',
-                iconSize: [2, 2],
-                iconAnchor: [1, 1],
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
                 popupAnchor: [0, 0]
             });
 
@@ -277,7 +279,6 @@ function showRandomOffer() {
         }
     }
 }
-
     
 // Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
