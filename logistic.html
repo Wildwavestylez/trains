@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 82</p>
+    <p>Kupony vlaků: 53</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -229,9 +229,23 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
+// Nastavení kategorií, cen a výdělků pro jednotlivé linky
+lines.forEach((line, index) => {
+    const isFirstLine = index === 0;
+
+    // Funkce pro generování náhodné ceny a výdělku podle kategorie
+    const { price, earnings } = generateRandomPriceAndEarnings(line.category, isFirstLine);
+    
+    line.price = price;
+    line.earnings = earnings;
+
+    availableLines.push(line);
+});
+
 // Funkce pro generování náhodné ceny a výdělku podle kategorie
 function generateRandomPriceAndEarnings(category, isFirstLine) {
     let price, earnings;
+
     switch (category) {
         case "A":
             if (isFirstLine) {
@@ -254,20 +268,14 @@ function generateRandomPriceAndEarnings(category, isFirstLine) {
             earnings = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
             break;
         default:
-            price = 1000;
-            earnings = 100;
+            price = 1000; // Defaultní cena
+            earnings = 100; // Defaultní výdělek
     }
+
     return { price, earnings };
 }
 
-// Nastavení kategorií, cen a výdělků pro jednotlivé linky
-lines.forEach((line, index) => {
-    const isFirstLine = index === 0;
-    const { price, earnings } = generateRandomPriceAndEarnings(line.category, isFirstLine);
-    line.price = price;
-    line.earnings = earnings;
-    availableLines.push(line);
-});
+
 
 
 // Funkce pro zobrazení náhodné nabídky od herního drážního úřadu
