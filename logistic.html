@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 32</p>
+    <p>Kupony vlaků: 82</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -294,7 +294,7 @@ function showRandomOffer() {
             offerPrice = 1000; // Defaultní cena
     }
 
-    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+   if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
@@ -318,6 +318,14 @@ function showRandomOffer() {
                 trainMarker.bindPopup(train.name);
 
                 train.marker = trainMarker; // Uložení markeru do dat vlaku
+            });
+
+            // Přidání nově odemčené linky do seznamu všech linek pro pohyb vlaků
+            lines.push(offerLine);
+
+            // Pohybující se ikony vlaků pro nově odemčenou linku
+            offerLine.trains.forEach(train => {
+                moveTrain(train, offerLine);
             });
         } else {
             alert("Nemáte dostatek financí na zakoupení této linky.");
