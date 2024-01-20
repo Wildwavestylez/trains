@@ -34,8 +34,8 @@
 <div id="playerPanel">
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
-    <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 99</p>
+    <p id="finance">Finance: 5000 Kč</p>
+    <p>Kupony vlaků: 72</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -46,24 +46,25 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-let playerFinance = 1000;
+let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
-const trainSpeed = 500; // Rychlost vlaku v km/h
+
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
+        category: "A",
         trains: [
-            { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
-            { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
-            { name: "Train 3", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
-            { name: "Train 4", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
-            { name: "Train 5", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
-            { name: "Train 6", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 }
+            { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/sgF74F8.png', maxSpeed: 600 },
+            { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/5V3WrS7.png', maxSpeed: 600 },
+            { name: "Train 3", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/sgF74F8.png', maxSpeed: 600 },
+            { name: "Train 4", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/sgF74F8.png', maxSpeed: 600 },
+            { name: "Train 5", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/5V3WrS7.png', maxSpeed: 600 },
+            { name: "Train 6", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/5V3WrS7.png', maxSpeed: 600 }
         ],
          stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047] },
@@ -95,11 +96,12 @@ const lines = [
         {
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
+        category: "A",
         trains: [
-            { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
-            { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
-            { name: "Train 9", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
-            { name: "Train 10", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train 9", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train 10", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
         ],
         stops: [
               { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
@@ -124,11 +126,12 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
-        trains: [
-            { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
-            { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
-            { name: "Train 13", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
-            { name: "Train 14", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
+        category: "A",
+        trains: [ 
+            { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
+            { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
+            { name: "Train 13", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
+            { name: "Train 14", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
             
         ],
         stops: [
@@ -155,9 +158,10 @@ const lines = [
           {
         name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
         color: "green",
+        category: "A",      
         trains: [
-            { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
-            { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
+            { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 600 },
+            { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 600 },
             ],
         stops: [
               { name: "Horná Štubňa", location: [48.7927947, 18.8818092] },
@@ -176,13 +180,16 @@ const lines = [
     {
         name: "Trať 010 Kolín - Česká Třebová",    
         color: "yellow",
+        category: "B",
         trains: [
-            { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 19", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 20", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 21", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 22", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 19", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 20", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 21", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 22", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 23", startingIndex: 23, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train 24", startingIndex: 28, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
             ],
               
         stops: [
@@ -210,10 +217,126 @@ const lines = [
                 { name: "Dobříkov u Chocně", location: [49.9959106, 16.1357575] }, 
                 { name: "Sruby", location: [49.9898339, 16.1711558] },
                 { name: "Choceň", location: [49.9940261, 16.2237836] },
-                
+                { name: "Brandýs nad Orlicí", location: [49.9996833, 16.2852631] },
+                { name: "Ústí nad Orlicí", location: [49.9711233, 16.3780250] }, 
+                { name: "Ústí nad Orlicí město", location: [49.9711233, 16.3780250] },
+                { name: "Dlouhá Třebová", location: [49.9356842, 16.4225675] },
+                { name: "Česká Třebová", location: [49.8972472, 16.4463578] },
+                 ]
+    },
+     {
+        name: "Trať 160 Plzeň  - Žatec",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train 25", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 26", startingIndex: 28, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 27", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 28", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 29", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 30", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 31", startingIndex: 21, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train 32", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+        ],
+        stops: [
+              { name: "Plzeň Hlavní nádraží", location: [49.7435456, 13.3880578] },
+                { name: "Plzeň - Bílá Hora", location: [49.7683450, 13.4003153] },
+                { name: "Plzeň - Bolevec", location: [49.7857933, 13.3857556] },
+                { name: "Plzeň - Orlík", location: [49.8039628, 13.3962497] },
+                { name: "Třemošná u Plzně", location: [49.8191147, 13.3945733] },
+                { name: "Horní Bříza zastávka", location: [49.8382186, 13.3589772] },
+                { name: "Horní Bříza", location: [49.8509025, 13.3796264] },
+                { name: "Obora u Kaznějova", location: [49.8714256, 13.4028406] },
+                { name: "Kaznějov", location: [49.8938178, 13.3749475] },
+                { name: "Plasy", location: [49.9309158, 13.3796111] },
+                { name: "Horní Hradiště", location: [49.9474067, 13.3627186] },
+                { name: "Mladotice zastávka", location: [49.9718208, 13.3462792] },
+                { name: "Mladotice", location: [49.9866828, 13.3639575] },
+                { name: "Potvorov", location: [50.0237808, 13.3747350] },
+                { name: "Žihle", location: [50.0467872, 13.3628236] },
+                { name: "Pastuchovice", location: [50.0713739, 13.3943872] },
+                { name: "Blatno u Jesenice", location: [50.0999069, 13.3900872] },
+                { name: "Stebno", location: [50.1196172, 13.4126733] },
+                { name: "Petrohrad", location: [50.1352617, 13.4340364] },
+                { name: "Kryry", location: [50.1688081, 13.4228631] },
+                { name: "Vroutek", location: [50.1840247, 13.3740119] },
+                { name: "Podbořany", location: [50.2235414, 13.4043303] },
+                { name: "Kaštice", location: [50.2616425, 13.4179258] },
+                { name: "Kněžice", location: [50.2894319, 13.4266811] },
+                { name: "Čejkovice", location: [50.3076292, 13.4256811] },
+                { name: "Žabokliky", location: [50.3299578, 13.4647575] },
+                { name: "Libočany", location: [50.3303128, 13.5152047] },
+                { name: "Žatec západ", location: [50.3380775, 13.5350008] },
+                { name: "Žatec", location: [50.3366203, 13.5552453] },
                
         ]
-    },
+    }, 
+    {
+    name: "Trať 011 Praha - Kolín",
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train 33", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
+            { name: "Train 34", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
+            { name: "Train 35", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
+            { name: "Train 36", startingIndex: 19, reverse: false, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
+            { name: "Train 37", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
+            
+        ],
+         stops: [
+                { name: "Praha hlavní nádraží", location: [50.0829886, 14.4369822] },
+                { name: "Praha-Libeň", location: [50.1009750, 14.5013742] },
+                { name: "Praha-Kyje", location: [50.0975419, 14.5432331] },
+                { name: "Praha-Dolní Počernice", location: [50.0882758, 14.5693342] },
+                { name: "Praha-Běchovice", location: [50.0821153, 14.5981122] },
+                { name: "Praha-Běchovice střed", location: [50.0836219, 14.6155472] },
+                { name: "Praha-Klánovice", location: [50.0871467, 14.6634797] },
+                { name: "Úvaly", location: [50.0746650, 14.7230769] },
+                { name: "Tuklaty", location: [50.0769919, 14.7706719] },
+                { name: "Rostoklaty", location: [50.0786781, 14.8059483] },
+                { name: "Český Brod", location: [50.0766603, 14.8660794] },
+                { name: "Klučov", location: [50.0946428, 14.9038533] },
+                { name: "Poříčany", location: [50.1112289, 14.9223908] },
+                { name: "Tatce", location: [50.0995408, 14.9842806] },
+                { name: "Pečky", location: [50.0897636, 15.0275592] },
+                { name: "Cerhenice", location: [50.0781517, 15.0784969] },
+                { name: "Velim", location: [50.0676194, 15.1247731] },
+                { name: "Nová Ves u Kolína", location: [50.0550461, 15.1506739] },
+                { name: "Kolín zastávka", location: [50.0306856, 15.1953050] },
+                { name: "Kolín", location: [50.0252381, 15.2142544] },
+                 
+        ]
+    }, 
+
+         {
+        name: "Trať 012 Pečky - Kořim - Bečváry",    
+        color: "green",
+        category: "A",      
+        trains: [
+            { name: "Train 38", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
+            { name: "Train 39", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
+            { name: "Train 40", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
+            { name: "Train 41", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
+            ],
+        stops: [
+                { name: "Pečky", location: [50.0897636, 15.0275592] },
+                { name: "Radim", location: [50.0735283, 15.0075103] },
+                { name: "Chotutice", location: [50.0715103, 14.9964619] },
+                { name: "Chroustov", location: [50.0649261, 14.9973392] },
+                { name: "Vrbčany", location: [50.0546722, 15.0003767] },
+                { name: "Plaňany", location: [50.0494500, 15.0161972] },
+                { name: "Plaňany zastávka", location: [50.0455894, 15.0239439] },
+                { name: "Žabonosy", location: [50.0396194, 15.0241231] },
+                { name: "Zalešany", location: [50.0349389, 15.0084142] },
+                { name: "Bošice", location: [50.0152817, 15.0153122] },
+                { name: "Kouřim", location: [50.0056572, 14.9877950] },
+                { name: "Votelež", location: [49.9997339, 15.0125294] },
+                { name: "Toušice", location: [49.9852383, 15.0151517] },
+                { name: "Zásmuky", location: [49.9626142, 15.0317814] },
+                { name: "Bečváry", location: [49.9560622, 15.0710583] },
+                ]
+    },  
+    
     // Další linky můžete přidávat podle potřeby
 ];
 
@@ -233,9 +356,37 @@ function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    const offerPrice = (randomLineIndex + 1) * 1000; // Cena nabídky od herního drážního úřadu
+    let offerPrice, earningMin, earningMax;
 
-    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+    switch (offerLine.category) {
+        case "A":
+            offerPrice = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+            earningMin = 100;
+            earningMax = 200;
+            break;
+        case "B":
+            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+            earningMin = 300;
+            earningMax = 500;
+            break;
+        case "C":
+            offerPrice = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000;
+            earningMin = 500;
+            earningMax = 800;
+            break;
+        case "D":
+            offerPrice = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000;
+            earningMin = 1000;
+            earningMax = 1500;
+            break;
+        default:
+            offerPrice = 0;
+            earningMin = 0;
+            earningMax = 0;
+            break;
+    }
+
+     if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
@@ -243,13 +394,13 @@ function showRandomOffer() {
             offerLine.hidden = false;
             availableLines.splice(randomLineIndex, 1);
 
-            // Přidání ikon a logiky pro nově zakoupenou linku (kód zůstává stejný, jen se zobrazí)
+            // Přidání ikon a logiky pro nově zakoupenou linku
             let polyline = L.polyline(offerLine.stops.map(stop => stop.location), { color: offerLine.color }).addTo(map);
             polyline.bindPopup(offerLine.name);
 
             offerLine.trains.forEach(train => {
                 let trainIcon = L.icon({
-                    iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+                    iconUrl: train.image,
                     iconSize: [100, 100],
                     iconAnchor: [50, 50],
                     popupAnchor: [0, 0]
@@ -258,28 +409,21 @@ function showRandomOffer() {
                 let trainMarker = L.marker(offerLine.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
                 trainMarker.bindPopup(train.name);
 
-                train.marker = trainMarker;
-                moveTrain(train, offerLine);
-            });
+                train.marker = trainMarker; // Uložení markeru do dat vlaku
 
-            let stopIcon = L.icon({
-                iconUrl: 'https://i.imgur.com/EDFZjPX.png',
-                iconSize: [2, 2],
-                iconAnchor: [1, 1],
-                popupAnchor: [0, 0]
+                // Spuštění pohybu vlaků na nové lince
+                moveTrain(train, offerLine);
             });
 
             offerLine.stops.forEach(stop => {
                 L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
             });
         } else {
-            alert("Nemáte dostatek financí na nákup linky.");
+            alert("Nemáte dostatek financí na zakoupení této linky.");
         }
     }
 }
-
     
-// Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
     let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
@@ -291,40 +435,33 @@ function moveTrain(train, line) {
 
         if (nextStop) {
             const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+            const timeToNextStop = distanceToNextStop / train.maxSpeed; // Vypočítat čas na základě maxSpeed vlaku
 
             const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
 
             if (elapsedTime <= timeToNextStop) {
                 const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
                 const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
                 train.marker.setLatLng([lat, lon]);
             } else {
-                // Přesun na další/zpětnou zastávku
                 currentStopIndex += direction;
                 startTime = new Date();
 
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                 if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                     direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                    giveRandomMoneyToPlayer();
                 }
             }
         } else {
-            // Dosáhli jsme konce trasy, změňme směr pohybu
             direction *= -1;
             currentStopIndex += direction;
-            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
+            giveRandomMoneyToPlayer();
         }
     }, updateInterval);
 }
-
-// Spuštění nabídek od herního drážního úřadu každou minutu
+    // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
-
-
-
 
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
@@ -338,46 +475,7 @@ function generateRandomAmount() {
     return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
 }
 
-// Změny v moveTrain funkci
-function moveTrain(train, line) {
-    let currentStopIndex = train.startingIndex;
-    let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
 
-    setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = line.stops[currentStopIndex + direction];
-
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-           const timeToNextStop = distanceToNextStop / train.maxSpeed; // v hodinách
-
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
-
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                train.marker.setLatLng([lat, lon]);
-            } else {
-                // Přesun na další/zpětnou zastávku
-                currentStopIndex += direction;
-                startTime = new Date();
-
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
-                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
-                    direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
-                }
-            }
-        } else {
-            // Dosáhli jsme konce trasy, změňme směr pohybu
-            direction *= -1;
-            currentStopIndex += direction;
-            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
-        }
-    }, updateInterval);
-}
 
 // Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
