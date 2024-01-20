@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 15000 Kč</p>
-    <p>Kupony vlaků: 55</p>
+    <p>Kupony vlaků: 34</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -123,6 +123,81 @@ const lines = [
         ]
     },
 
+    {
+        name: "Trať 020 Praha  - Hradec Králové",    
+        color: "brown",
+        category: "B",
+        trains: [
+            { name: "Train AO", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+            { name: "Train AP", startingIndex: 31, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+            { name: "Train AQ", startingIndex: 11, reverse: true, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+            { name: "Train AR", startingIndex: 9, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+            { name: "Train AS", startingIndex: 19, reverse: true, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+            { name: "Train AT", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
+        ],
+        stops: [
+              { name: "Praha Hlavní nádraží", location: [50.0829886, 14.4369822] },
+                { name: "Praha-Vysočany", location: [50.1122436, 14.4975614] },
+                { name: "Praha-Rajská zahrada", location: [50.1075325, 14.5601778] },
+                { name: "Praha-Horní Počernice", location: [50.1167069, 14.6127500] },
+                { name: "Zeleneč", location: [50.1302414, 14.6648703] },
+                { name: "Mstětice", location: [50.1368981, 14.6920911] },
+                { name: "Čelákovice", location: [50.1579894, 14.7543325] },
+                { name: "Čelákovice - Jiřina", location: [50.1674767, 14.7652989] },
+                { name: "Lysá nad Labem", location: [50.1954881, 14.8429022] },
+                { name: "Ostrá", location: [50.1878586, 14.8910142] },
+                { name: "Stratov", location: [50.1874503, 14.9080267] },
+                { name: "Kostomlaty nad Labem", location: [50.1859208, 14.9620733] },
+                { name: "Kamenné Zboží", location: [50.1889344, 15.0029611] },
+            { name: "Nymburk Hlavní nádraží", location: [50.1934472, 15.0458125] },
+                { name: "Velké Zboží", location: [50.1646156, 15.1009436] },
+                { name: "Poděbrady", location: [50.1495742, 15.1236878] },
+                { name: "Libice nad Cidlinou", location: [50.1276283, 15.1830958] },
+                { name: "Velký Osek", location: [50.1019439, 15.1934339] },
+                { name: "Mstětice", location: [50.1368981, 14.6920911] },
+                { name: "Sány", location: [50.1301042, 15.2410878] },
+                { name: "Dobšice nad Cidlinou", location: [50.1401025, 15.2636747] },
+                { name: "Choťovice", location: [50.1460381, 15.3291378] },
+                { name: "Převýšov", location: [50.1526375, 15.4073639] },
+                { name: "Chlumec nad Cidlinou", location: [50.1635856, 15.4572086] },
+                { name: "Nové Město nad Cidlinou", location: [50.1502686, 15.5022364] },
+                { name: "Káranice", location: [50.1551208, 15.5612631] },
+             { name: "Kratonohy", location: [50.1575394, 15.6108350] },
+                { name: "Dobřenice", location: [50.1596833, 15.6568947] },
+                { name: "Lhota pod Libčany", location: [50.1666869, 15.6962214] },
+                { name: "Praskačka", location: [50.1751822, 15.7316361] },
+                { name: "Hradec Králové-Kukleny", location: [50.2019844, 15.7980469] },
+                { name: "Hradec Králové hlavní nádraží", location: [50.2140617, 15.8101597] },
+               
+        ]
+    },
+
+     {
+        name: "Trať 018 Choceň  - Litomyšl",    
+        color: "violet",
+        category: "A",
+        trains: [
+            { name: "Train AM", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
+            { name: "Train AN", startingIndex: 13, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Choceň", location: [49.9940261, 16.2237836] },
+                { name: "Dvořisko", location: [49.9842719, 16.1921578] },
+                { name: "Slatina u Vysokého Mýta", location: [49.9750061, 16.1633072] },
+                { name: "Vysoké Mýto", location: [49.9554061, 16.1470508] },
+                { name: "Vysoké Mýto město", location: [49.9505194, 16.1557178] },
+                { name: "Džbánov", location: [49.9251633, 16.1742972] },
+                { name: "Hrušová", location: [49.9111786, 16.1966133] },
+                { name: "Cerekvice nad Loučnou", location: [49.9057464, 16.2060967] },
+                { name: "Cerekvice nad Loučnou zastávka", location: [49.9010314, 16.2185842] },
+                { name: "Řídký", location: [49.8919831, 16.2461931] },
+                { name: "Tržek", location: [49.8898239, 16.2604122] },
+                { name: "Litomyšl-Nedošín", location: [49.8858375, 16.2797869] },
+                { name: "Litomyšl zastávka", location: [49.8813667, 16.2927381] },
+                { name: "Litomyšl", location: [49.8747864, 16.3040925] },
+                ]
+    },
      {
         name: "Trať 017 Česká Třebová  - Prostějov",    
         color: "red",
