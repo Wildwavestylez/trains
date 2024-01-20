@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 00</p>
+    <p>Kupony vlaků: 07</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -231,6 +231,49 @@ const lines = [
                 { name: "Litomyšl-Nedošín", location: [49.8858375, 16.2797869] },
                 { name: "Litomyšl zastávka", location: [49.8813667, 16.2927381] },
                 { name: "Litomyšl", location: [49.8747864, 16.3040925] },
+                ]
+    },
+
+    {
+        name: "Trať 023 Doudleby nad Orlicí – Rokytnice v Orlických horách",    
+        color: "brown",
+        category: "A",
+        trains: [
+            { name: "Train BA", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
+            { name: "Train BB", startingIndex: 6, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Doudleby nad Orlicí", location: [50.1093825, 16.2588653] },
+                { name: "Vamberk", location: [50.1180153, 16.2829150] },
+                { name: "Peklo nad Zdobnicí", location: [50.1220664, 16.3055533] },
+                { name: "Rybná nad Zdobnicí", location: [50.1275367, 16.3431167] },
+                { name: "Slatina nad Zdobnicí", location: [50.1368294, 16.3777314] },
+                { name: "Pěčín", location: [50.1608658, 16.4193553] },
+                { name: "Rokytnice v Orlických horách", location: [50.1615867, 16.4652061] },
+                
+                ]
+    },
+
+    {
+        name: "Trať 021a Častolovice  - Solnice",    
+        color: "violet",
+        category: "A",
+        trains: [
+            { name: "Train AY", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            { name: "Train AZ", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Častolovice", location: [50.1284867, 16.1736050] },
+                { name: "Častolovice zastávka", location: [50.1276208, 16.1904964] },
+                { name: "Synkov", location: [50.1393586, 16.2185975] },
+                { name: "Slemeno", location: [50.1469192, 16.2418556] },
+                { name: "Rychnov nad Kněžnou", location: [50.1579322, 16.2736436] },
+                { name: "Rychnov nad Kněžnou zastávka", location: [50.1662978, 16.2707272] },
+                { name: "Solnice zastávka", location: [50.1999169, 16.2563208] },
+                { name: "Solnice", location: [50.2037431, 16.2541275] },
+                
                 ]
     },
      {
