@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 38</p>
+    <p>Kupony vlaků: 31</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 10000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -93,11 +93,11 @@ const lines = [
         ],
 
         waypoints: [
-            { location: [49.2551575, 13.9163047] },
-            { location: [49.2183647, 13.8940200] },
-            { location: [49.1701164, 13.8928975] },
-            { location: [49.1090089, 13.8666047] },
-            { location: [49.0487633, 13.7639522] },
+            { location: [49.2543183, 13.9119561] },
+            { location: [49.2512947, 13.9059222] },
+            { location: [49.2256311, 13.9041628] },
+            { location: [49.1961769, 13.8855889] },
+            { location: [49.1172825, 13.8510594] },
             // ... (další průjezdní body podél trasy)
         ]
     }, 
