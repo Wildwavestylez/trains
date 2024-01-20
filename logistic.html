@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 63</p>
+    <p>Kupony vlaků: 58</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 16000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -307,8 +307,8 @@ function showRandomOffer() {
         }
     }
 }
+
     
-// Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
     let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
@@ -351,7 +351,6 @@ function moveTrain(train, line) {
 
 // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
-
 
 
 
