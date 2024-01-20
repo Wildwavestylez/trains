@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 72</p>
+    <p>Kupony vlaků: 38</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -90,6 +90,15 @@ const lines = [
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581] },
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },  
+        ],
+
+        waypoints: [
+            { location: [49.2551575, 13.9163047] },
+            { location: [49.2183647, 13.8940200] },
+            { location: [49.1701164, 13.8928975] },
+            { location: [49.1090089, 13.8666047] },
+            { location: [49.0487633, 13.7639522] },
+            // ... (další průjezdní body podél trasy)
         ]
     }, 
 
@@ -453,13 +462,14 @@ function moveTrain(train, line) {
                     giveRandomMoneyToPlayer();
                 }
             }
-        } else {
+      } else {
             direction *= -1;
             currentStopIndex += direction;
             giveRandomMoneyToPlayer();
         }
     }, updateInterval);
 }
+
     // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
