@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 34</p>
+    <p>Kupony vlaků: 27</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -261,12 +261,9 @@ function showRandomOffer() {
             earningMax = 1500;
             break;
         default:
-            offerPrice = 0;
-            earningMin = 0;
-            earningMax = 0;
+            console.error("Neznámá kategorie linky.");
             break;
     }
-
          if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
