@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 22</p>
+    <p>Kupony vlaků: 47</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -282,7 +282,7 @@ function showRandomOffer() {
 
             offerLine.trains.forEach(train => {
                 let trainIcon = L.icon({
-                    iconUrl: 'https://i.imgur.com/jXoYbZs.png',
+                    iconUrl: train.image,
                     iconSize: [100, 100],
                     iconAnchor: [50, 50],
                     popupAnchor: [0, 0]
@@ -342,7 +342,6 @@ function moveTrain(train, line) {
         }
     }, updateInterval);
 }
-
     // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
