@@ -34,8 +34,8 @@
 <div id="playerPanel">
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
-    <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 39</p>
+    <p id="finance">Finance: 1000 Kč</p>
+    <p>Kupony vlaků: 85</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -46,7 +46,7 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-let playerFinance = 5000;
+let playerFinance = 1000;
 let availableLines = []; // Seznam dostupných linek
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
@@ -57,7 +57,6 @@ const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
-        category: "A",
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
@@ -94,8 +93,7 @@ const lines = [
     }, 
 
         {
-        name: "Trať 031 Pardubice  - Jaroměř",  
-        category: "A",
+        name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
@@ -126,7 +124,6 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
-        category: "A",
         trains: [
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
@@ -158,7 +155,6 @@ const lines = [
           {
         name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
         color: "green",
-        category: "A",
         trains: [
             { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
             { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
@@ -221,43 +217,11 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
+// Inicializace mapy Leaflet
 const map = L.map('map').setView([49.25, 13.91], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
-
-lines.forEach(line => {
-    // Linka
-    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
-    polyline.bindPopup(line.name);
-
-    // Vlaky
-    line.trains.forEach(train => {
-        let trainIcon = L.icon({
-            iconUrl: train.image, // Použijeme URL z popisu vlaku
-            iconSize: [100, 100],
-            iconAnchor: [50, 50],
-            popupAnchor: [0, 0]
-        });
-
-        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-        trainMarker.bindPopup(train.name);
-
-        train.marker = trainMarker; // Uložení markeru do dat vlaku
-    });
-
-    // Zastávky
-    line.stops.forEach(stop => {
-        L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
-    });
-});
-
-// Pohybující se ikony vlaků
-lines.forEach(line => {
-    line.trains.forEach(train => {
-        moveTrain(train, line);
-    });
-});
 
 // Skrytí linek na začátku hry
 lines.forEach(line => {
@@ -270,34 +234,9 @@ function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    let offerPrice, earningMin, earningMax;
+    const offerPrice = (randomLineIndex + 1) * 1000; // Cena nabídky od herního drážního úřadu
 
-    switch (offerLine.category) {
-        case "A":
-            offerPrice = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
-            earningMin = 100;
-            earningMax = 200;
-            break;
-        case "B":
-            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-            earningMin = 300;
-            earningMax = 500;
-            break;
-        case "C":
-            offerPrice = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000;
-            earningMin = 500;
-            earningMax = 800;
-            break;
-        case "D":
-            offerPrice = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000;
-            earningMin = 1000;
-            earningMax = 1500;
-            break;
-        default:
-            console.error("Neznámá kategorie linky.");
-            break;
-    }
-         if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
@@ -305,7 +244,7 @@ function showRandomOffer() {
             offerLine.hidden = false;
             availableLines.splice(randomLineIndex, 1);
 
-            // Přidání ikon a logiky pro nově zakoupenou linku
+            // Přidání ikon a logiky pro nově zakoupenou linku (kód zůstává stejný, jen se zobrazí)
             let polyline = L.polyline(offerLine.stops.map(stop => stop.location), { color: offerLine.color }).addTo(map);
             polyline.bindPopup(offerLine.name);
 
@@ -320,41 +259,30 @@ function showRandomOffer() {
                 let trainMarker = L.marker(offerLine.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
                 trainMarker.bindPopup(train.name);
 
-                train.marker = trainMarker; // Uložení markeru do dat vlaku
-
-                // Spuštění pohybu vlaků na nové lince
+                train.marker = trainMarker;
                 moveTrain(train, offerLine);
+            });
+
+            let stopIcon = L.icon({
+                iconUrl: 'https://i.imgur.com/EDFZjPX.png',
+                iconSize: [2, 2],
+                iconAnchor: [1, 1],
+                popupAnchor: [0, 0]
             });
 
             offerLine.stops.forEach(stop => {
                 L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
             });
         } else {
-            alert("Nemáte dostatek financí na zakoupení této linky.");
+            alert("Nemáte dostatek financí na nákup linky.");
         }
     }
 }
-    
-
-
-// Spuštění nabídek od herního drážního úřadu každou minutu
-setInterval(showRandomOffer, offerInterval);
 
 
 
 
-    
-// Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-function giveRandomMoneyToPlayer() {
-    const randomAmount = generateRandomAmount();
-    playerFinance += randomAmount;
-    document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-}
-
-function generateRandomAmount() {
-    return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
-}
-
+// Funkce pro pohyb vlaku
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
     let direction = train.reverse ? -1 : 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
@@ -371,40 +299,64 @@ function moveTrain(train, line) {
             const currentTime = new Date();
             const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
 
-            const progress = elapsedTime / timeToNextStop;
-            const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * progress;
-            const lng = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * progress;
-
-            train.marker.setLatLng([lat, lng]);
-
-            if (progress >= 1) {
+            if (elapsedTime <= timeToNextStop) {
+                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                train.marker.setLatLng([lat, lon]);
+            } else {
+                // Přesun na další/zpětnou zastávku
                 currentStopIndex += direction;
                 startTime = new Date();
+
+                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
+                if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
+                    direction *= -1;
+                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                }
             }
         } else {
-            // Vlak dojel na konečnou
-            currentStopIndex = train.reverse ? line.stops.length - 1 : 0;
-            startTime = new Date();
+            // Dosáhli jsme konce trasy, změňme směr pohybu
+            direction *= -1;
+            currentStopIndex += direction;
+            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
         }
     }, updateInterval);
 }
 
-// Funkce pro výpočet vzdálenosti mezi dvěma body na mapě
+// Spuštění nabídek od herního drážního úřadu každou minutu
+setInterval(showRandomOffer, offerInterval);
+
+
+    
+// Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
+function giveRandomMoneyToPlayer() {
+    const randomAmount = generateRandomAmount();
+    playerFinance += randomAmount;
+    document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+}
+
+function generateRandomAmount() {
+    return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+}
+
+/
+// Vypočítá vzdálenost mezi dvěma zastávkami
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // poloměr Země v km
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
+    const distance = R * c; // vzdálenost v km
     return distance;
 }
 
-// Převede úhel na radiány
-function toRad(deg) {
-    return deg * (Math.PI / 180);
+// Převádí stupně na radiány
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
 }
 
 </script>
