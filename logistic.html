@@ -267,7 +267,7 @@ function showRandomOffer() {
             break;
     }
 
-    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+     if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
@@ -275,7 +275,7 @@ function showRandomOffer() {
             offerLine.hidden = false;
             availableLines.splice(randomLineIndex, 1);
 
-            // Přidání ikon a logiky pro nově zakoupenou linku (kód zůstává stejný, jen se zobrazí)
+            // Přidání ikon a logiky pro nově zakoupenou linku
             let polyline = L.polyline(offerLine.stops.map(stop => stop.location), { color: offerLine.color }).addTo(map);
             polyline.bindPopup(offerLine.name);
 
@@ -291,15 +291,13 @@ function showRandomOffer() {
                 trainMarker.bindPopup(train.name);
 
                 train.marker = trainMarker; // Uložení markeru do dat vlaku
+
+                // Spuštění pohybu vlaků na nové lince
+                moveTrain(train, offerLine);
             });
 
             offerLine.stops.forEach(stop => {
                 L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
-            });
-
-            // Spuštění pohybu vlaků na nové lince
-            offerLine.trains.forEach(train => {
-                moveTrain(train, offerLine);
             });
         } else {
             alert("Nemáte dostatek financí na zakoupení této linky.");
