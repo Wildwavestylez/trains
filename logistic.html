@@ -50,7 +50,7 @@ let playerFinance = 20000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 20000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -121,6 +121,41 @@ const lines = [
                 { name: "Jaroměř", location: [50.3417397, 15.9101000] },
                
         ]
+    },
+
+     {
+        name: "Trať 021 Hradec Králové  - Letohrad",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train AU", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
+            { name: "Train AV", startingIndex: 20, reverse: false, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
+            { name: "Train AW", startingIndex: 9, reverse: true, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
+            { name: "Train AX", startingIndex: 11, reverse: false, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
+        ],
+        stops: [
+              { name: "Hradec Králové hlavní nádraží", location: [50.2140617, 15.8101597] },
+                { name: "Hradec Králové zastávka", location: [50.2224083, 15.8414822] },
+                { name: "Hradec Králové-Slezské Předměstí", location: [50.2218781, 15.8596697] },
+                { name: "Blešno", location: [50.2146722, 15.9359683] },
+                { name: "Třebechovice pod Orebem", location: [50.2000733, 15.9821664] },
+                { name: "Petrovice nad Orlicí", location: [50.1737672, 16.0460186] },
+                { name: "Týniště nad Orlicí", location: [50.1549606, 16.0740508] },
+                { name: "Lípa nad Orlicí", location: [50.1414756, 16.1024283] },
+                { name: "Čestice", location: [50.1303519, 16.1476422] },
+                { name: "Častolovice", location: [50.1284867, 16.1736050] },
+                { name: "Kostelec nad Orlicí město", location: [50.1198769, 16.2050475] },
+                { name: "Kostelec nad Orlicí", location: [50.1165542, 16.2239819] },
+                { name: "Doudleby nad Orlicí", location: [50.1093825, 16.2588653] },
+                { name: "Záměl", location: [50.1001700, 16.2970314] },
+                { name: "Potštějn", location: [50.0837708, 16.3152675] },
+            { name: "Sopotnice", location: [50.0705033, 16.3403358] },
+                { name: "Litice nad Orlicí", location: [50.0869636, 16.3578967] },
+                { name: "Bohousová", location: [50.0909919, 16.3798503] },
+                { name: "Žamberk", location: [50.0737611, 16.4501286] },
+                { name: "Lukavice v Čechách", location: [50.0492517, 16.4842378] },
+                { name: "Letohrad", location: [50.0314292, 16.5076886] },
+                 ]
     },
 
     {
