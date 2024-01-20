@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 15000 Kč</p>
-    <p>Kupony vlaků: 11</p>
+    <p>Kupony vlaků: 55</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -105,7 +105,7 @@ const lines = [
         ],
         stops: [
               { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
-                { name: "Pardubice - Rosice nad Laben", location: [50.0454825, 15.7424669] },
+                { name: "Pardubice - Rosice nad Labem", location: [50.0454825, 15.7424669] },
                 { name: "Pardubice - Semtín", location: [50.0614931, 15.7479144] },
                 { name: "Stéblová obec", location: [50.0928917, 15.7523633] },
                 { name: "Stéblová", location: [50.1044083, 15.7576503] },
@@ -119,6 +119,94 @@ const lines = [
                 { name: "Černožice", location: [50.3155061, 15.8695822] },
                 { name: "Semonice", location: [50.3316458, 15.8774558] },
                 { name: "Jaroměř", location: [50.3417397, 15.9101000] },
+               
+        ]
+    },
+
+     {
+        name: "Trať 017 Česká Třebová  - Prostějov",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train AI", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 500 },
+            { name: "Train AJ", startingIndex: 25, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 500 },
+            { name: "Train AK", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 500 },
+            { name: "Train AL", startingIndex: 13, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 500 },
+        ],
+        stops: [
+              { name: "Česká Třebová", location: [49.8972472, 16.4463578] },
+                { name: "Třebovice v Čechách", location: [49.8581008, 16.4975089] },
+                { name: "Anenská Studánka", location: [49.8545303, 16.5565547] },
+                { name: "Trpík", location: [49.8451461, 16.5697078] },
+                { name: "Mladějov na Moravě", location: [49.8251381, 16.5882625] },
+                { name: "Kunčina", location: [49.7963181, 16.6378517] },
+                { name: "Moravská Třebová", location: [49.7667044, 16.6664733] },
+                { name: "Linhartice", location: [49.7519303, 16.7128297] },
+                { name: "Rozstání", location: [49.7283744, 16.7307547] },
+                { name: "Městečko Trnávka", location: [49.7149964, 16.7246056] },
+                { name: "Mezihoří", location: [49.7032967, 16.7420197] },
+                { name: "Chornice", location: [49.6770133, 16.7450942] },
+                { name: "Nectava", location: [49.6575928, 16.7802239] },
+                { name: "Šubířov", location: [49.6266633, 16.8173922] },
+                { name: "Dzbel", location: [49.6101761, 16.8482989] },
+                { name: "Jesenec", location: [49.6063461, 16.8611144] },
+                { name: "Konice", location: [49.5915869, 16.8837222] },
+                { name: "Křemenec", location: [49.5725097, 16.9062594] },
+                { name: "Čunín", location: [49.5635108, 16.9136600] },
+                { name: "Stražisko", location: [49.5424842, 16.9287186] },
+                { name: "Ptení", location: [49.5286903, 16.9580744] },
+                { name: "Zdětín u Prostějova", location: [49.5283011, 16.9877072] },
+                { name: "Lutonín", location: [49.5915869, 16.8837222] },
+                { name: "Kostelec na Hané", location: [49.5090675, 17.0650139] },
+                { name: "Prostějov místní nádraží", location: [49.4789619, 17.1116714] },
+                { name: "Prostějov hlavní nádraží", location: [49.4723550, 17.1295814] },
+               
+        ]
+    },
+    {
+        name: "Trať 015 Přelouč  - Prachovice",    
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train AE", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 200 },
+            { name: "Train AF", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 200 },
+        ],
+        stops: [
+              { name: "Přelouč", location: [50.0396194, 15.5744897] },
+                { name: "Valy u Přelouče zastávka", location: [50.0307158, 15.6139642] },
+                { name: "Veselí u Přelouče", location: [50.0168572, 15.6233178] },
+                { name: "Choltice", location: [49.9894067, 15.6430969] },
+                { name: "Jeníkovice", location: [49.9808769, 15.6563225] },
+                { name: "Heřmanův Městec", location: [49.9513778, 15.6585378] },
+                { name: "Kostelec u Heřmanova Městce zastávka", location: [49.9513778, 15.6585378] },
+                { name: "Kostelec u Heřmanova Městce", location: [49.9207708, 15.6512192] },
+                { name: "Prachovice", location: [49.8927269, 15.6326036] },
+                ]
+    },
+{
+        name: "Trať 016 Borohrádek  - Chrudim",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train AG", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train AH", startingIndex: 12, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Borohrádek", location: [50.0970689, 16.0856306] },
+                { name: "Holice zastávka", location: [50.0818883, 16.0343208] },
+                { name: "Holice", location: [50.0693511, 15.9925281] },
+                { name: "Dolní Roveň", location: [50.0288733, 15.9695167] },
+                { name: "Platěnice", location: [50.0089531, 15.9614381] },
+                { name: "Moravany", location: [50.0022431, 15.9462853] },
+                { name: "Bořice", location: [49.9803658, 15.9222164] },
+                { name: "Hrochův Týnec", location: [49.9663353, 15.9082642] },
+                { name: "Vejvanovice", location: [49.9730186, 15.8731289] },
+                { name: "Úhřetice", location: [49.9774131, 15.8622742] },
+                { name: "Tuněchody", location: [49.9744872, 15.8498183] },
+                { name: "Chrudim město", location: [49.9577178, 15.7938519] },
+                { name: "Chrudim", location: [49.9482764, 15.7867108] },
+                
                
         ]
     },
@@ -153,6 +241,37 @@ const lines = [
                 { name: "Šumperk", location: [49.9617958, 16.9831067] },
                
         ]
+    },
+    {
+        name: "Trať 014 Kolín  - Ledečko",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train AA", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            { name: "Train AB", startingIndex: 17, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            { name: "Train AC", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            { name: "Train AD", startingIndex: 9, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+        ],
+        stops: [
+              { name: "Kolín", location: [50.0252381, 15.2142544] },
+                { name: "Kolín místní nádraží", location: [50.0153044, 15.2230378] },
+                { name: "Hluboký Důl", location: [50.0022239, 15.2185411] },
+                { name: "Červené Pečky", location: [49.9879494, 15.2069589] },
+                { name: "Ratboř", location: [49.9815942, 15.1603700] },
+                { name: "Kořenice", location: [49.9731675, 15.1385831] },
+                { name: "Chotouchov", location: [49.9704436, 15.1212339] },
+                { name: "Pučery", location: [49.9672928, 15.1057425] },
+                { name: "Bečváry", location: [49.9560622, 15.0710583] },
+                { name: "Drahobudice", location: [49.9366761, 15.0626889] },
+                { name: "Hatě", location: [49.9138069, 15.0580178] },
+                { name: "Chmeliště", location: [49.8957100, 15.0563422] },
+                { name: "Uhlířské Janovice", location: [49.8823167, 15.0597983] },
+                { name: "Mitrov", location: [49.8657836, 15.0484458] },
+                { name: "Mirošovice u Rataj nad Sázavou", location: [49.8603744, 15.0047864] },
+                { name: "Rataje nad Sázavou předměstí", location: [49.8495789, 14.9788906] },
+                { name: "Rataje nad Sázavou", location: [49.8436853, 14.9507675] },
+                { name: "Ledečko", location: [49.8472978, 14.9321356] },
+                ]
     },
 
           {
@@ -309,7 +428,7 @@ const lines = [
     }, 
 
          {
-        name: "Trať 012 Pečky - Kořim - Bečváry",    
+        name: "Trať 012 Pečky - Kouřim - Bečváry",    
         color: "green",
         category: "A",      
         trains: [
