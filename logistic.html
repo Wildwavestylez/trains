@@ -34,8 +34,8 @@
 <div id="playerPanel">
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
-    <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 53</p>
+    <p id="finance">Finance: 5000 Kč</p>
+    <p>Kupony vlaků: 84</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -46,19 +46,18 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-let playerFinance = 1000;
+let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
 const trainSpeed = 500; // Rychlost vlaku v km/h
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
 const offerInterval = 60000; // Interval nabídek od herního drážního úřadu v ms
-let offerBasePrice = 1000; // Základní cena nabídky
-    
+
 // Fiktivní data pro linky a zastávky
 const lines = [
     {
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
-        category: "A", 
+        category: "A",
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/C0nmEUE.png', maxSpeed: 100 },
@@ -95,9 +94,9 @@ const lines = [
     }, 
 
         {
-        name: "Trať 031 Pardubice  - Jaroměř",    
+        name: "Trať 031 Pardubice  - Jaroměř",  
+        category: "A",
         color: "red",
-        category: "A", 
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
             { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
@@ -127,7 +126,7 @@ const lines = [
       {
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
-        category: "A", 
+        category: "A",
         trains: [
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/1xGFDKV.png', maxSpeed: 100 },
@@ -159,7 +158,7 @@ const lines = [
           {
         name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
         color: "green",
-        category: "A", 
+        category: "A",
         trains: [
             { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
             { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
@@ -181,7 +180,6 @@ const lines = [
     {
         name: "Trať 010 Kolín - Česká Třebová",    
         color: "yellow",
-        category: "B", 
         trains: [
             { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
             { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
@@ -229,80 +227,47 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Nastavení kategorií, cen a výdělků pro jednotlivé linky
-lines.forEach((line, index) => {
-    const isFirstLine = index === 0;
-
-    // Funkce pro generování náhodné ceny a výdělku podle kategorie
-    const { price, earnings } = generateRandomPriceAndEarnings(line.category, isFirstLine);
-    
-    line.price = price;
-    line.earnings = earnings;
-
+// Skrytí linek na začátku hry
+lines.forEach(line => {
+    line.hidden = true;
     availableLines.push(line);
 });
 
-// Funkce pro generování náhodné ceny a výdělku podle kategorie
-function generateRandomPriceAndEarnings(category, isFirstLine) {
-    let price, earnings;
-
-    switch (category) {
-        case "A":
-            if (isFirstLine) {
-                price = 1000;
-            } else {
-                price = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
-            }
-            earnings = Math.floor(Math.random() * (200 - 100 + 1)) + 100;
-            break;
-        case "B":
-            price = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-            earnings = Math.floor(Math.random() * (500 - 300 + 1)) + 300;
-            break;
-        case "C":
-            price = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000;
-            earnings = Math.floor(Math.random() * (800 - 500 + 1)) + 500;
-            break;
-        case "D":
-            price = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000;
-            earnings = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
-            break;
-        default:
-            price = 1000; // Defaultní cena
-            earnings = 100; // Defaultní výdělek
-    }
-
-    return { price, earnings };
-}
-
-
-
-
-// Funkce pro zobrazení náhodné nabídky od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    // Cena nabídky od herního drážního úřadu závisí na kategorii linky
-    let offerPrice;
+    let offerPrice, earningMin, earningMax;
+
     switch (offerLine.category) {
         case "A":
-            offerPrice = offerLine.price + (randomLineIndex * 1000); // Cena nabídky začíná od 1000
+            offerPrice = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+            earningMin = 100;
+            earningMax = 200;
             break;
         case "B":
-            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // Cena pro kategorii B: 5000 - 10000
+            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+            earningMin = 300;
+            earningMax = 500;
             break;
         case "C":
-            offerPrice = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000; // Cena pro kategorii C: 15000 - 20000
+            offerPrice = Math.floor(Math.random() * (20000 - 15000 + 1)) + 15000;
+            earningMin = 500;
+            earningMax = 800;
             break;
         case "D":
-            offerPrice = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000; // Cena pro kategorii D: 30000 - 50000
+            offerPrice = Math.floor(Math.random() * (50000 - 30000 + 1)) + 30000;
+            earningMin = 1000;
+            earningMax = 1500;
             break;
         default:
-            offerPrice = 1000; // Defaultní cena
+            offerPrice = 0;
+            earningMin = 0;
+            earningMax = 0;
+            break;
     }
 
-   if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
@@ -328,10 +293,11 @@ function showRandomOffer() {
                 train.marker = trainMarker; // Uložení markeru do dat vlaku
             });
 
-            // Přidání nově odemčené linky do seznamu všech linek pro pohyb vlaků
-            lines.push(offerLine);
+            offerLine.stops.forEach(stop => {
+                L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
+            });
 
-            // Pohybující se ikony vlaků pro nově odemčenou linku
+            // Spuštění pohybu vlaků na nové lince
             offerLine.trains.forEach(train => {
                 moveTrain(train, offerLine);
             });
@@ -340,7 +306,6 @@ function showRandomOffer() {
         }
     }
 }
-
     
 // Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
