@@ -21,7 +21,7 @@
 
         #map {
             flex: 2;
-            height: 50%;
+            height: 100%;
         }
 
           
@@ -35,13 +35,13 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 1000 Kč</p>
-    <p>Kupony vlaků: 15</p>
-    <p>Vlaky v provozu: 4</p>
+    <p>Kupony vlaků: 99</p>
+    
     <!-- Doplnit další informace podle potřeby -->
 </div>
 
 <div id="map"></div>
-<div id="map"></div>
+
 
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -151,6 +151,69 @@ const lines = [
                
         ]
     },
+
+          {
+        name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
+        color: "green",
+        trains: [
+            { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
+            { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 60 },
+            ],
+        stops: [
+              { name: "Horná Štubňa", location: [48.7927947, 18.8818092] },
+                { name: "Sklené pri Handlovej", location: [48.7827594, 18.8423286] },
+                { name: "Remäta", location: [48.7529411, 18.8051108] },
+                { name: "Handlová", location: [48.7254917, 18.7541539] },
+                { name: "Ráztočno", location: [48.7679444, 18.7626331] },
+                { name: "Jalovec", location: [48.7727233, 18.7456547] },
+                { name: "Chrenovec", location: [48.7780800, 18.7127303] },
+                { name: "Prievidza", location: [48.7748283, 18.6167244] },
+                
+               
+        ]
+    },  
+    
+    {
+        name: "Trať 010 Kolín - Česká Třebová",    
+        color: "yellow",
+        trains: [
+            { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 19", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 20", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 21", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 22", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            ],
+              
+        stops: [
+              { name: "Kolín", location: [50.0252381, 15.2142544] },
+                { name: "Kolín Dílny", location: [50.0117758, 15.2338533] },
+                { name: "Starý Kolín", location: [50.0110397, 15.2951967] },
+                { name: "Záboří nad Labem", location: [50.0310097, 15.3490239] },
+                { name: "Týnec nad Labem", location: [50.0373956, 15.3591994] },
+                { name: "Kojice", location: [50.0405578, 15.3979206] },
+                { name: "Chvaletice", location: [50.0374603, 15.4186744] },
+                { name: "Řečany nad Labem", location: [50.0317497, 15.4783706] },
+                { name: "Lhota pod Přeloučí", location: [50.0365714, 15.5267486] },
+                { name: "Přelouč", location: [50.0396194, 15.5744897] },
+                { name: "Valy u Přelouče", location: [50.0319747, 15.6140661] },
+                { name: "Pardubice-Opočínek", location: [50.0304261, 15.6698569] },
+                { name: "Pardubice-Svítkov", location: [50.0319253, 15.7237300] },
+                { name: "Pardubice hlavní nádraží", location: [50.0318908, 15.7563753] },
+                { name: "Pardubice-Pardubičky", location: [50.0312119, 15.7890586] },
+                { name: "Pardubice-Černá za Bory", location: [50.0274467, 15.8305319] },
+                { name: "Kostěnice", location: [50.0128861, 15.8975467] }, 
+                { name: "Moravany", location: [50.0022431, 15.9462853] },
+                { name: "Uhersko", location: [49.9873542, 16.0149956] }, 
+                { name: "Sedlíšťka", location: [49.9900969, 16.0646381] }, 
+                { name: "Zámrsk", location: [49.9949797, 16.1087169] },
+                { name: "Dobříkov u Chocně", location: [49.9959106, 16.1357575] }, 
+                { name: "Sruby", location: [49.9898339, 16.1711558] },
+                { name: "Choceň", location: [49.9940261, 16.2237836] },
+                
+               
+        ]
+    },
     // Další linky můžete přidávat podle potřeby
 ];
 
@@ -166,14 +229,15 @@ lines.forEach(line => {
     availableLines.push(line);
 });
 
-// Funkce pro zobrazování nabídek od herního drážního úřadu
 function showRandomOffer() {
     const randomLineIndex = Math.floor(Math.random() * availableLines.length);
     const offerLine = availableLines[randomLineIndex];
 
-    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za 1000 Kč. Chcete ji koupit?`)) {
-        if (playerFinance >= 1000) {
-            playerFinance -= 1000;
+    const offerPrice = (randomLineIndex + 1) * 1000; // Cena nabídky od herního drážního úřadu
+
+    if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+        if (playerFinance >= offerPrice) {
+            playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
 
             offerLine.hidden = false;
@@ -198,8 +262,15 @@ function showRandomOffer() {
                 moveTrain(train, offerLine);
             });
 
+            let stopIcon = L.icon({
+                iconUrl: 'https://i.imgur.com/EDFZjPX.png',
+                iconSize: [2, 2],
+                iconAnchor: [1, 1],
+                popupAnchor: [0, 0]
+            });
+
             offerLine.stops.forEach(stop => {
-                L.marker(stop.location).addTo(map).bindPopup(stop.name);
+                L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
             });
         } else {
             alert("Nemáte dostatek financí na nákup linky.");
@@ -207,6 +278,7 @@ function showRandomOffer() {
     }
 }
 
+    
 // Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
     let currentStopIndex = train.startingIndex;
