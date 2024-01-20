@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 27</p>
+    <p>Kupony vlaků: 59</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -221,11 +221,43 @@ const lines = [
     // Další linky můžete přidávat podle potřeby
 ];
 
-// Inicializace mapy Leaflet
 const map = L.map('map').setView([49.25, 13.91], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
+
+lines.forEach(line => {
+    // Linka
+    let polyline = L.polyline(line.stops.map(stop => stop.location), { color: line.color }).addTo(map);
+    polyline.bindPopup(line.name);
+
+    // Vlaky
+    line.trains.forEach(train => {
+        let trainIcon = L.icon({
+            iconUrl: train.iconUrl, // Použití cesty k ikoně vlaku definované na začátku
+            iconSize: [100, 100],
+            iconAnchor: [50, 50],
+            popupAnchor: [0, 0]
+        });
+
+        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
+        trainMarker.bindPopup(train.name);
+
+        train.marker = trainMarker; // Uložení markeru do dat vlaku
+    });
+
+    // Zastávky
+    line.stops.forEach(stop => {
+        L.marker(stop.location, { icon: stopIcon }).addTo(map).bindPopup(stop.name);
+    });
+});
+
+// Pohybující se ikony vlaků
+lines.forEach(line => {
+    line.trains.forEach(train => {
+        moveTrain(train, line);
+    });
+});
 
 // Skrytí linek na začátku hry
 lines.forEach(line => {
