@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 47</p>
+    <p>Kupony vlaků: 76</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 16000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -182,12 +182,14 @@ const lines = [
         color: "yellow",
         category: "B",
         trains: [
-            { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 19", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 20", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 21", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
-            { name: "Train 22", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 160 },
+            { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 19", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 20", startingIndex: 15, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 21", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 22", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 23", startingIndex: 23, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
+            { name: "Train 24", startingIndex: 28, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 160 },
             ],
               
         stops: [
@@ -215,7 +217,57 @@ const lines = [
                 { name: "Dobříkov u Chocně", location: [49.9959106, 16.1357575] }, 
                 { name: "Sruby", location: [49.9898339, 16.1711558] },
                 { name: "Choceň", location: [49.9940261, 16.2237836] },
-                
+                { name: "Brandýs nad Orlicí", location: [49.9996833, 16.2852631] },
+                { name: "Ústí nad Orlicí", location: [49.9711233, 16.3780250] }, 
+                { name: "Ústí nad Orlicí město", location: [49.9711233, 16.3780250] },
+                { name: "Dlouhá Třebová", location: [49.9356842, 16.4225675] },
+                { name: "Česká Třebová", location: [49.8972472, 16.4463578] },
+                 ]
+    },
+     {
+        name: "Trať 160 Plzeň  - Žatec",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train 25", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 26", startingIndex: 28, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 27", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 28", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 29", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 30", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 31", startingIndex: 21, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+            { name: "Train 32", startingIndex: 21, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 100 },
+        ],
+        stops: [
+              { name: "Plzeň Hlavní nádraží", location: [49.7435456, 13.3880578] },
+                { name: "Plzeň - Bílá Hora", location: [49.7683450, 13.4003153] },
+                { name: "Plzeň - Bolevec", location: [49.7857933, 13.3857556] },
+                { name: "Plzeň - Orlík", location: [49.8039628, 13.3962497] },
+                { name: "Třemošná u Plzně", location: [49.8191147, 13.3945733] },
+                { name: "Horní Bříza zastávka", location: [49.8382186, 13.3589772] },
+                { name: "Horní Bříza", location: [49.8509025, 13.3796264] },
+                { name: "Obora u Kaznějova", location: [49.8714256, 13.4028406] },
+                { name: "Kaznějov", location: [49.8938178, 13.3749475] },
+                { name: "Plasy", location: [49.9309158, 13.3796111] },
+                { name: "Horní Hradiště", location: [49.9474067, 13.3627186] },
+                { name: "Mladotice zastávka", location: [49.9718208, 13.3462792] },
+                { name: "Mladotice", location: [49.9866828, 13.3639575] },
+                { name: "Potvorov", location: [50.0237808, 13.3747350] },
+                { name: "Žihle", location: [50.0467872, 13.3628236] },
+                { name: "Pastuchovice", location: [50.0713739, 13.3943872] },
+                { name: "Blatno u Jesenice", location: [50.0999069, 13.3900872] },
+                { name: "Stebno", location: [50.1196172, 13.4126733] },
+                { name: "Petrohrad", location: [50.1352617, 13.4340364] },
+                { name: "Kryry", location: [50.1688081, 13.4228631] },
+                { name: "Vroutek", location: [50.1840247, 13.3740119] },
+                { name: "Podbořany", location: [50.2235414, 13.4043303] },
+                { name: "Kaštice", location: [50.2616425, 13.4179258] },
+                { name: "Kněžice", location: [50.2894319, 13.4266811] },
+                { name: "Čejkovice", location: [50.3076292, 13.4256811] },
+                { name: "Žabokliky", location: [50.3299578, 13.4647575] },
+                { name: "Libočany", location: [50.3303128, 13.5152047] },
+                { name: "Žatec západ", location: [50.3380775, 13.5350008] },
+                { name: "Žatec", location: [50.3366203, 13.5552453] },
                
         ]
     },
