@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 73</p>
+    <p>Kupony vlaků: 34</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -267,7 +267,7 @@ function showRandomOffer() {
             break;
     }
 
-     if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
+         if (confirm(`Herní drážní úřad nabízí provozování linky: ${offerLine.name} za ${offerPrice} Kč. Chcete ji koupit?`)) {
         if (playerFinance >= offerPrice) {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
