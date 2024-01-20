@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 31</p>
+    <p>Kupony vlaků: 72</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 10000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -90,15 +90,6 @@ const lines = [
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581] },
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611] },
                 { name: "Volary", location: [48.9070969, 13.8833131] },  
-        ],
-
-        waypoints: [
-            { location: [49.2543183, 13.9119561] },
-            { location: [49.2512947, 13.9059222] },
-            { location: [49.2256311, 13.9041628] },
-            { location: [49.1961769, 13.8855889] },
-            { location: [49.1172825, 13.8510594] },
-            // ... (další průjezdní body podél trasy)
         ]
     }, 
 
@@ -462,14 +453,13 @@ function moveTrain(train, line) {
                     giveRandomMoneyToPlayer();
                 }
             }
-      } else {
+        } else {
             direction *= -1;
             currentStopIndex += direction;
             giveRandomMoneyToPlayer();
         }
     }, updateInterval);
 }
-
     // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
 
