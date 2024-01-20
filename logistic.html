@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 15</p>
+    <p>Kupony vlaků: 22</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -48,7 +48,7 @@
 <script>
 let playerFinance = 5000;
 let availableLines = []; // Seznam dostupných linek
-const trainSpeed = 500; // Rychlost vlaku v km/h
+
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
 const offerInterval = 16000; // Interval nabídek od herního drážního úřadu v ms
 
@@ -317,39 +317,34 @@ function moveTrain(train, line) {
 
         if (nextStop) {
             const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / trainSpeed; // v hodinách
+            const timeToNextStop = distanceToNextStop / train.maxSpeed; // Vypočítat čas na základě maxSpeed vlaku
 
             const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60; // v hodinách
+            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
 
             if (elapsedTime <= timeToNextStop) {
                 const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
                 const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
                 train.marker.setLatLng([lat, lon]);
             } else {
-                // Přesun na další/zpětnou zastávku
                 currentStopIndex += direction;
                 startTime = new Date();
 
-                // Pokud jsme dosáhli konce nebo začátku trasy, změníme směr pohybu
                 if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                     direction *= -1;
-                    giveRandomMoneyToPlayer(); // Získání peněz při dosažení zastávky
+                    giveRandomMoneyToPlayer();
                 }
             }
         } else {
-            // Dosáhli jsme konce trasy, změňme směr pohybu
             direction *= -1;
             currentStopIndex += direction;
-            giveRandomMoneyToPlayer(); // Získání peněz při dosažení konce trasy
+            giveRandomMoneyToPlayer();
         }
     }, updateInterval);
 }
 
-// Spuštění nabídek od herního drážního úřadu každou minutu
+    // Spuštění nabídek od herního drážního úřadu každou minutu
 setInterval(showRandomOffer, offerInterval);
-
-
 
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
