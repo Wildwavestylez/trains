@@ -242,6 +242,8 @@ function showRandomOffer() {
             playerFinance -= offerPrice;
             document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
 
+            offerBasePrice += 1000; // Aktualizace základní ceny nabídky
+
             offerLine.hidden = false;
             availableLines.splice(randomLineIndex, 1);
 
@@ -279,6 +281,7 @@ function showRandomOffer() {
         }
     }
 }
+
     
 // Funkce pro pohybující se ikony vlaků pouze pro nově odemčené linky
 function moveTrain(train, line) {
