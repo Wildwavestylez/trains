@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 5000 Kč</p>
-    <p>Kupony vlaků: 05</p>
+    <p>Kupony vlaků: 24</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -247,11 +247,7 @@ line.trains.forEach(train => {
 });
 
 
-        let trainMarker = L.marker(line.stops[train.startingIndex].location, { icon: trainIcon }).addTo(map);
-        trainMarker.bindPopup(train.name);
 
-        train.marker = trainMarker; // Uložení markeru do dat vlaku
-    });
 
     // Zastávky
     line.stops.forEach(stop => {
