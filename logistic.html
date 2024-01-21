@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 68</p>
+    <p>Kupony vlaků: 74</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -103,7 +103,7 @@ const lines = [
             { name: "Train CF", startingIndex: 60, reverse: true, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
             { name: "Train CG", startingIndex: 60, reverse: false, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
             { name: "Train CH", startingIndex: 45, reverse: true, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
-            { name: "Train CI", startingIndex: 45, reverse: false, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 }
+            { name: "Train CI", startingIndex: 45, reverse: false, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
             { name: "Train CJ", startingIndex: 32, reverse: true, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
             { name: "Train CK", startingIndex: 32, reverse: false, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
             { name: "Train CL", startingIndex: 20, reverse: true, image: 'https://i.imgur.com/2wCzoS3.png', maxSpeed: 800 },
@@ -187,12 +187,12 @@ const lines = [
         color: "#FFFFFF00",
         category: "C",
         trains: [
-            { name: "Train CD", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
-            { name: "Train CE", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
-            { name: "Train CF", startingIndex: 60, reverse: true, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
-            { name: "Train CG", startingIndex: 60, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
-            { name: "Train CH", startingIndex: 45, reverse: true, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
-            { name: "Train CI", startingIndex: 45, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 }
+            { name: "Train CN", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
+            { name: "Train CO", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
+            { name: "Train CP", startingIndex: 60, reverse: true, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
+            { name: "Train CQ", startingIndex: 60, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
+            { name: "Train CR", startingIndex: 45, reverse: true, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 },
+            { name: "Train CS", startingIndex: 45, reverse: false, image: 'https://i.imgur.com/TMC7tvK.png', maxSpeed: 1000 }
            
         ],
          stops: [
@@ -521,6 +521,48 @@ const lines = [
                 { name: "Hradec Králové hlavní nádraží", location: [50.2140617, 15.8101597] },
                
         ]
+    },
+
+     {
+        name: "Trať 034 Smržovka  - Josefův Důl",    
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train CT", startingInDex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            
+            
+        ],
+        stops: [
+              { name: "Smržovka", location: [50.7402839, 15.2438928] },
+                { name: "Jiřetín pod Bukovou", location: [50.7569197, 15.2638922] },
+                { name: "Tanvaldský Špičák", location: [50.7609214, 15.2675333] },
+                { name: "Antonínov", location: [50.7715911, 15.2494106] },
+                { name: "Josefův Důl", location: [50.7795372, 15.2401992] },
+                
+                ]
+    },
+
+    {
+        name: "Trať 035 Železný Brod – Tanvald",    
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train CU", startingInDex: 0, reverse: false, image: 'https://i.imgur.com/P2FHNVi.png', maxSpeed: 500 },
+            { name: "Train CV", startingInDex: 7, reverse: false, image: 'https://i.imgur.com/P2FHNVi.png', maxSpeed: 500 },
+            
+            
+        ],
+        stops: [
+              { name: "Železný Brod", location: [50.6399764, 15.2652283] },
+                { name: "Spálov", location: [50.6338958, 15.3005306 },
+                { name: "Jesenný", location: [50.6517600, 15.3278464] },
+                { name: "Návarov", location: [50.6762389, 15.3192986] },
+                { name: "Plavy", location: [50.7017442, 15.3170558] },
+                { name: "Velké Hamry", location: [50.7116433, 15.3137292] },
+                { name: "Velké Hamry město", location: [50.7198067, 15.3135778] },
+                { name: "Tanvald", location: [50.7434233, 15.3110017] },
+                
+                ]
     },
 
      {
