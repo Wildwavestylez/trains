@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 56</p>
+    <p>Kupony vlaků: 81</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 20000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 30000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -172,6 +172,44 @@ const lines = [
                
         ]
     },
+
+     {
+        name: "Trať 032 Jaroměř - Svoboda nad Úpou",
+        color: "#8B008B",
+        category: "A",
+        trains: [
+            { name: "Train BZ", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train CA", startingIndex: 10, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train CB", startingIndex: 14, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train CC", startingIndex: 22, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            
+        ],
+         stops: [
+                { name: "Jaroměř", location: [50.3417397, 15.9101000] },
+                { name: "Rychnovek", location: [50.3607483, 15.9688606] },
+                { name: "Velká Jesenice", location: [50.3755761, 16.0291806] },
+                { name: "Česká Skalice", location: [50.3955917, 16.0540275] },
+                { name: "Starkoč", location: [50.4110986, 16.1007556] },
+                { name: "Řešetova Lhota", location: [50.4304808, 16.1028881] },
+                { name: "Olešnice", location: [50.4573822, 16.0843333] },
+                { name: "Červený Kostelec", location: [50.4838333, 16.0754586] },
+                { name: "Rtyně v Podkrkonoší zastávka", location: [50.4995461, 16.0911025] },
+                { name: "Rtyně v Podkrkonoší", location: [50.5155983, 16.0732478] },
+                { name: "Malé Svatoňovice", location: [50.5296669, 16.0507469] },
+                { name: "Velké Svatoňovice", location: [50.5398139, 16.0215836] },
+                { name: "Suchovršice", location: [50.5324364, 16.0055142] },
+                { name: "Bohuslavice", location: [50.5510036, 15.9787700] },
+                { name: "Trutnov - Poříčí", location: [50.5791633, 15.9583594] },
+                { name: "Trutnov střed", location: [50.5777472, 15.9451056] },
+                { name: "Trutnov hlavní nádraží", location: [50.5652047, 15.9111508] },
+                { name: "Trutnov-Zelená Louka", location: [50.5808181, 15.8882342] },
+                { name: "Trutnov-Staré město", location: [50.5908050, 15.8818178] },
+                { name: "Kalná Voda", location: [50.6004283, 15.8725975] },
+                { name: "Mladé Buky", location: [50.6070975, 15.8408050] },
+                { name: "Svoboda nad Úpou", location: [50.6222953, 15.8199653] },
+                
+        ]
+    }, 
 
      {
         name: "Trať 021 Hradec Králové  - Letohrad",    
@@ -911,20 +949,20 @@ function generateRandomAmount(category) {
 
     switch (category) {
         case "A":
-            earningMin = 100;
-            earningMax = 200;
-            break;
-        case "B":
-            earningMin = 300;
-            earningMax = 500;
-            break;
-        case "C":
             earningMin = 500;
             earningMax = 800;
             break;
+        case "B":
+            earningMin = 2000;
+            earningMax = 2500;
+            break;
+        case "C":
+            earningMin = 7000;
+            earningMax = 10000;
+            break;
         case "D":
-            earningMin = 1000;
-            earningMax = 1500;
+            earningMin = 10000;
+            earningMax = 15000;
             break;
         default:
             earningMin = 0;
