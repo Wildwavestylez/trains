@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 07</p>
+    <p>Kupony vlaků: 03</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -158,6 +158,46 @@ const lines = [
                  ]
     },
 
+     {
+        name: "Trať 024 Ústí nad Orlicí  - Štíty",    
+        color: "#ADD8E6",
+        category: "A",
+        trains: [
+            { name: "Train BC", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            { name: "Train BD", startingIndex: 23, reverse: false, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            { name: "Train BE", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            { name: "Train BF", startingIndex: 10, reverse: true, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            { name: "Train BG", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            { name: "Train BH", startingIndex: 17, reverse: true, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Ústí nad Orlicí", location: [49.9715539, 16.3780328] },
+                { name: "Dolní Libchavy", location: [49.9893836, 16.3970833] },
+                { name: "Černovír", location: [49.9870339, 16.4273872] },
+                { name: "Landšperk", location: [49.9927217, 16.4472483] },
+                { name: "Hnátnice", location: [50.0016136, 16.4613589] },
+                { name: "Dolní Dobrouč", location: [50.0125236, 16.4743461] },
+                { name: "Letohrad", location: [50.0314292, 16.5076886] },
+                { name: "Verměřovice", location: [50.0115014, 16.5576858] },
+                { name: "Jablonné nad Orlicí", location: [50.0263900, 16.5945644] },
+                { name: "Jamné nad Orlicí", location: [50.0399703, 16.6026553] },
+                { name: "Těchonín", location: [50.0688667, 16.6081372] },
+                { name: "Mladkov", location: [50.0922128, 16.6298064] },
+                { name: "Lichkov", location: [50.0972253, 16.6583672] },
+                { name: "Dolní Lipka", location: [50.0893631, 16.7212239 },
+                { name: "Králíky zastávka", location: [50.0867158, 16.7489033] },
+            { name: "Králíky", location: [50.0806161, 16.7561703] },
+                { name: "Dolní Orlice", location: [50.0657311, 16.7473889] },
+                { name: "Červená Voda", location: [50.0469628, 16.7465533] },
+                { name: "Červená Voda‑Pod rozhlednou", location: [50.0368194, 16.7459642] },
+                { name: "Moravský Karlov", location: [50.0257072, 16.7531433] },
+                { name: "Bílá Voda", location: [50.0172158, 16.7474556] },
+            { name: "Mlýnický Dvůr", location: [50.0038528, 16.7479744] },
+                { name: "Heroltice", location: [49.9896011, 16.7533175] },
+                { name: "Štíty", location: [49.9700653, 16.7547936] },
+                 ]
+    },
     {
         name: "Trať 020 Praha  - Hradec Králové",    
         color: "brown",
@@ -189,7 +229,6 @@ const lines = [
                 { name: "Poděbrady", location: [50.1495742, 15.1236878] },
                 { name: "Libice nad Cidlinou", location: [50.1276283, 15.1830958] },
                 { name: "Velký Osek", location: [50.1019439, 15.1934339] },
-                { name: "Mstětice", location: [50.1368981, 14.6920911] },
                 { name: "Sány", location: [50.1301042, 15.2410878] },
                 { name: "Dobšice nad Cidlinou", location: [50.1401025, 15.2636747] },
                 { name: "Choťovice", location: [50.1460381, 15.3291378] },
@@ -231,6 +270,80 @@ const lines = [
                 { name: "Litomyšl-Nedošín", location: [49.8858375, 16.2797869] },
                 { name: "Litomyšl zastávka", location: [49.8813667, 16.2927381] },
                 { name: "Litomyšl", location: [49.8747864, 16.3040925] },
+                ]
+    },
+
+    {
+        name: "Trať 026 Choceň  - Broumov",    
+        color: "green",
+        category: "A",
+        trains: [
+            { name: "Train BJ", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BK", startingIndex: 35, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BL", startingIndex: 10, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BM", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BN", startingIndex: 18, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BO", startingIndex: 19, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BP", startingIndex: 25, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train BQ", startingIndex: 26, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            
+        ],
+        stops: [
+              { name: "Choceň", location: [49.9940261, 16.2237836] },
+                { name: "Újezd u Chocně", location: [50.0318222, 16.1790658] },
+                { name: "Plchůvky", location: [50.0387956, 16.1621381] },
+                { name: "Čermná nad Orlicí", location: [50.0647889, 16.1358739] },
+                { name: "Borohrádek", location: [50.0970689, 16.0856306] },
+                { name: "Žďár nad Orlicí", location: [50.1194992, 16.0670794] },
+                { name: "Týniště nad Orlicí", location: [50.1549606, 16.0740508] },
+                { name: "Bolehošť", location: [50.2146264, 16.0650750] },
+                { name: "Očelice", location: [50.2433586, 16.0632764] },
+                { name: "Opočno pod Orlickými horami", location: [50.2786828, 16.0857392] },
+                { name: "Dobruška", location: [50.2892381, 16.1523858] },
+                { name: "Pohoří", location: [50.2917367, 16.0786306] },
+                { name: "Bohuslavice nad Metují zastávka", location: [50.3122978, 16.0797481] },
+                { name: "Bohuslavice nad Metují", location: [50.3282700, 16.0957661] },
+                { name: "Černčice", location: [50.3345300, 16.1056367] },
+                { name: "Nové Město nad Metují", location: [50.3534164, 16.1376592] },
+                { name: "Václavice", location: [50.3928908, 16.1231803] },
+                { name: "Náchod zastávka", location: [50.4083022, 16.1517353] },
+                { name: "Náchod", location: [50.4172744, 16.1712247] },
+                { name: "Náchod-Běloves", location: [50.4234581, 16.1876356] },
+                { name: "Náchod-Malé Poříčí", location: [50.4416808, 16.1926689] },
+                { name: "Velké Poříčí", location: [50.4635964, 16.1818753] },
+                { name: "Hronov", location: [50.4730417, 16.1768569] },
+                { name: "Hronov zastávka", location: [50.4902839, 16.1863003] },
+             { name: "Police nad Metují", location: [50.5133706, 16.2118931] },
+                { name: "Žďár nad Metují", location: [50.5374183, 16.2042103] },
+                { name: "Česká Metuje", location: [50.5528336, 16.1850778] },
+                { name: "Dědov", location: [50.5616189, 16.1879578] },
+                { name: "Teplice nad Metují", location: [50.5816003, 16.1788217] },
+                { name: "Bohdašín", location: [50.5970514, 16.2111464] },
+                { name: "Březová u Broumova", location: [50.6048622, 16.2346956] },
+                { name: "Meziměstí", location: [50.6266517, 16.2424375] },
+                { name: "Ruprechtice", location: [50.6248056, 16.2681314] },
+                { name: "Hynčice", location: [50.6243631, 16.2883167] },
+                { name: "Broumov-Olivětín", location: [50.6080056, 16.3280200] },
+                { name: "Broumov", location: [50.5807419, 16.3395614] },
+                ]
+    },
+
+    {
+        name: "Trať 025 Dolní Lipka - Hanušovice",    
+        color: "violet",
+        category: "A",
+        trains: [
+            { name: "Train BI", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
+            
+            ],
+        stops: [
+              { name: "Dolní Lipka", location: [50.0893631, 16.7212239] },
+                { name: "Prostřední Lipka", location: [50.0990561, 16.7540264] },
+                { name: "Červený Potok", location: [50.1047364, 16.7837772] },
+                { name: "Podlesí", location: [50.0900497, 16.8490314] },
+                { name: "Vlaské", location: [50.0874825, 16.9001369] },
+                { name: "Hanušovice", location: [50.0718042, 16.9293289] },
+                
                 ]
     },
 
