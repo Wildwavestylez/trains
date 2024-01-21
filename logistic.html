@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 41</p>
+    <p>Kupony vlaků: 77</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -565,6 +565,51 @@ const lines = [
                 ]
     },
 
+    {
+        name: "Trať 036 Liberec – Tanvald – Harrachov – Szklarska Poręba Górna",    
+        color: "#00FFFF",
+        category: "A",
+        trains: [
+            { name: "Train CW", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train CX", startingIndex: 27, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train CY", startingIndex: 18, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train CZ", startingIndex: 17, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train DA", startingIndex: 9, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train DB", startingIndex: 9, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+           ],
+        stops: [
+              { name: "Liberec", location: [50.7615014, 15.0462581] },
+                { name: "Liberec-Rochlice", location: [50.7472192, 15.0617075] },
+                { name: "Vesec u Liberce", location: [50.7431717, 15.0813903] },
+                { name: "Vratislavice nad Nisou", location: [50.7401428, 15.0935153] },
+                { name: "Proseč nad Nisou", location: [50.7283783, 15.1156044] },
+                { name: "Jablonec nad Nisou dolní nádraží", location: [50.7262992, 15.1491433] },
+                { name: "Jablonec nad Nisou", location: [50.7208786, 15.1608533] },
+                { name: "Jablonec nad Nisou centrum", location: [50.7208442, 15.1737947] },
+                { name: "Jablonec nad Nisou zastávka", location: [50.7203903, 15.1861697] },
+                { name: "Nová Ves nad Nisou", location: [50.7239228, 15.1937094] },
+                { name: "Jablonecké Paseky", location: [50.7315256, 15.1910792] },
+                { name: "Lučany nad Nisou", location: [50.7394944, 15.2250222] },
+                { name: "Smržovka", location: [50.7402839, 15.2438928] },
+                { name: "Smržovka-Luční", location: [50.7349586, 15.2495328] },
+                { name: "Smržovka střed", location: [50.7319681, 15.2545986] },
+                { name: "Smržovka dolní nádraží", location: [50.7348061, 15.2803850] },
+                { name: "Tanvald zastávka", location: [50.7369767, 15.3052083] },
+                { name: "Tanvald", location: [50.7434233, 15.3110017] },
+                { name: "Desná", location: [50.7534828, 15.3089114] },
+                { name: "Desná-Riedlova vila", location: [50.7592125, 15.3139125] },
+                { name: "Dolní Polubný", location: [50.7605247, 15.3231469] },
+                { name: "Desná-Pustinská", location: [50.7640647, 15.3353042] },
+            { name: "Kořenov zastávka", location: [50.7623139, 15.3468922] },
+                { name: "Kořenov", location: [50.7701339, 15.3656550] },
+                { name: "Harrachov", location: [50.7716103, 15.3929692] },
+                { name: "Szklarska Poręba, Polana Jakuszycka", location: [50.8146325, 15.4295503] },
+                { name: "Szklarska Poręba Huta", location: [50.8266564, 15.4970961] },
+                { name: "Szklarska Poręba Górna", location: [50.8326797, 15.5188331] },
+                
+                
+            
+
      {
         name: "Trať 018 Choceň  - Litomyšl",    
         color: "violet",
@@ -1064,7 +1109,7 @@ function showRandomOffer() {
 
     switch (offerLine.category) {
         case "A":
-            offerPrice = Math.floor(Math.random() * (10000 - 50000 + 1)) + 5000;
+            offerPrice = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
             earningMin = 100;
             earningMax = 200;
             break;
