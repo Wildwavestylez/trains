@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 33</p>
+    <p>Kupony vlaků: 51</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -921,18 +921,16 @@ setInterval(showRandomOffer, offerInterval);
 
     
 
-// Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
 function giveRandomMoneyToPlayer(line, currentStopIndex) {
-    const stop = line.stops[currentStopIndex];
-    const randomAmount = generateRandomAmount(stop.earnings.min, stop.earnings.max);
-    playerFinance += randomAmount;
-    document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
-}
+            const stop = line.stops[currentStopIndex];
+            const randomAmount = generateRandomAmount(stop.earnings.min, stop.earnings.max);
+            playerFinance += randomAmount;
+            document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
+        }
 
-function generateRandomAmount(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
+        function generateRandomAmount(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
 
 
