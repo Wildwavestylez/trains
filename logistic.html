@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 39</p>
+    <p>Kupony vlaků: 56</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -885,13 +885,13 @@ function moveTrain(train, line) {
 
                 if (currentStopIndex === 0 || currentStopIndex === line.stops.length - 1) {
                     direction *= -1;
-                    giveRandomMoneyToPlayer();
+                    giveRandomMoneyToPlayer(line.category);
                 }
             }
         } else {
             direction *= -1;
             currentStopIndex += direction;
-            giveRandomMoneyToPlayer();
+            giveRandomMoneyToPlayer(line.category);
         }
     }, updateInterval);
 }
@@ -900,8 +900,8 @@ setInterval(showRandomOffer, offerInterval);
 
     
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-function giveRandomMoneyToPlayer() {
-    const randomAmount = generateRandomAmount();
+function giveRandomMoneyToPlayer(category) {
+    const randomAmount = generateRandomAmount(category);
     playerFinance += randomAmount;
     document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
 }
