@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 20000 Kč</p>
-    <p>Kupony vlaků: 57</p>
+    <p>Kupony vlaků: 87</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -50,7 +50,7 @@ let playerFinance = 20000;
 let availableLines = []; // Seznam dostupných linek
 
 const updateInterval = 1000; // Interval aktualizace polohy vlaku v ms
-const offerInterval = 90000; // Interval nabídek od herního drážního úřadu v ms
+const offerInterval = 12000; // Interval nabídek od herního drážního úřadu v ms
 
 // Fiktivní data pro linky a zastávky
 const lines = [
@@ -58,6 +58,7 @@ const lines = [
         name: "Trať 198 Strakonice - Volary",
         color: "blue",
         category: "A",
+        earnings: { min: 500, max: 800 },
         trains: [
             { name: "Train 1", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/sgF74F8.png', maxSpeed: 600 },
             { name: "Train 2", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/5V3WrS7.png', maxSpeed: 600 },
@@ -97,6 +98,7 @@ const lines = [
         name: "Trať 030 Jaroměř - Liberec",
         color: "blue",
         category: "B",
+        earnings: { min: 400, max: 700 },
         trains: [
             { name: "Train BR", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/pomYLWB.png', maxSpeed: 600 },
             { name: "Train BS", startingIndex: 31, reverse: false, image: 'https://i.imgur.com/pomYLWB.png', maxSpeed: 600 },
@@ -147,6 +149,7 @@ const lines = [
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
         category: "A",
+        earnings: { min: 700, max: 1200 },
         trains: [
             { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
             { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
@@ -177,6 +180,7 @@ const lines = [
         name: "Trať 021 Hradec Králové  - Letohrad",    
         color: "red",
         category: "A",
+         earnings: { min: 700, max: 1000 },
         trains: [
             { name: "Train AU", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
             { name: "Train AV", startingIndex: 20, reverse: false, image: 'https://i.imgur.com/q3Mh9Ld.png', maxSpeed: 500 },
@@ -211,6 +215,7 @@ const lines = [
      {
         name: "Trať 024 Ústí nad Orlicí  - Štíty",    
         color: "green",
+        earnings: { min: 200, max: 500 },
         category: "A",
         trains: [
             { name: "Train BC", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/VS2M75n.png', maxSpeed: 500 },
@@ -252,6 +257,7 @@ const lines = [
         name: "Trať 020 Praha  - Hradec Králové",    
         color: "brown",
         category: "B",
+        earnings: { min: 2500, max: 2800 },
         trains: [
             { name: "Train AO", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
             { name: "Train AP", startingIndex: 31, reverse: false, image: 'https://i.imgur.com/kGQIe2f.png', maxSpeed: 500 },
@@ -300,6 +306,7 @@ const lines = [
         name: "Trať 018 Choceň  - Litomyšl",    
         color: "violet",
         category: "A",
+         earnings: { min: 300, max: 500 },
         trains: [
             { name: "Train AM", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
             { name: "Train AN", startingIndex: 13, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
@@ -327,6 +334,7 @@ const lines = [
         name: "Trať 026 Choceň  - Broumov",    
         color: "green",
         category: "A",
+        earnings: { min: 500, max: 800 },
         trains: [
             { name: "Train BJ", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
             { name: "Train BK", startingIndex: 35, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
@@ -382,6 +390,7 @@ const lines = [
         name: "Trať 025 Dolní Lipka - Hanušovice",    
         color: "violet",
         category: "A",
+        earnings: { min: 200, max: 500 },
         trains: [
             { name: "Train BI", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
             
@@ -401,6 +410,7 @@ const lines = [
         name: "Trať 023 Doudleby nad Orlicí – Rokytnice v Orlických horách",    
         color: "brown",
         category: "A",
+        earnings: { min: 150, max: 300 },
         trains: [
             { name: "Train BA", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
             { name: "Train BB", startingIndex: 6, reverse: false, image: 'https://i.imgur.com/ngRS3Lg.png', maxSpeed: 500 },
@@ -422,6 +432,7 @@ const lines = [
         name: "Trať 021a Častolovice  - Solnice",    
         color: "violet",
         category: "A",
+        earnings: { min: 150, max: 250 },
         trains: [
             { name: "Train AY", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
             { name: "Train AZ", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
@@ -442,6 +453,7 @@ const lines = [
      {
         name: "Trať 017 Česká Třebová  - Prostějov",    
         color: "red",
+        earnings: { min: 600, max: 900 },
         category: "A",
         trains: [
             { name: "Train AI", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 500 },
@@ -483,6 +495,7 @@ const lines = [
         name: "Trať 015 Přelouč  - Prachovice",    
         color: "blue",
         category: "A",
+        earnings: { min: 200, max: 400 },
         trains: [
             { name: "Train AE", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 200 },
             { name: "Train AF", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 200 },
@@ -503,6 +516,7 @@ const lines = [
         name: "Trať 016 Borohrádek  - Chrudim",    
         color: "red",
         category: "A",
+        earnings: { min: 300, max: 500 },
         trains: [
             { name: "Train AG", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
             { name: "Train AH", startingIndex: 12, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
@@ -531,6 +545,7 @@ const lines = [
         name: "Trať 290 Olomouc  - Šumperk",    
         color: "green",
         category: "A",
+        earnings: { min: 500, max: 800 },
         trains: [ 
             { name: "Train 11", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
             { name: "Train 12", startingIndex: 15, reverse: false, image: 'https://i.imgur.com/0wL4K2Q.png', maxSpeed: 600 },
@@ -562,6 +577,7 @@ const lines = [
         name: "Trať 014 Kolín  - Ledečko",    
         color: "red",
         category: "A",
+        earnings: { min: 200, max: 500 },
         trains: [
             { name: "Train AA", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
             { name: "Train AB", startingIndex: 17, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
@@ -593,7 +609,8 @@ const lines = [
           {
         name: "Trať ZSSK 145 Horná Štubňa - Prievidza",    
         color: "green",
-        category: "A",      
+        category: "A", 
+        earnings: { min: 150, max: 300 },
         trains: [
             { name: "Train 15", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 600 },
             { name: "Train 16", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/nAWghTJ.png', maxSpeed: 600 },
@@ -616,6 +633,7 @@ const lines = [
         name: "Trať 010 Kolín - Česká Třebová",    
         color: "yellow",
         category: "B",
+        earnings: { min: 2000, max: 2500 },
         trains: [
             { name: "Train 17", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
             { name: "Train 18", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
@@ -663,6 +681,7 @@ const lines = [
         name: "Trať 160 Plzeň  - Žatec",    
         color: "red",
         category: "A",
+        earnings: { min: 800, max: 1200 },
         trains: [
             { name: "Train 25", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
             { name: "Train 26", startingIndex: 28, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
@@ -710,6 +729,7 @@ const lines = [
     name: "Trať 011 Praha - Kolín",
         color: "blue",
         category: "A",
+        earnings: { min: 1500, max: 1800 },
         trains: [
             { name: "Train 33", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
             { name: "Train 34", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/tw5kV39.png', maxSpeed: 600 },
@@ -746,7 +766,8 @@ const lines = [
          {
         name: "Trať 012 Pečky - Kouřim - Bečváry",    
         color: "green",
-        category: "A",      
+        category: "A",    
+        earnings: { min: 300, max: 500 },
         trains: [
             { name: "Train 38", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
             { name: "Train 39", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 600 },
@@ -899,16 +920,19 @@ function moveTrain(train, line) {
 setInterval(showRandomOffer, offerInterval);
 
     
+
 // Funkce pro udělení náhodné finanční částky hráči při dosažení zastávky
-function giveRandomMoneyToPlayer() {
-    const randomAmount = generateRandomAmount();
+function giveRandomMoneyToPlayer(line, currentStopIndex) {
+    const stop = line.stops[currentStopIndex];
+    const randomAmount = generateRandomAmount(stop.earnings.min, stop.earnings.max);
     playerFinance += randomAmount;
     document.getElementById('finance').innerText = `Finance: ${playerFinance} Kč`;
 }
 
-function generateRandomAmount() {
-    return Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+function generateRandomAmount(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 
 
 
