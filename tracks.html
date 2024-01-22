@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $2000 | Dostupný vlak: 1
+        Dostupné finance: $2000 | Dostupný vlak: 5
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -134,7 +134,7 @@
             // Přidejte další tratě podle potřeby
         ];
 
-        // Přidání tratí na mapu
+           // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -173,6 +173,7 @@
                     cityCoordinates = [49.2551575, 13.9163047]; // Defaultní hodnota
             }
 
+            trainMarker.setLatLng(cityCoordinates); // Přesunutí markeru vlaku do vybraného města
             map.setView(cityCoordinates, 13);
 
             updateStopsVisibility(cityCoordinates);
