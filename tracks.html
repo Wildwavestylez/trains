@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 78
+       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 1
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -135,7 +135,7 @@
         ]
     }, 
 ];
-         // Přidání tratí na mapu
+  // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
