@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 51
+        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 14
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -135,27 +135,27 @@
         ]
     }, 
 
-        // Přidání tratí na mapu
-        var trackPolylines = [];
-        tracks.forEach(track => {
-            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
-            trackPolylines.push(trackPolyline);
-        });
+       // Přidání tratí na mapu
+var trackPolylines = [];
+tracks.forEach(track => {
+    var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+    trackPolylines.push(trackPolyline);
+});
 
-        // Přidání zastávek na mapu
-        var stopMarkers = [];
-        tracks.forEach(track => {
-            track.stops.forEach(stop => {
-                var stopMarker = L.marker(stop.location, { isUnlocked: false, cost: stop.cost }).addTo(map);
-                stopMarker.bindPopup(stop.name);
-                stopMarkers.push(stopMarker);
+// Přidání zastávek na mapu
+var stopMarkers = [];
+tracks.forEach(track => {
+    track.stops.forEach(stop => {
+        var stopMarker = L.marker(stop.location, { isUnlocked: false, cost: stop.cost }).addTo(map);
+        stopMarker.bindPopup(stop.name);
+        stopMarkers.push(stopMarker);
 
-                // Přidání event listeneru pro odemykání zastávky po kliknutí
-                stopMarker.on('click', function () {
-                    unlockStop(stopMarker);
-                });
-            });
+        // Přidání event listeneru pro odemykání zastávky po kliknutí
+        stopMarker.on('click', function () {
+            unlockStop(stopMarker);
         });
+    });
+});
 
         // Funkce pro změnu města na mapě
         function changeCity() {
