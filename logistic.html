@@ -533,10 +533,7 @@ const lines = [
         color: "blue",
         category: "A",
         trains: [
-            { name: "Train CT", startingInDex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 },
-            
-            
-        ],
+            { name: "Train CT", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/TaoyxXt.png', maxSpeed: 500 }, ],
         stops: [
               { name: "Smržovka", location: [50.7402839, 15.2438928] },
                 { name: "Jiřetín pod Bukovou", location: [50.7569197, 15.2638922] },
@@ -613,6 +610,39 @@ const lines = [
                 { name: "Szklarska Poręba Górna", location: [50.8326797, 15.5188331] },
                    ]
     },
+
+    {
+        name: "Trať 037  Liberec – Jindřichovice pod Smrkem",
+        color: "#D2691E",
+        category: "A",
+        trains: [
+            { name: "Train DC", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train DD", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train DE", startingIndex: 11, reverse: true, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            { name: "Train DF", startingIndex: 16, reverse: false, image: 'https://i.imgur.com/FApj7Eq.png', maxSpeed: 600 },
+            
+        ],
+         stops: [
+                { name: "Liberec", location: [50.7615014, 15.0462581] },
+                { name: "Stráž nad Nisou", location: [50.7885933, 15.0256242] },
+                { name: "Krásná Studánka", location: [50.8013192, 15.0380964] },
+                { name: "Mníšek u Liberce", location: [50.8324469, 15.0652350] },
+                { name: "Oldřichov v Hájích", location: [50.8552361, 15.0915986] },
+                { name: "Raspenava", location: [50.8965303, 15.1304761] },
+                { name: "Frýdlant v Čechách", location: [50.9189492, 15.0734025] },
+                { name: "Frýdlant v Čechách předměstí", location: [50.9268761, 15.0764914] },
+                { name: "Krásný Les bažantnice", location: [50.9307786, 15.1091183] },
+                { name: "Krásný Les", location: [50.9376489, 15.1284819] },
+                { name: "Řasnice", location: [50.9388656, 15.1510925] },
+                { name: "Řasnice zastávka", location: [50.9398728, 15.1628742] },
+                { name: "Hajniště", location: [50.9287986, 15.1973275] },
+                { name: "Nové Město pod Smrkem", location: [50.9247628, 15.2241822] },
+                { name: "Jindřichovice pod Smrkem-Skanzen", location: [50.9590950, 15.2282314] },
+                { name: "Jindřichovice pod Smrkem", location: [50.9588128, 15.2542439] },
+                
+        ]
+    }, 
+    
      {
         name: "Trať 018 Choceň  - Litomyšl",    
         color: "violet",
