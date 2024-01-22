@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $2000 | Dostupný vlak: 7
+       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 1
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -35,6 +35,8 @@
     <!-- Přidání Leaflet JS a vlastního JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        var playerMoney = 2000; // Počáteční množství herních peněz
+        var unlockedStops = []; // Pole odemčených zastávek
         // Inicializace Leaflet mapy
         var map = L.map('map').setView([49.2551575, 13.9163047], 13);
 
@@ -131,8 +133,8 @@
                 { name: "České Budějovice", location: [48.9744872, 14.4886075] }, 
         ]
     }, 
-            // Přidejte další tratě podle potřeby
-        ];        // Přidání tratí na mapu
+ 
+        // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -145,6 +147,9 @@
             track.stops.forEach(stop => {
                 var stopMarker = L.marker(stop.location).addTo(map);
                 stopMarker.bindPopup(stop.name);
+                stopMarker.on('click', function () {
+                    unlockStop(stop);
+                });
                 stopMarkers.push(stopMarker);
             });
         });
@@ -188,7 +193,28 @@
                 } else {
                     marker.setOpacity(0);
                 }
+
+                // Pokud je zastávka odemčená, zobrazte ji vždy
+                var stopIndex = stopMarkers.indexOf(marker);
+                if (unlockedStops.includes(stopIndex)) {
+                    marker.setOpacity(1);
+                }
             });
+        }
+
+        // Funkce pro odemčení zastávky
+        function unlockStop(stop) {
+            var stopIndex = stopMarkers.findIndex(marker => marker.getLatLng().equals(stop.location));
+
+            // Pokud hráč má dostatek peněz a zastávka není již odemčená
+            if (playerMoney >= stop.cost && !unlockedStops.includes(stopIndex)) {
+                unlockedStops.push(stopIndex); // Přidání do pole odemčených zastávek
+                playerMoney -= stop.cost; // Odečtení nákladů na odemčení
+
+                // Aktualizace zobrazených financí a viditelnosti zastávek
+                document.getElementById('player-money').textContent = playerMoney;
+                updateStopsVisibility(trainMarker.getLatLng());
+            }
         }
 
         // Aktualizace informací pro hráče
