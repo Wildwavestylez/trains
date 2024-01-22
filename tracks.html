@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $2000 | Dostupný vlak: 3
+        Dostupné finance: $2000 | Dostupný vlak: 1
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -95,7 +95,8 @@
             stopMarkers.push(stopMarker);
         });
 
-           function changeCity() {
+        // Funkce pro změnu města na mapě
+        function changeCity() {
             var selectedCity = document.getElementById("city-select").value;
             var cityCoordinates;
 
@@ -118,12 +119,11 @@
 
             map.setView(cityCoordinates, 13);
 
-            updateStopsVisibility(cityCoordinates);
+            updateStopsVisibility(track.stops, cityCoordinates);
         }
 
-
-        / Funkce pro aktualizaci viditelnosti zastávek
-        function updateStopsVisibility(cityCoordinates) {
+        // Funkce pro aktualizaci viditelnosti zastávek
+        function updateStopsVisibility(stops, cityCoordinates) {
             stopMarkers.forEach(marker => {
                 var distance = marker.getLatLng().distanceTo(cityCoordinates);
 
