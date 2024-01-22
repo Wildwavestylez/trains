@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 28
+        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 78
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -135,7 +135,7 @@
         ]
     }, 
 ];
-        // Přidání tratí na mapu
+         // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -146,32 +146,22 @@
         var stopMarkers = [];
         tracks.forEach(track => {
             track.stops.forEach(stop => {
-                var stopMarker = L.marker(stop.location, { opacity: stop.unlocked ? 1 : 0.5 }).addTo(map);
+                var stopMarker = L.marker(stop.location).addTo(map);
                 stopMarker.bindPopup(stop.name);
                 stopMarkers.push(stopMarker);
 
-                // Přidání akce na kliknutí na ikonu zastávky
-                stopMarker.on('click', function () {
-                    if (!stop.unlocked) {
-                        var cost = 500; // Cena za odemčení zastávky (můžete nastavit libovolnou částku)
-
-                        // Kontrola, zda hráč má dostatek peněz na odemčení
-                        var playerMoney = parseInt(document.getElementById("player-money").innerText);
-                        if (playerMoney >= cost) {
-                            // Odečtění peněz
-                            playerMoney -= cost;
-                            document.getElementById("player-money").innerText = playerMoney;
-
-                            // Odemčení zastávky
-                            stop.unlocked = true;
-                            stopMarker.setOpacity(1);
-                        } else {
-                            alert("Nemáte dostatek peněz na odemčení této zastávky.");
-                        }
-                    }
+                // Přidání interaktivity pro klikání na zastávku
+                stopMarker.on('click', function() {
+                    buyStation(stop);
                 });
             });
         });
+
+        // Aktualizace informací o hráči
+        function updatePlayerInfo() {
+            var playerMoney = 2000; // TODO: Získat aktuální herní peníze hráče
+            document.getElementById("player-money").textContent = playerMoney;
+        }
 
         // Funkce pro změnu města na mapě
         function changeCity() {
@@ -207,17 +197,40 @@
                 var distance = marker.getLatLng().distanceTo(cityCoordinates);
 
                 // Nastavte viditelnost podle vzdálenosti od vybraného města
-                if (distance <= 5000 || marker.options.opacity === 1) { // Ukažte odemčené zastávky nebo zastávky v poloměru 5 km
+                if (distance <= 5000) { // Ukažte zastávky v poloměru 5 km
                     marker.setOpacity(1);
                 } else {
-                    marker.setOpacity(0.5);
+                    marker.setOpacity(0);
                 }
             });
         }
 
-        // Aktualizace informací pro hráče
-        function updatePlayerInfo() {
-            // TODO: Přidejte kód pro aktualizaci informací o hráči (finance, dostupný vlak, atd.)
+        // Funkce pro koupi zastávky
+        function buyStation(station) {
+            var stationName = station.getPopup().getContent(); // Získání názvu zastávky
+
+            // TODO: Zjistit cenu zastávky
+            var stationCost = 500; // Příklad ceny zastávky
+
+            // TODO: Získat aktuální herní peníze hráče
+            var playerMoney = 2000;
+
+            // Zkontrolovat, zda hráč má dostatek peněz na nákup
+            if (playerMoney >= stationCost) {
+                // TODO: Odečíst cenu zastávky z herních peněz hráče
+                playerMoney -= stationCost;
+
+                // TODO: Označit zastávku jako odemčenou nebo přidat do seznamu odemčených zastávek hráče
+
+                // Aktualizovat informace o hráči
+                updatePlayerInfo();
+
+                // Zobrazit zprávu o úspěšném nákupu
+                alert("Zastávka " + stationName + " byla úspěšně zakoupena!");
+            } else {
+                // Zobrazit zprávu o nedostatečných finančních prostředcích
+                alert("Nemáte dostatek financí na zakoupení této zastávky.");
+            }
         }
 
         // Volání funkce pro aktualizaci informací pro hráče
