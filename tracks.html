@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 7
+       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 6
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -36,7 +36,13 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
        
+// Inicializace Leaflet mapy
+        var map = L.map('map').setView([49.2551575, 13.9163047], 13);
 
+        // Přidání mapové podkladové vrstvy (například OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
     
 
         // Seznam tratí s jejich zastávkami
@@ -117,10 +123,7 @@
                 { name: "České Budějovice", location: [48.9744872, 14.4886075], unlocked: false }, 
         ]
     }, 
-
-         // Přidání tratí na mapu
-        var trackPolylines = [];
-        tracks.forEach(track => {
+tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
             trackPolylines.push(trackPolyline);
         });
@@ -140,14 +143,6 @@
                 }
             });
         });
-
-        // Inicializace Leaflet mapy
-        var map = L.map('map').setView([49.2551575, 13.9163047], 13);
-
-        // Přidání mapové podkladové vrstvy (například OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
 
         // Přidání ikony vlaku na mapu
         var trainIcon = L.icon({
