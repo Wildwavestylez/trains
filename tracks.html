@@ -132,9 +132,7 @@
         ]
     }, 
             // Přidejte další tratě podle potřeby
-        ];
-
-         // Přidání tratí na mapu
+        ];        // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -150,14 +148,6 @@
                 stopMarkers.push(stopMarker);
             });
         });
-
-        // Finance hráče
-        var playerMoney = 2000;
-
-        // Aktualizace informací pro hráče
-        function updatePlayerInfo() {
-            document.getElementById("player-money").textContent = playerMoney;
-        }
 
         // Funkce pro změnu města na mapě
         function changeCity() {
@@ -192,8 +182,8 @@
             stopMarkers.forEach(marker => {
                 var distance = marker.getLatLng().distanceTo(cityCoordinates);
 
-                // Nastavte viditelnost podle vzdálenosti od vybraného města a stavu odemknutí
-                if (distance <= 5000 || marker.stop.unlocked) { // Ukažte zastávky v poloměru 5 km nebo odemčené
+                // Nastavte viditelnost podle vzdálenosti od vybraného města
+                if (distance <= 5000) { // Ukažte zastávky v poloměru 5 km
                     marker.setOpacity(1);
                 } else {
                     marker.setOpacity(0);
@@ -201,24 +191,9 @@
             });
         }
 
-        // Funkce pro odemknutí aktuálního města za herní dolary
-        function unlockCurrentCity() {
-            var selectedCity = document.getElementById("city-select").value;
-            var selectedTrack = tracks.find(track => track.stops.some(stop => stop.name === selectedCity));
-
-            if (selectedTrack) {
-                var selectedStop = selectedTrack.stops.find(stop => stop.name === selectedCity);
-
-                if (!selectedStop.unlocked && playerMoney >= 500) {
-                    // Odečtěte 500 dolary a odemkněte zastávku
-                    playerMoney -= 500;
-                    selectedStop.unlocked = true;
-                    updateStopsVisibility(trainMarker.getLatLng());
-                    updatePlayerInfo();
-                } else {
-                    alert("Nemáte dostatek financí na odemknutí této zastávky.");
-                }
-            }
+        // Aktualizace informací pro hráče
+        function updatePlayerInfo() {
+            // TODO: Přidejte kód pro aktualizaci informací o hráči (finance, dostupný vlak, atd.)
         }
 
         // Volání funkce pro aktualizaci informací pro hráče
