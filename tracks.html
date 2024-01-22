@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 07
+        Dostupné finance: $<span id="player-funds">2000</span> | Dostupný vlak: 28
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -62,29 +62,29 @@
                 name: "Trať 198 Strakonice - Volary",
                 color: "blue",
                 stops: [
-                    { name: "Strakonice", location: [49.2551575, 13.9163047], cost: 0 },
-                         { name: "Radošovice", location: [49.2322158, 13.901812], cost: 500 },
-                { name: "Přední Zborovice", location: [49.2183647, 13.8940200], cost: 500 },
-                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], cost: 500 },
-                { name: "Hoštice", location: [49.1873397, 13.8930731], cost: 500 },
-                { name: "Volyně", location: [49.1701164, 13.8928975], cost: 500 },
-                { name: "Nišovice", location: [49.1502839, 13.9059867], cost: 500 },
-                { name: "Malenice", location: [49.1237908, 13.8832197], cost: 500 },
-                { name: "Lčovice", location: [49.1090089, 13.8666047], cost: 500 },
-                { name: "Čkyně", location: [49.1111489, 13.8291083], cost: 500 },
-                { name: "Bohumilice v Čechách, zastávka", location: [49.0975800, 13.8137817], cost: 500 },
-                { name: "Bohumilice v Čechách", location: [49.0927086, 13.8010150], cost: 500 },
-                { name: "Vimperk", location: [49.0555267, 13.7907544], cost: 500 },
-                { name: "Vimperk, zastávka", location: [49.0487633, 13.7639522], cost: 500 },
-                { name: "Lipka", location: [49.0202103, 13.7354764], cost: 500 },
-                { name: "Kubova Huť", location: [48.9830017, 13.7747478], cost: 500 },
-                { name: "Horní Vltavice", location: [48.9625625, 13.7746514], cost: 500 },
-                { name: "Zátoň", location: [48.9509200, 13.8030072], cost: 500 },
-                { name: "Zátoň - Boubín", location: [48.9515725, 13.8224831], cost: 500 },
-                { name: "Lenora", location: [48.9283675, 13.7969542], cost: 500 },
-                { name: "Lenora zastávka", location: [48.9233969, 13.8026581], cost: 500 },
-                { name: "Soumarský Most", location: [48.9080047, 13.8287611], cost: 500 },
-                    { name: "Volary", location: [48.9070969, 13.8833131], cost: 500 },
+                    { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false },
+                         { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false },
+                { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false },
+                { name: "Volyně", location: [49.1701164, 13.8928975], unlocked: true },
+                { name: "Nišovice", location: [49.1502839, 13.9059867], unlocked: false },
+                { name: "Malenice", location: [49.1237908, 13.8832197], unlocked: false },
+                { name: "Lčovice", location: [49.1090089, 13.8666047], unlocked: false },
+                { name: "Čkyně", location: [49.1111489, 13.8291083], unlocked: false },
+                { name: "Bohumilice v Čechách, zastávka", location: [49.0975800, 13.8137817], unlocked: false },
+                { name: "Bohumilice v Čechách", location: [49.0927086, 13.8010150], unlocked: false },
+                { name: "Vimperk", location: [49.0555267, 13.7907544], unlocked: false },
+                { name: "Vimperk, zastávka", location: [49.0487633, 13.7639522], unlocked: false },
+                { name: "Lipka", location: [49.0202103, 13.7354764], unlocked: false },
+                { name: "Kubova Huť", location: [48.9830017, 13.7747478], unlocked: false },
+                { name: "Horní Vltavice", location: [48.9625625, 13.7746514], unlocked: false },
+                { name: "Zátoň", location: [48.9509200, 13.8030072], unlocked: false },
+                { name: "Zátoň - Boubín", location: [48.9515725, 13.8224831], unlocked: false },
+                { name: "Lenora", location: [48.9283675, 13.7969542], unlocked: false },
+                { name: "Lenora zastávka", location: [48.9233969, 13.8026581], unlocked: false },
+                { name: "Soumarský Most", location: [48.9080047, 13.8287611], unlocked: false },
+                    { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false },
                 ]
             },
             
@@ -93,69 +93,85 @@
         color: "red",
         
          stops: [
-                { name: "Plzeň hlavní nádraží", location: [49.7435456, 13.3880578], cost: 500 },
-                { name: "Plzeň-Slovany", location: [49.7348519, 13.4078303], cost: 500 },
-                { name: "Starý Plzenec", location: [49.6953125, 13.4781703], cost: 500 },
-                { name: "Šťáhlavy", location: [49.6694031, 13.5035172], cost: 500 },
-                { name: "Nezvěstice", location: [49.6423722, 13.5165967], cost: 500 },
-                { name: "Zdemyslice", location: [49.6064719, 13.5170383], cost: 500 },
-                { name: "Blovice", location: [49.5812264, 13.5314531], cost: 500 },
-                { name: "Ždírec u Plzně", location: [49.5506783, 13.5739869], cost: 500 },
-                { name: "Srby", location: [49.5246506, 13.5917739], cost: 500 },
-                { name: "Nepomuk", location: [49.4975547, 13.6088542], cost: 500 },
-                { name: "Mileč", location: [49.4618186, 13.6081772], cost: 500 },
-                { name: "Nekvasovy", location: [49.4383658, 13.6105403], cost: 500 },
-                { name: "Kovčín", location: [49.4135856, 13.6132697], cost: 500 },
-                { name: "Pačejov", location: [49.3913308, 13.6205664], cost: 500 },
-                { name: "Jetenovice", location: [49.3700714, 13.6656181], cost: 500 },
-                { name: "Velký Bor", location: [49.3458594, 13.7009936], cost: 500 },
-                { name: "Horažďovice předměstí", location: [49.3313714, 13.7388486], cost: 500 },
-                { name: "Střelské Hoštice", location: [49.3051414, 13.7788925], cost: 500 },
-                { name: "Dolní Poříčí", location: [49.2886125, 13.8008481], cost: 500 },
-                { name: "Katovice", location: [49.2693519, 13.8235978], cost: 500 },
-                { name: "Pracejovice", location: [49.2582358, 13.8489875], cost: 500 },
-                { name: "Strakonice", location: [49.2551575, 13.9163047], cost: 0 },
-                { name: "Modlešovice", location: [49.2565003, 13.9762058], cost: 500 },  
-                { name: "Čejetice", location: [49.2515564, 14.0157986], cost: 500 },
-                { name: "Sudoměř u Písku", location: [49.2494011, 14.0572156], cost: 500 },
-                { name: "Ražice", location: [49.2446214, 14.1085939], cost: 500 },
-                { name: "Heřmaň obec", location: [49.2364769, 14.1359625], cost: 500 },
-                { name: "Skály", location: [49.2238389, 14.1645900], cost: 500 },
-                { name: "Protivín", location: [49.2125053, 14.2119942], cost: 500 },
-                { name: "Protivín zastávka", location: [49.1964417, 14.2224597], cost: 500 }, 
+                { name: "Plzeň hlavní nádraží", location: [49.7435456, 13.3880578], unlocked: false },
+                { name: "Plzeň-Slovany", location: [49.7348519, 13.4078303], unlocked: false },
+                { name: "Starý Plzenec", location: [49.6953125, 13.4781703], unlocked: false },
+                { name: "Šťáhlavy", location: [49.6694031, 13.5035172], unlocked: false },
+                { name: "Nezvěstice", location: [49.6423722, 13.5165967], unlocked: false },
+                { name: "Zdemyslice", location: [49.6064719, 13.5170383], unlocked: false },
+                { name: "Blovice", location: [49.5812264, 13.5314531], unlocked: false },
+                { name: "Ždírec u Plzně", location: [49.5506783, 13.5739869], unlocked: false },
+                { name: "Srby", location: [49.5246506, 13.5917739], unlocked: false },
+                { name: "Nepomuk", location: [49.4975547, 13.6088542], unlocked: false },
+                { name: "Mileč", location: [49.4618186, 13.6081772], unlocked: false },
+                { name: "Nekvasovy", location: [49.4383658, 13.6105403], unlocked: false },
+                { name: "Kovčín", location: [49.4135856, 13.6132697], unlocked: false },
+                { name: "Pačejov", location: [49.3913308, 13.6205664], unlocked: false },
+                { name: "Jetenovice", location: [49.3700714, 13.6656181], unlocked: false },
+                { name: "Velký Bor", location: [49.3458594, 13.7009936], unlocked: false },
+                { name: "Horažďovice předměstí", location: [49.3313714, 13.7388486], unlocked: false },
+                { name: "Střelské Hoštice", location: [49.3051414, 13.7788925], unlocked: false },
+                { name: "Dolní Poříčí", location: [49.2886125, 13.8008481], unlocked: false },
+                { name: "Katovice", location: [49.2693519, 13.8235978], unlocked: false },
+                { name: "Pracejovice", location: [49.2582358, 13.8489875], unlocked: false },
+                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false},
+                { name: "Modlešovice", location: [49.2565003, 13.9762058], unlocked: false },  
+                { name: "Čejetice", location: [49.2515564, 14.0157986], unlocked: false },
+                { name: "Sudoměř u Písku", location: [49.2494011, 14.0572156], unlocked: false },
+                { name: "Ražice", location: [49.2446214, 14.1085939], unlocked: false },
+                { name: "Heřmaň obec", location: [49.2364769, 14.1359625], unlocked: false },
+                { name: "Skály", location: [49.2238389, 14.1645900], unlocked: false },
+                { name: "Protivín", location: [49.2125053, 14.2119942], unlocked: false },
+                { name: "Protivín zastávka", location: [49.1964417, 14.2224597], unlocked: false }, 
                 
-                { name: "Milenovice", location: [49.1726953, 14.2206258], cost: 500 },
-                { name: "Číčenice", location: [49.1536025, 14.2215758], cost: 500 },
-                { name: "Záblatíčko", location: [49.1249389, 14.2651444], cost: 500 },
-                { name: "Zbudov", location: [49.0895767, 14.3268633], cost: 500 },
-                { name: "Zliv", location: [49.0654831, 14.3617669], cost: 500 },
-                { name: "Hluboká nad Vltavou", location: [49.0324019, 14.4202061], cost: 500 }, 
-             { name: "České Budějovice severní zastávka", location: [48.9947853, 14.4793767], cost: 500 },
-                { name: "České Budějovice", location: [48.9744872, 14.4886075], cost: 500 }, 
+                { name: "Milenovice", location: [49.1726953, 14.2206258], unlocked: false },
+                { name: "Číčenice", location: [49.1536025, 14.2215758], unlocked: false },
+                { name: "Záblatíčko", location: [49.1249389, 14.2651444], unlocked: false },
+                { name: "Zbudov", location: [49.0895767, 14.3268633], unlocked: false },
+                { name: "Zliv", location: [49.0654831, 14.3617669], unlocked: false },
+                { name: "Hluboká nad Vltavou", location: [49.0324019, 14.4202061], unlocked: false }, 
+             { name: "České Budějovice severní zastávka", location: [48.9947853, 14.4793767], unlocked: false },
+                { name: "České Budějovice", location: [48.9744872, 14.4886075], unlocked: false }, 
         ]
     }, 
-]
-       // Přidání tratí na mapu
-var trackPolylines = [];
-tracks.forEach(track => {
-    var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
-    trackPolylines.push(trackPolyline);
-});
-
-// Přidání zastávek na mapu
-var stopMarkers = [];
-tracks.forEach(track => {
-    track.stops.forEach(stop => {
-        var stopMarker = L.marker(stop.location, { isUnlocked: false, cost: stop.cost }).addTo(map);
-        stopMarker.bindPopup(stop.name);
-        stopMarkers.push(stopMarker);
-
-        // Přidání event listeneru pro odemykání zastávky po kliknutí
-        stopMarker.on('click', function () {
-            unlockStop(stopMarker);
+];
+        // Přidání tratí na mapu
+        var trackPolylines = [];
+        tracks.forEach(track => {
+            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+            trackPolylines.push(trackPolyline);
         });
-    });
-});
+
+        // Přidání zastávek na mapu
+        var stopMarkers = [];
+        tracks.forEach(track => {
+            track.stops.forEach(stop => {
+                var stopMarker = L.marker(stop.location, { opacity: stop.unlocked ? 1 : 0.5 }).addTo(map);
+                stopMarker.bindPopup(stop.name);
+                stopMarkers.push(stopMarker);
+
+                // Přidání akce na kliknutí na ikonu zastávky
+                stopMarker.on('click', function () {
+                    if (!stop.unlocked) {
+                        var cost = 500; // Cena za odemčení zastávky (můžete nastavit libovolnou částku)
+
+                        // Kontrola, zda hráč má dostatek peněz na odemčení
+                        var playerMoney = parseInt(document.getElementById("player-money").innerText);
+                        if (playerMoney >= cost) {
+                            // Odečtění peněz
+                            playerMoney -= cost;
+                            document.getElementById("player-money").innerText = playerMoney;
+
+                            // Odemčení zastávky
+                            stop.unlocked = true;
+                            stopMarker.setOpacity(1);
+                        } else {
+                            alert("Nemáte dostatek peněz na odemčení této zastávky.");
+                        }
+                    }
+                });
+            });
+        });
 
         // Funkce pro změnu města na mapě
         function changeCity() {
@@ -191,42 +207,17 @@ tracks.forEach(track => {
                 var distance = marker.getLatLng().distanceTo(cityCoordinates);
 
                 // Nastavte viditelnost podle vzdálenosti od vybraného města
-                if (distance <= 5000) { // Ukažte zastávky v poloměru 5 km
+                if (distance <= 5000 || marker.options.opacity === 1) { // Ukažte odemčené zastávky nebo zastávky v poloměru 5 km
                     marker.setOpacity(1);
                 } else {
-                    marker.setOpacity(0);
-                }
-
-                // Zamčené zastávky zvýrazníme odlišnou barvou
-                if (!marker.options.isUnlocked) {
-                    marker.setIcon(L.icon({
-                        iconUrl: 'https://i.imgur.com/neFFZgt.png',
-                        iconSize: [40, 40],
-                        iconAnchor: [20, 20],
-                        popupAnchor: [0, -20],
-                        className: 'locked-marker' // Přidáme třídu pro zamčené zastávky
-                    }));
-                } else {
-                    marker.setIcon(trainIcon); // Nastavíme původní ikonu pro odemčené zastávky
+                    marker.setOpacity(0.5);
                 }
             });
         }
 
-        // Funkce pro odemykání zastávky
-        function unlockStop(marker) {
-            if (!marker.options.isUnlocked && playerFunds >= marker.options.cost) {
-                marker.options.isUnlocked = true;
-                playerFunds -= marker.options.cost; // Odečteme náklady na odemčení z hráčových financí
-                document.getElementById("player-funds").innerText = playerFunds; // Aktualizujeme zobrazené hráčovy finance
-
-                // Aktualizujeme vzhled zastávky na odemčený stav
-                marker.setIcon(trainIcon);
-            }
-        }
-
         // Aktualizace informací pro hráče
         function updatePlayerInfo() {
-            document.getElementById("player-funds").innerText = playerFunds;
+            // TODO: Přidejte kód pro aktualizaci informací o hráči (finance, dostupný vlak, atd.)
         }
 
         // Volání funkce pro aktualizaci informací pro hráče
