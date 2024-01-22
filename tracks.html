@@ -95,42 +95,43 @@
             stopMarkers.push(stopMarker);
         });
 
-        // Funkce pro změnu města na mapě
-        function changeCity() {
+           function changeCity() {
             var selectedCity = document.getElementById("city-select").value;
             var cityCoordinates;
-            var cityIndex;
 
             switch (selectedCity) {
                 case "Strakonice":
-                    cityIndex = 0;
+                    cityCoordinates = [49.2551575, 13.9163047];
                     break;
                 case "Volyně":
-                    cityIndex = 5;
+                    cityCoordinates = [49.1701164, 13.8928975];
                     break;
                 case "Vimperk":
-                    cityIndex = 13;
+                    cityCoordinates = [49.0555267, 13.7907544];
                     break;
                 case "Volary":
-                    cityIndex = 21;
+                    cityCoordinates = [48.9070969, 13.8833131];
                     break;
                 default:
-                    cityIndex = 0; // Defaultní hodnota
+                    cityCoordinates = [49.2551575, 13.9163047]; // Defaultní hodnota
             }
 
-            cityCoordinates = track.stops[cityIndex].location;
             map.setView(cityCoordinates, 13);
 
-            updateStopsVisibility(cityIndex);
+            updateStopsVisibility(cityCoordinates);
         }
 
-        // Funkce pro aktualizaci viditelnosti zastávek
-        function updateStopsVisibility(cityIndex) {
-            stopMarkers.forEach((marker, index) => {
-                if (index >= cityIndex - 1 && index <= cityIndex + 1) {
-                    marker.setOpacity(1); // Zobrazit zastávky v rozmezí +/- 1 od vybraného města
+
+        / Funkce pro aktualizaci viditelnosti zastávek
+        function updateStopsVisibility(cityCoordinates) {
+            stopMarkers.forEach(marker => {
+                var distance = marker.getLatLng().distanceTo(cityCoordinates);
+
+                // Nastavte viditelnost podle vzdálenosti od vybraného města
+                if (distance <= 5000) { // Ukažte zastávky v poloměru 5 km
+                    marker.setOpacity(1);
                 } else {
-                    marker.setOpacity(0); // Skrýt zastávky mimo rozmezí
+                    marker.setOpacity(0);
                 }
             });
         }
