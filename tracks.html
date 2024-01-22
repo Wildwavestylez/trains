@@ -135,11 +135,11 @@
     }, 
  
         // Přidání tratí na mapu
-        var trackPolylines = [];
-        tracks.forEach(track => {
-            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
-            trackPolylines.push(trackPolyline);
-        });
+var trackPolylines = [];
+tracks.forEach(track => {
+    var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+    trackPolylines.push(trackPolyline);
+});
 
         // Přidání zastávek na mapu
         var stopMarkers = [];
