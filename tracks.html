@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 6
+       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 4
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -123,6 +123,7 @@
                 { name: "České Budějovice", location: [48.9744872, 14.4886075], unlocked: false }, 
         ]
     }, 
+            function initializeMap() {
 tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
             trackPolylines.push(trackPolyline);
@@ -143,7 +144,7 @@ tracks.forEach(track => {
                 }
             });
         });
-
+   
         // Přidání ikony vlaku na mapu
         var trainIcon = L.icon({
             iconUrl: 'https://i.imgur.com/neFFZgt.png',
@@ -151,7 +152,7 @@ tracks.forEach(track => {
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
-
+}
         var trainMarker = L.marker([49.2551575, 13.9163047], { icon: trainIcon }).addTo(map);
 
         // Funkce pro změnu města na mapě
