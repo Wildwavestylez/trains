@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Game</title>
+    <!-- Přidání Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Přidání vlastního CSS (pokud chcete) -->
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 75vh; }
+        #player-info { padding: 10px; background-color: #f0f0f0; }
+        #city-selector { margin: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Informace pro hráče -->
+    <div id="player-info">
+        Dostupné finance: $2000 | Dostupný vlak: 1
+    </div>
+    <!-- Roletací nabídka s otázkou -->
+    <div id="city-selector">
+        <label for="city-select">Vyberte město:</label>
+        <select id="city-select" onchange="changeCity()">
+            <option value="Strakonice">Strakonice</option>
+            <option value="Volyně">Volyně</option>
+            <option value="Vimperk">Vimperk</option>
+            <option value="Volary">Volary</option>
+        </select>
+    </div>
+    <!-- Leaflet mapa -->
+    <div id="map"></div>
+
+    <!-- Přidání Leaflet JS a vlastního JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializace Leaflet mapy
+        var map = L.map('map').setView([49.2551575, 13.9163047], 13);
+
+        // Přidání mapové podkladové vrstvy (například OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Přidání ikony vlaku na mapu
+        var trainIcon = L.icon({
+            iconUrl: 'https://i.imgur.com/neFFZgt.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        var trainMarker = L.marker([49.2551575, 13.9163047], { icon: trainIcon }).addTo(map);
+
+        // Přidání tratě s zastávkami
+        var track = {
+            name: "Trať 198 Strakonice - Volary",
+            color: "blue",
+            stops: [
+                { name: "Strakonice", location: [49.2551575, 13.9163047] },
+                // ... (další zastávky)
+                { name: "Volary", location: [48.9070969, 13.8833131] },
+            ]
+        };
+
+        // Přidání tratě na mapu
+        var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+
+        // Přidání zastávek na mapu
+        var stopMarkers = [];
+        track.stops.forEach(stop => {
+            var stopMarker = L.marker(stop.location).addTo(map);
+            stopMarker.bindPopup(stop.name);
+            stopMarkers.push(stopMarker);
+        });
+
+        // Funkce pro změnu města na mapě
+        function changeCity() {
+            var selectedCity = document.getElementById("city-select").value;
+            var cityCoordinates;
+            var cityIndex;
+
+            switch (selectedCity) {
+                case "Strakonice":
+                    cityIndex = 0;
+                    break;
+                case "Volyně":
+                    cityIndex = 5;
+                    break;
+                case "Vimperk":
+                    cityIndex = 13;
+                    break;
+                case "Volary":
+                    cityIndex = 21;
+                    break;
+                default:
+                    cityIndex = 0; // Defaultní hodnota
+            }
+
+            cityCoordinates = track.stops[cityIndex].location;
+            map.setView(cityCoordinates, 13);
+
+            updateStopsVisibility(cityIndex);
+        }
+
+        // Funkce pro aktualizaci viditelnosti zastávek
+        function updateStopsVisibility(cityIndex) {
+            stopMarkers.forEach((marker, index) => {
+                if (index >= cityIndex - 1 && index <= cityIndex + 1) {
+                    marker.setOpacity(1); // Zobrazit zastávky v rozmezí +/- 1 od vybraného města
+                } else {
+                    marker.setOpacity(0); // Skrýt zastávky mimo rozmezí
+                }
+            });
+        }
+
+        // Aktualizace informací pro hráče
+        function updatePlayerInfo() {
+            // TODO: Přidejte kód pro aktualizaci informací o hráči (finance, dostupný vlak, atd.)
+        }
+
+        // Volání funkce pro aktualizaci informací pro hráče
+        updatePlayerInfo();
+    </script>
+</body>
+</html>
