@@ -7,17 +7,18 @@
     <!-- Přidání Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Přidání vlastního CSS (pokud chcete) -->
-    <style>
+       <style>
         body { margin: 0; padding: 0; }
         #map { height: 75vh; }
         #player-info { padding: 10px; background-color: #f0f0f0; }
         #city-selector { margin: 10px; }
+        .unlock-button { cursor: pointer; }
     </style>
 </head>
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-        Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 1
+        Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 7
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
