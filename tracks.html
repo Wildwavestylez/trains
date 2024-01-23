@@ -17,7 +17,7 @@
 <body>
     <!-- Informace pro hráče -->
     <div id="player-info">
-       Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 5
+        Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: 1
     </div>
     <!-- Roletací nabídka s otázkou -->
     <div id="city-selector">
@@ -35,7 +35,7 @@
     <!-- Přidání Leaflet JS a vlastního JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        var playerFunds = 2000; // Počáteční herní peníze hráče
+        var playerMoney = 2000; // Počáteční množství herních dolarů
 
         // Inicializace Leaflet mapy
         var map = L.map('map').setView([49.2551575, 13.9163047], 13);
@@ -135,7 +135,6 @@
         ]
     }, 
 ];
-  // Přidání tratí na mapu
         var trackPolylines = [];
         tracks.forEach(track => {
             var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -146,22 +145,12 @@
         var stopMarkers = [];
         tracks.forEach(track => {
             track.stops.forEach(stop => {
-                var stopMarker = L.marker(stop.location).addTo(map);
+                var stopMarker = L.marker(stop.location, { locked: true }).addTo(map);
                 stopMarker.bindPopup(stop.name);
+                stopMarker.on('click', function () { unlockStop(stop, stopMarker); });
                 stopMarkers.push(stopMarker);
-
-                // Přidání interaktivity pro klikání na zastávku
-                stopMarker.on('click', function() {
-                    buyStation(stop);
-                });
             });
         });
-
-        // Aktualizace informací o hráči
-        function updatePlayerInfo() {
-            var playerMoney = 2000; // TODO: Získat aktuální herní peníze hráče
-            document.getElementById("player-money").textContent = playerMoney;
-        }
 
         // Funkce pro změnu města na mapě
         function changeCity() {
@@ -191,46 +180,33 @@
             updateStopsVisibility(cityCoordinates);
         }
 
+        // Funkce pro odemčení zastávky
+        function unlockStop(stop, marker) {
+            if (marker.options.locked && playerMoney >= stop.unlockCost) {
+                playerMoney -= stop.unlockCost;
+                marker.options.locked = false;
+                marker.setOpacity(1);
+                updatePlayerInfo();
+            }
+        }
+
         // Funkce pro aktualizaci viditelnosti zastávek
         function updateStopsVisibility(cityCoordinates) {
             stopMarkers.forEach(marker => {
                 var distance = marker.getLatLng().distanceTo(cityCoordinates);
 
-                // Nastavte viditelnost podle vzdálenosti od vybraného města
-                if (distance <= 5000) { // Ukažte zastávky v poloměru 5 km
+                // Nastavte viditelnost podle vzdálenosti od vybraného města a stavu zámku
+                if (distance <= 5000 && !marker.options.locked) { // Ukažte odemčené zastávky v poloměru 5 km
                     marker.setOpacity(1);
                 } else {
-                    marker.setOpacity(0);
+                    marker.setOpacity(0.5);
                 }
             });
         }
 
-        // Funkce pro koupi zastávky
-        function buyStation(station) {
-            var stationName = station.getPopup().getContent(); // Získání názvu zastávky
-
-            // TODO: Zjistit cenu zastávky
-            var stationCost = 500; // Příklad ceny zastávky
-
-            // TODO: Získat aktuální herní peníze hráče
-            var playerMoney = 2000;
-
-            // Zkontrolovat, zda hráč má dostatek peněz na nákup
-            if (playerMoney >= stationCost) {
-                // TODO: Odečíst cenu zastávky z herních peněz hráče
-                playerMoney -= stationCost;
-
-                // TODO: Označit zastávku jako odemčenou nebo přidat do seznamu odemčených zastávek hráče
-
-                // Aktualizovat informace o hráči
-                updatePlayerInfo();
-
-                // Zobrazit zprávu o úspěšném nákupu
-                alert("Zastávka " + stationName + " byla úspěšně zakoupena!");
-            } else {
-                // Zobrazit zprávu o nedostatečných finančních prostředcích
-                alert("Nemáte dostatek financí na zakoupení této zastávky.");
-            }
+        // Funkce pro aktualizaci informací pro hráče
+        function updatePlayerInfo() {
+            document.getElementById("player-money").innerText = playerMoney;
         }
 
         // Volání funkce pro aktualizaci informací pro hráče
