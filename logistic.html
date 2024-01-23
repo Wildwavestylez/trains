@@ -35,7 +35,7 @@
     <!-- Zde můžete umístit obsah hráčova panelu, např. portfolio, kupony vlaků, atd. -->
     <h2>Player Panel</h2>
     <p id="finance">Finance: 500000 Kč</p>
-    <p>Kupony vlaků: 01</p>
+    <p>Kupony vlaků: 17</p>
     
     <!-- Doplnit další informace podle potřeby -->
 </div>
@@ -806,6 +806,95 @@ const lines = [
                 { name: "Velké Hamry", location: [50.7116433, 15.3137292] },
                 { name: "Velké Hamry město", location: [50.7198067, 15.3135778] },
                 { name: "Tanvald", location: [50.7434233, 15.3110017] },
+                
+                ]
+    },
+
+     {
+        name: "Trať 042  Martinice v Krkonoších – Rokytnice nad Jizerou",    
+        color: "green",
+        category: "A",
+        trains: [
+            { name: "Train ER", startingIndex: 9, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 500 },
+            { name: "Train ES", startingIndex: 1, reverse: false, image: 'https://i.imgur.com/qgahT4b.png', maxSpeed: 500 },
+            
+            
+        ],
+        stops: [
+              { name: "Martinice v Krkonoších", location: [50.5807381, 15.5411872] },
+                { name: "Jilemnice", location: [50.6043664, 15.5137750] },
+                { name: "Hrabačov", location: [50.6232492, 15.5012742] },
+                { name: "Víchová nad Jizerou", location: [50.6271858, 15.4845792] },
+                { name: "Horní Sytová", location: [50.6323547, 15.4618472] },
+                { name: "Poniklá", location: [50.6485594, 15.4570922] },
+                { name: "Poniklá zastávka", location: [50.6667289, 15.4509153] },
+                { name: "Jablonec nad Jizerou-Hradsko", location: [50.6806144, 15.4513311] },
+             { name: "Jablonec nad Jizerou", location: [50.7003517, 15.4350558] },
+                { name: "Rokytnice nad Jizerou", location: [50.7121467, 15.4229497] },
+                
+                ]
+    },
+
+    {
+        name: "Trať 043  Trutnov – Lubawka",    
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train ET", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train EU", startingIndex: 1, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            ],
+        stops: [
+              { name: "Trutnov hlavní nádraží", location: [50.5652047, 15.9111508] },
+                { name: "Trutnov střed", location: [50.5777472, 15.9451056] },
+                { name: "Libeč", location: [50.5963286, 15.9462692] },
+                { name: "Křenov", location: [50.6382294, 15.9357481] },
+                { name: "Bernartice u Trutnova", location: [50.6470489, 15.9586792] },
+                { name: "Královec", location: [50.6731833, 15.9706125] },
+                { name: "Lubawka", location: [50.7058678, 16.0034772] },
+                { name: "Błażkowa", location: [50.7450942, 15.9909011] },
+             { name: "Kamienna Gora", location: [50.7856483, 16.0234108] },
+                ]
+    },
+
+    {
+        name: "Trať 044  Kunčice nad Labem – Vrchlabí",    
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train EV", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            
+            ],
+        stops: [
+              { name: "Kunčice nad Labem", location: [50.5838394, 15.6228189] },
+                { name: "Podhůří", location: [50.6006469, 15.6246778] },
+                { name: "Vrchlabí", location: [50.6188317, 15.6227722] },
+                
+                ]
+    },
+
+     {
+        name: "Trať 047  Trutnov – Teplice nad Metují",    
+        color: "red",
+        category: "A",
+        trains: [
+            { name: "Train EV", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 500 },
+            { name: "Train EW", startingIndex: 12, reverse: false, image: 'https://i.imgur.com/neFFZgt.png', maxSpeed: 500 },
+            ],
+        stops: [
+              { name: "Trutnov hlavní nádraží", location: [50.5652047, 15.9111508] },
+                { name: "Trutnov střed", location: [50.5777472, 15.9451056] },
+                { name: "Trutnov zastávka", location: [50.5778886, 15.9607517] },
+                { name: "Lhota u Trutnova", location: [50.5866317, 15.9863967] },
+                { name: "Petříkovice", location: [50.6018142, 16.0034542] },
+                { name: "Chvaleč", location: [50.5993500, 16.0380117] },
+            { name: "Radvanice", location: [50.5753556, 16.0600453] },
+                { name: "Janovice u Trutnova", location: [50.5870056, 16.0847778] },
+                { name: "Hodkovice u Trutnova", location: [50.6047211, 16.0719967] },
+                { name: "Horní Adršpach", location: [50.6232758, 16.0835208] },
+                { name: "Adršpach", location: [50.6154403, 16.1242675] },
+                { name: "Teplice nad Metují skály", location: [50.5970383, 16.1497728] },
+                { name: "Teplice nad Metují město", location: [50.5928306, 16.1723117] },
+                { name: "Teplice nad Metují", location: [50.5816003, 16.1788217] },
                 
                 ]
     },
