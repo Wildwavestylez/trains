@@ -550,19 +550,57 @@ const lines = [
         ]
     }, 
 
+    {
+        name: "Trať 060 Poříčany - Nymburk - Jičín",
+        color: "blue",
+        category: "A",
+        trains: [
+            { name: "Train EX", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train EY", startingIndex: 20, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train EZ", startingIndex: 8, reverse: true, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+            { name: "Train FA", startingIndex: 11, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 600 },
+           
+        ],
+         stops: [
+                { name: "Poříčany", location: [50.1112289, 14.9223908] },
+                { name: "Třebestovice", location: [50.1257400, 14.9609014] },
+                { name: "Sadská", location: [50.1313744, 14.9865342] },
+                { name: "Hořátev", location: [50.1528092, 15.0286225] },
+                { name: "Nymburk město", location: [50.1844750, 15.0334350] },
+                { name: "Nymburk hlavní nádraží", location: [50.1934472, 15.0458125] },
+                { name: "Veleliby", location: [50.2146569, 15.0234939] },
+                { name: "Jíkev", location: [50.2391433, 15.0518464] },
+                { name: "Oskořínek", location: [50.2416953, 15.0860614] },
+                { name: "Křinec", location: [50.2659950, 15.1435842] },
+                { name: "Ledečky", location: [50.2841719, 15.1859883] },
+                { name: "Rožďalovice", location: [50.2991714, 15.1803178] },
+                { name: "Mlýnec", location: [50.3176728, 15.2207222] },
+                { name: "Kopidlno", location: [50.3339578, 15.2604494] },
+                { name: "Pševes", location: [50.3451919, 15.2955903] },
+                { name: "Bartoušov zastávka", location: [50.3550378, 15.3110722] },
+                { name: "Žitětín", location: [50.3610344, 15.3245897] },
+                { name: "Jičíněves", location: [50.3738975, 15.3365736] },
+                { name: "Nemyčeves", location: [50.3872908, 15.3605453] },
+                { name: "Staré Místo u Jičína", location: [50.4061164, 15.3530064] },
+                { name: "Jičín", location: [50.4305000, 15.3612050] },
+                
+        ]
+    }, 
+
+
         {
         name: "Trať 031 Pardubice  - Jaroměř",    
         color: "red",
         category: "A",
         trains: [
-            { name: "Train 7", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
-            { name: "Train 8", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
-            { name: "Train 9", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
-            { name: "Train 10", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train FB", startingIndex: 0, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train FC", startingIndex: 14, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+           { name: "Train FD", startingIndex: 7, reverse: true, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
+            { name: "Train FE", startingIndex: 8, reverse: false, image: 'https://i.imgur.com/P2qZ1di.png', maxSpeed: 500 },
         ],
         stops: [
               { name: "Pardubice Hlavní nádraží", location: [50.0318908, 15.7563753] },
-                { name: "Pardubice - Rosice nad Labem", location: [50.0454825, 15.7424669] },
+                { name: "Pardubice - Rosice nad Laben", location: [50.0454825, 15.7424669] },
                 { name: "Pardubice - Semtín", location: [50.0614931, 15.7479144] },
                 { name: "Stéblová obec", location: [50.0928917, 15.7523633] },
                 { name: "Stéblová", location: [50.1044083, 15.7576503] },
@@ -576,6 +614,7 @@ const lines = [
                 { name: "Černožice", location: [50.3155061, 15.8695822] },
                 { name: "Semonice", location: [50.3316458, 15.8774558] },
                 { name: "Jaroměř", location: [50.3417397, 15.9101000] },
+                
                
         ]
     },
@@ -617,6 +656,27 @@ const lines = [
                 
         ]
     }, 
+
+    {
+        name: "Trať 062  Chlumec nad Cidlinou – Křinec",    
+        color: "#F4A460",
+        category: "A",
+        trains: [
+            { name: "Train EV", startingIndex: 7, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            { name: "Train EW", startingIndex: 1, reverse: false, image: 'https://i.imgur.com/jXoYbZs.png', maxSpeed: 500 },
+            ],
+        stops: [
+              { name: "Chlumec nad Cidlinou", location: [50.1635856, 15.4572086] },
+                { name: "Lovčice obec", location: [50.1704217, 15.3824100] },
+                { name: "Slibovice", location: [50.1750678, 15.3667097] },
+                { name: "Běrunice", location: [50.1859283, 15.3413019] },
+                { name: "Městec Králové", location: [50.2106247, 15.3002378] },
+                { name: "Jakubský Mlýn", location: [50.2106247, 15.3002378] },
+                { name: "Zbuzany", location: [50.2106247, 15.3002378] },
+                { name: "Svídnice", location: [50.2106247, 15.3002378] },
+                { name: "Křinec", location: [50.2659950, 15.1435842] },
+                ]
+    },
 
      {
         name: "Trať 021 Hradec Králové  - Letohrad",    
