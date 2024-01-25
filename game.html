@@ -74,7 +74,7 @@
             color: "blue",
             stops: [
                 { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 50 },
-                { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+                 { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
                 { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
@@ -98,11 +98,6 @@
                 { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
             ]
         };
-
-        // Funkce pro generování náhodné ceny odemykání stanice mezi 500 a 1000 dolary
-        function generateRandomCost() {
-            return Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
-        }
 
         // Přidání tratě na mapu
         var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
@@ -149,7 +144,7 @@
             stopMarker.bindPopup(popupContent);
         });
 
-        // Funkce pro pohyb vlaku po trati
+        // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
         function moveTrain(trainMarker, line) {
             let currentStopIndex = 0;
             let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
@@ -157,11 +152,11 @@
 
             setInterval(() => {
                 const currentStop = line.stops[currentStopIndex];
-                const nextStop = line.stops[currentStopIndex + direction];
+                const nextStop = findNextUnlockedStop(currentStopIndex, direction, line.stops);
 
                 if (nextStop) {
                     const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-                    const timeToNextStop = distanceToNextStop / 60; // Předpokládaná rychlost 60 km/h
+                    const timeToNextStop = distanceToNextStop / 160; // Předpokládaná rychlost 60 km/h
 
                     const currentTime = new Date();
                     const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
@@ -171,14 +166,27 @@
                         const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
                         trainMarker.setLatLng([lat, lon]);
                     } else {
-                        currentStopIndex += direction;
+                        currentStopIndex = line.stops.indexOf(nextStop);
                         startTime = new Date();
                     }
                 } else {
+                    // Vlak dojel na konec tratě
                     direction *= -1;
                     currentStopIndex += direction;
                 }
             }, 1000); // Aktualizace každou sekundu
+        }
+
+        // Funkce pro nalezení další odemčené zastávky
+        function findNextUnlockedStop(currentIndex, direction, stops) {
+            let index = currentIndex + direction;
+            while (index >= 0 && index < stops.length) {
+                if (stops[index].unlocked) {
+                    return stops[index];
+                }
+                index += direction;
+            }
+            return null;
         }
 
         // Aktualizace informací o hráči
