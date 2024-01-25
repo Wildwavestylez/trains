@@ -25,11 +25,12 @@
     <!-- Přidání Leaflet JS a vlastního JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializace hráčových financí, vlaku a polohy vlaku
+        // Inicializace hráčových financí a vlaku
         var playerMoney = 2000;
         var playerTrain = 1;
-        var trainSpeed = 80; // rychlost vlaku v km/h
-        var trainPositionIndex = 0; // index aktuální zastávky
+
+        // Inicializace hráčova vlaku
+        var playerTrainMarker;
 
         // Inicializace Leaflet mapy
         var map = L.map('map').setView([49.2551575, 13.9163047], 13);
@@ -47,15 +48,13 @@
             popupAnchor: [0, -20]
         });
 
-        var trainMarker = L.marker([49.2551575, 13.9163047], { icon: trainIcon }).addTo(map);
-
         // Přidání tratě s zastávkami
         var track = {
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
             stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: true, cost: 0 },
-                { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 500 },
+               { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
                 { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
@@ -88,91 +87,53 @@
         // Přidání tratě na mapu
         var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
 
-// Přidání zastávek na mapu
-track.stops.forEach(stop => {
-    var stopMarker = L.marker(stop.location).addTo(map);
+        // Přidání zastávek na mapu
+        track.stops.forEach(stop => {
+            var stopMarker = L.marker(stop.location).addTo(map);
 
-    // Vytvoření obsahu vyskakovacího okna
-    var popupContent = document.createElement('div');
-    popupContent.className = 'popup-content';
-    popupContent.innerHTML = `<p>${stop.name}</p>`;
+            // Vytvoření obsahu vyskakovacího okna
+            var popupContent = document.createElement('div');
+            popupContent.className = 'popup-content';
+            popupContent.innerHTML = `<p>${stop.name}</p>`;
 
-    // Přidání tlačítka pro odemčení stanice
-    if (!stop.unlocked) {
-        var unlockButton = document.createElement('button');
-        unlockButton.textContent = `Odemknout za $${stop.cost}`;
-        unlockButton.addEventListener('click', function() {
-            if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
-                if (playerMoney >= stop.cost) {
-                    // Odečti peníze a odemkni stanici
-                    playerMoney -= stop.cost;
-                    stop.unlocked = true;
-                    updatePlayerInfo();
-                    map.closePopup();
+            // Přidání tlačítka pro odemčení stanice
+            if (!stop.unlocked) {
+                var unlockButton = document.createElement('button');
+                unlockButton.textContent = `Odemknout za $${stop.cost}`;
+                unlockButton.addEventListener('click', function() {
+                    if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
+                        if (playerMoney >= stop.cost) {
+                            // Odečti peníze a odemkni stanici
+                            playerMoney -= stop.cost;
+                            stop.unlocked = true;
+                            updatePlayerInfo();
+                            map.closePopup();
 
-                    // Pokud je to první odemčená stanice, spusť pohyb vlaku
-                    if (trainPositionIndex === 0) {
-                        moveTrain();
+                            // Umísti hráčův vlak na zakoupenou stanici
+                            if (playerTrainMarker) {
+                                map.removeLayer(playerTrainMarker);
+                            }
+                            playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
+                        } else {
+                            alert("Nemáte dostatek peněz na odemčení této stanice.");
+                        }
                     }
-                } else {
-                    alert("Nemáte dostatek peněz na odemčení této stanice.");
-                }
+                });
+                popupContent.appendChild(unlockButton);
             }
-        });
-        popupContent.appendChild(unlockButton);
-    }
 
-    // Přidání vyskakovacího okna k zastávce
-    stopMarker.bindPopup(popupContent);
-});
+            // Přidání vyskakovacího okna k zastávce
+            stopMarker.bindPopup(popupContent);
+        });
+
         // Aktualizace informací o hráči
         function updatePlayerInfo() {
             document.getElementById('player-money').textContent = playerMoney;
             document.getElementById('player-train').textContent = playerTrain;
         }
 
-        // Funkce pro pohyb vlaku mezi zastávkami
-        function moveTrain() {
-            var currentStop = track.stops[trainPositionIndex];
-            var nextStop = track.stops[trainPositionIndex + 1];
-
-            if (currentStop && nextStop) {
-                var distance = calculateDistance(currentStop.location, nextStop.location);
-                var timeToNextStop = (distance / trainSpeed) * 3600 * 1000; // převod na milisekundy
-
-                // Pohyb vlaku na mapě
-                trainMarker.setLatLng(currentStop.location);
-                trainPositionIndex++;
-
-                // Nastavení intervalu pro další pohyb
-                setTimeout(moveTrain, timeToNextStop);
-            }
-        }
-
-        // Funkce pro výpočet vzdálenosti mezi dvěma body na mapě
-        function calculateDistance(latlng1, latlng2) {
-            var R = 6371; // poloměr Země v km
-            var lat1 = latlng1[0];
-            var lon1 = latlng1[1];
-            var lat2 = latlng2[0];
-            var lon2 = latlng2[1];
-
-            var dLat = toRad(lat2 - lat1);
-            var dLon = toRad(lon2 - lon1);
-            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            var distance = R * c;
-
-            return distance;
-        }
-
-        // Funkce pro převod stupňů na radiány
-        function toRad(degrees) {
-            return degrees * Math.PI / 180;
-        }
-
-        // Spuštění pohybu vlaku po načtení stránky
-        moveTrain();
+        // Volání funkce pro aktualizaci informací o hráči
+        updatePlayerInfo();
     </script>
 </body>
 </html>
