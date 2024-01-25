@@ -145,20 +145,19 @@
             }
         ];
 
-        // Přidání tratí na mapu
-        tracks.forEach(track => {
-            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+        // Přidání tratě na mapu
+        var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
 
-            // Přidání zastávek na mapu
-            track.stops.forEach(stop => {
-                var stopMarker = L.marker(stop.location).addTo(map);
+        // Přidání zastávek na mapu
+        track.stops.forEach(stop => {
+            var stopMarker = L.marker(stop.location).addTo(map);
 
-                // Vytvoření obsahu vyskakovacího okna
-                var popupContent = document.createElement('div');
-                popupContent.className = 'popup-content';
-                popupContent.innerHTML = `<p>${stop.name}</p>`;
+            // Vytvoření obsahu vyskakovacího okna
+            var popupContent = document.createElement('div');
+            popupContent.className = 'popup-content';
+            popupContent.innerHTML = `<p>${stop.name}</p>`;
 
-                // Přidání tlačítka pro odemčení stanice (pokud je zamčená)
+            // Přidání tlačítka pro odemčení stanice (pokud je zamčená)
             if (!stop.unlocked) {
                 var unlockButton = document.createElement('button');
                 unlockButton.textContent = `Odemknout za $${stop.cost}`;
@@ -191,7 +190,6 @@
             stopMarker.bindPopup(popupContent);
         });
 
-
         // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
         function moveTrain(trainMarker, line) {
             let currentStopIndex = 0;
@@ -204,7 +202,7 @@
 
                 if (nextStop) {
                     const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-                    const timeToNextStop = distanceToNextStop / 260; // Předpokládaná rychlost 60 km/h
+                    const timeToNextStop = distanceToNextStop / 60; // Předpokládaná rychlost 60 km/h
 
                     const currentTime = new Date();
                     const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
@@ -245,6 +243,3 @@
 
         // Volání funkce pro aktualizaci informací o hráči
         updatePlayerInfo();
-    </script>
-</body>
-</html>
