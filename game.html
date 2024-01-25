@@ -68,13 +68,14 @@
             return deg * (Math.PI / 180);
         }
 
-        // Přidání tratě s zastávkami
-        var track = {
-            name: "Trať 198 Strakonice - Volary",
-            color: "blue",
-            stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 50 },
-                 { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+        // Přidání tratí s zastávkami
+        var tracks = [
+            {
+                name: "Trať 198 Strakonice - Volary",
+                color: "blue",
+                stops: [
+                    { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 50 },
+                    { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
                 { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
@@ -95,53 +96,100 @@
                 { name: "Lenora", location: [48.9283675, 13.7969542], unlocked: false, cost: generateRandomCost() },
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581], unlocked: false, cost: generateRandomCost() },
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611], unlocked: false, cost: generateRandomCost() },
-                { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
-            ]
-        };
-
-        // Přidání tratě na mapu
-        var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
-
-        // Přidání zastávek na mapu
-        track.stops.forEach(stop => {
-            var stopMarker = L.marker(stop.location).addTo(map);
-
-            // Vytvoření obsahu vyskakovacího okna
-            var popupContent = document.createElement('div');
-            popupContent.className = 'popup-content';
-            popupContent.innerHTML = `<p>${stop.name}</p>`;
-
-            // Přidání tlačítka pro odemčení stanice
-            if (!stop.unlocked) {
-                var unlockButton = document.createElement('button');
-                unlockButton.textContent = `Odemknout za $${stop.cost}`;
-                unlockButton.addEventListener('click', function() {
-                    if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
-                        if (playerMoney >= stop.cost) {
-                            // Odečti peníze a odemkni stanici
-                            playerMoney -= stop.cost;
-                            stop.unlocked = true;
-                            updatePlayerInfo();
-                            map.closePopup();
-
-                            // Umísti hráčův vlak na zakoupenou stanici
-                            if (playerTrainMarker) {
-                                map.removeLayer(playerTrainMarker);
-                            }
-                            playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
-
-                            // Začni pohyb vlaku po trati
-                            moveTrain(playerTrainMarker, track);
-                        } else {
-                            alert("Nemáte dostatek peněz na odemčení této stanice.");
-                        }
-                    }
-                });
-                popupContent.appendChild(unlockButton);
+                    { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
+                ]
+            },
+            {
+                name: "Trať 190  Plzeň - CB",
+                color: "green",
+                stops: [
+                    { name: "Plzeň hlavní nádraží", location: [49.7435456, 13.3880578], unlocked: false, cost: generateRandomCost() },
+                { name: "Plzeň-Slovany", location: [49.7348519, 13.4078303], unlocked: false, cost: generateRandomCost() },
+                { name: "Starý Plzenec", location: [49.6953125, 13.4781703], unlocked: false, cost: generateRandomCost() },
+                { name: "Šťáhlavy", location: [49.6694031, 13.5035172], unlocked: false, cost: generateRandomCost() },
+                { name: "Nezvěstice", location: [49.6423722, 13.5165967], unlocked: false, cost: generateRandomCost() },
+                { name: "Zdemyslice", location: [49.6064719, 13.5170383], unlocked: false, cost: generateRandomCost() },
+                { name: "Blovice", location: [49.5812264, 13.5314531], unlocked: false, cost: generateRandomCost() },
+                { name: "Ždírec u Plzně", location: [49.5506783, 13.5739869], unlocked: false, cost: generateRandomCost() },
+                { name: "Srby", location: [49.5246506, 13.5917739], unlocked: false, cost: generateRandomCost() },
+                { name: "Nepomuk", location: [49.4975547, 13.6088542], unlocked: false, cost: generateRandomCost() },
+                { name: "Mileč", location: [49.4618186, 13.6081772], unlocked: false, cost: generateRandomCost() },
+                { name: "Nekvasovy", location: [49.4383658, 13.6105403], unlocked: false, cost: generateRandomCost() },
+                { name: "Kovčín", location: [49.4135856, 13.6132697], unlocked: false, cost: generateRandomCost() },
+                { name: "Pačejov", location: [49.3913308, 13.6205664], unlocked: false, cost: generateRandomCost() },
+                { name: "Jetenovice", location: [49.3700714, 13.6656181], unlocked: false, cost: generateRandomCost() },
+                { name: "Velký Bor", location: [49.3458594, 13.7009936], unlocked: false, cost: generateRandomCost() },
+                { name: "Horažďovice předměstí", location: [49.3313714, 13.7388486], unlocked: false, cost: generateRandomCost() },
+                { name: "Střelské Hoštice", location: [49.3051414, 13.7788925], unlocked: false, cost: generateRandomCost() },
+                { name: "Dolní Poříčí", location: [49.2886125, 13.8008481], unlocked: false, cost: generateRandomCost() },
+                { name: "Katovice", location: [49.2693519, 13.8235978], unlocked: false, cost: generateRandomCost() },
+                { name: "Pracejovice", location: [49.2582358, 13.8489875], unlocked: false, cost: generateRandomCost() },
+                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 50 },
+                { name: "Modlešovice", location: [49.2565003, 13.9762058], unlocked: false, cost: generateRandomCost() },  
+                { name: "Čejetice", location: [49.2515564, 14.0157986], unlocked: false, cost: generateRandomCost() },
+                { name: "Sudoměř u Písku", location: [49.2494011, 14.0572156], unlocked: false, cost: generateRandomCost() },
+                { name: "Ražice", location: [49.2446214, 14.1085939], unlocked: false, cost: generateRandomCost() },
+                { name: "Heřmaň obec", location: [49.2364769, 14.1359625], unlocked: false, cost: generateRandomCost() },
+                { name: "Skály", location: [49.2238389, 14.1645900], unlocked: false, cost: generateRandomCost() },
+                { name: "Protivín", location: [49.2125053, 14.2119942], unlocked: false, cost: generateRandomCost() },
+                { name: "Protivín zastávka", location: [49.1964417, 14.2224597], unlocked: false, cost: generateRandomCost() }, 
+                { name: "Milenovice", location: [49.1726953, 14.2206258], unlocked: false, cost: generateRandomCost() },
+                { name: "Číčenice", location: [49.1536025, 14.2215758], unlocked: false, cost: generateRandomCost() },
+                { name: "Záblatíčko", location: [49.1249389, 14.2651444], unlocked: false, cost: generateRandomCost() },
+                { name: "Zbudov", location: [49.0895767, 14.3268633], unlocked: false, cost: generateRandomCost() },
+                { name: "Zliv", location: [49.0654831, 14.3617669], unlocked: false, cost: generateRandomCost() },
+                { name: "Hluboká nad Vltavou", location: [49.0324019, 14.4202061], unlocked: false, cost: generateRandomCost() }, 
+             { name: "České Budějovice severní zastávka", location: [48.9947853, 14.4793767], unlocked: false, cost: generateRandomCost() },
+                { name: "České Budějovice", location: [48.9744872, 14.4886075], unlocked: false, cost: generateRandomCost() }, 
+                ]
             }
+        ];
 
-            // Přidání vyskakovacího okna k zastávce
-            stopMarker.bindPopup(popupContent);
+        // Přidání tratí na mapu
+        tracks.forEach(track => {
+            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+
+            // Přidání zastávek na mapu
+            track.stops.forEach(stop => {
+                var stopMarker = L.marker(stop.location).addTo(map);
+
+                // Vytvoření obsahu vyskakovacího okna
+                var popupContent = document.createElement('div');
+                popupContent.className = 'popup-content';
+                popupContent.innerHTML = `<p>${stop.name}</p>`;
+
+                // Přidání tlačítka pro odemčení stanice
+                if (!stop.unlocked) {
+                    var unlockButton = document.createElement('button');
+                    unlockButton.textContent = `Odemknout za $${stop.cost}`;
+                    unlockButton.addEventListener('click', function() {
+                        if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
+                            if (playerMoney >= stop.cost) {
+                                // Odečti peníze a odemkni stanici
+                                playerMoney -= stop.cost;
+                                stop.unlocked = true;
+                                updatePlayerInfo();
+                                map.closePopup();
+
+                                // Umísti hráčův vlak na zakoupenou stanici
+                                if (playerTrainMarker) {
+                                    map.removeLayer(playerTrainMarker);
+                                }
+                                playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
+
+                                // Začni pohyb vlaku po trati
+                                moveTrain(playerTrainMarker, track);
+                            } else {
+                                alert("Nemáte dostatek peněz na odemčení této stanice.");
+                            }
+                        }
+                    });
+                    popupContent.appendChild(unlockButton);
+                }
+
+                // Přidání vyskakovacího okna k zastávce
+                stopMarker.bindPopup(popupContent);
+            });
         });
 
         // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
@@ -156,7 +204,7 @@
 
                 if (nextStop) {
                     const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-                    const timeToNextStop = distanceToNextStop / 160; // Předpokládaná rychlost 60 km/h
+                    const timeToNextStop = distanceToNextStop / 260; // Předpokládaná rychlost 60 km/h
 
                     const currentTime = new Date();
                     const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
