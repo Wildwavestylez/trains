@@ -48,13 +48,33 @@
             popupAnchor: [0, -20]
         });
 
+        // Funkce pro generování náhodné ceny odemykání stanice mezi 500 a 1000 dolary
+        function generateRandomCost() {
+            return Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+        }
+
+        // Funkce pro výpočet vzdálenosti mezi dvěma body na zeměpisné šířce a délce
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // poloměr Země v kilometrech
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c;
+            return distance;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
         // Přidání tratě s zastávkami
         var track = {
             name: "Trať 198 Strakonice - Volary",
             color: "blue",
             stops: [
-                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 500 },
-               { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: 50 },
+                { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
                 { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
@@ -114,6 +134,9 @@
                                 map.removeLayer(playerTrainMarker);
                             }
                             playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
+
+                            // Začni pohyb vlaku po trati
+                            moveTrain(playerTrainMarker, track);
                         } else {
                             alert("Nemáte dostatek peněz na odemčení této stanice.");
                         }
@@ -125,6 +148,38 @@
             // Přidání vyskakovacího okna k zastávce
             stopMarker.bindPopup(popupContent);
         });
+
+        // Funkce pro pohyb vlaku po trati
+        function moveTrain(trainMarker, line) {
+            let currentStopIndex = 0;
+            let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+            let startTime = new Date();
+
+            setInterval(() => {
+                const currentStop = line.stops[currentStopIndex];
+                const nextStop = line.stops[currentStopIndex + direction];
+
+                if (nextStop) {
+                    const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                    const timeToNextStop = distanceToNextStop / 60; // Předpokládaná rychlost 60 km/h
+
+                    const currentTime = new Date();
+                    const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
+
+                    if (elapsedTime <= timeToNextStop) {
+                        const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                        const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                        trainMarker.setLatLng([lat, lon]);
+                    } else {
+                        currentStopIndex += direction;
+                        startTime = new Date();
+                    }
+                } else {
+                    direction *= -1;
+                    currentStopIndex += direction;
+                }
+            }, 1000); // Aktualizace každou sekundu
+        }
 
         // Aktualizace informací o hráči
         function updatePlayerInfo() {
