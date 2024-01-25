@@ -158,39 +158,39 @@
                 popupContent.className = 'popup-content';
                 popupContent.innerHTML = `<p>${stop.name}</p>`;
 
-                // Přidání tlačítka pro odemčení stanice
-                if (!stop.unlocked) {
-                    var unlockButton = document.createElement('button');
-                    unlockButton.textContent = `Odemknout za $${stop.cost}`;
-                    unlockButton.addEventListener('click', function() {
-                        if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
-                            if (playerMoney >= stop.cost) {
-                                // Odečti peníze a odemkni stanici
-                                playerMoney -= stop.cost;
-                                stop.unlocked = true;
-                                updatePlayerInfo();
-                                map.closePopup();
+                // Přidání tlačítka pro odemčení stanice (pokud je zamčená)
+            if (!stop.unlocked) {
+                var unlockButton = document.createElement('button');
+                unlockButton.textContent = `Odemknout za $${stop.cost}`;
+                unlockButton.addEventListener('click', function() {
+                    if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
+                        if (playerMoney >= stop.cost) {
+                            // Odečti peníze a odemkni stanici
+                            playerMoney -= stop.cost;
+                            stop.unlocked = true;
+                            updatePlayerInfo();
+                            map.closePopup();
 
-                                // Umísti hráčův vlak na zakoupenou stanici
-                                if (playerTrainMarker) {
-                                    map.removeLayer(playerTrainMarker);
-                                }
-                                playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
-
-                                // Začni pohyb vlaku po trati
-                                moveTrain(playerTrainMarker, track);
-                            } else {
-                                alert("Nemáte dostatek peněz na odemčení této stanice.");
+                            // Umísti hráčův vlak na zakoupenou stanici
+                            if (playerTrainMarker) {
+                                map.removeLayer(playerTrainMarker);
                             }
-                        }
-                    });
-                    popupContent.appendChild(unlockButton);
-                }
+                            playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
 
-                // Přidání vyskakovacího okna k zastávce
-                stopMarker.bindPopup(popupContent);
-            });
+                            // Začni pohyb vlaku po trati
+                            moveTrain(playerTrainMarker, track);
+                        } else {
+                            alert("Nemáte dostatek peněz na odemčení této stanice.");
+                        }
+                    }
+                });
+                popupContent.appendChild(unlockButton);
+            }
+
+            // Přidání vyskakovacího okna k zastávce
+            stopMarker.bindPopup(popupContent);
         });
+
 
         // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
         function moveTrain(trainMarker, line) {
