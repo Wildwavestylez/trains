@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Game</title>
+    <!-- Přidání Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Přidání vlastního CSS (pokud chcete) -->
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 75vh; }
+        #player-info { padding: 10px; background-color: #f0f0f0; }
+        .popup-content { text-align: center; }
+    </style>
+</head>
+<body>
+    <!-- Informace pro hráče -->
+    <div id="player-info">
+        Dostupné finance: $<span id="player-money">2000</span> | Dostupný vlak: <span id="player-train">1</span>
+    </div>
+    <!-- Leaflet mapa -->
+    <div id="map"></div>
 
+    <!-- Přidání Leaflet JS a vlastního JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializace hráčových financí, vlaku a polohy vlaku
+        var playerMoney = 2000;
+        var playerTrain = 1;
+        var trainSpeed = 80; // rychlost vlaku v km/h
+        var trainPositionIndex = 0; // index aktuální zastávky
+
+        // Inicializace Leaflet mapy
+        var map = L.map('map').setView([49.2551575, 13.9163047], 13);
+
+        // Přidání mapové podkladové vrstvy (například OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Přidání ikony vlaku na mapu
+        var trainIcon = L.icon({
+            iconUrl: 'https://i.imgur.com/neFFZgt.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        var trainMarker = L.marker([49.2551575, 13.9163047], { icon: trainIcon }).addTo(map);
+
+        // Přidání tratě s zastávkami
+        var track = {
+            name: "Trať 198 Strakonice - Volary",
+            color: "blue",
+            stops: [
+                { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: true, cost: 0 },
+                { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+                { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
+                { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
+                { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
+                { name: "Volyně", location: [49.1701164, 13.8928975], unlocked: false, cost: generateRandomCost() },
+                { name: "Nišovice", location: [49.1502839, 13.9059867], unlocked: false, cost: generateRandomCost() },
+                { name: "Malenice", location: [49.1237908, 13.8832197], unlocked: false, cost: generateRandomCost() },
+                { name: "Lčovice", location: [49.1090089, 13.8666047], unlocked: false, cost: generateRandomCost() },
+                { name: "Čkyně", location: [49.1111489, 13.8291083], unlocked: false, cost: generateRandomCost() },
+                { name: "Bohumilice v Čechách, zastávka", location: [49.0975800, 13.8137817], unlocked: false, cost: generateRandomCost() },
+                { name: "Bohumilice v Čechách", location: [49.0927086, 13.8010150], unlocked: false, cost: generateRandomCost() },
+                { name: "Vimperk", location: [49.0555267, 13.7907544], unlocked: false, cost: generateRandomCost() },
+                { name: "Vimperk, zastávka", location: [49.0487633, 13.7639522], unlocked: false, cost: generateRandomCost() },
+                { name: "Lipka", location: [49.0202103, 13.7354764], unlocked: false, cost: generateRandomCost() },
+                { name: "Kubova Huť", location: [48.9830017, 13.7747478], unlocked: false, cost: generateRandomCost() },
+                { name: "Horní Vltavice", location: [48.9625625, 13.7746514], unlocked: false, cost: generateRandomCost() },
+                { name: "Zátoň", location: [48.9509200, 13.8030072], unlocked: false, cost: generateRandomCost() },
+                { name: "Zátoň - Boubín", location: [48.9515725, 13.8224831], unlocked: false, cost: generateRandomCost() },
+                { name: "Lenora", location: [48.9283675, 13.7969542], unlocked: false, cost: generateRandomCost() },
+                { name: "Lenora zastávka", location: [48.9233969, 13.8026581], unlocked: false, cost: generateRandomCost() },
+                { name: "Soumarský Most", location: [48.9080047, 13.8287611], unlocked: false, cost: generateRandomCost() },
+                { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
+            ]
+        };
+
+        // Funkce pro generování náhodné ceny odemykání stanice mezi 500 a 1000 dolary
+        function generateRandomCost() {
+            return Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+        }
+
+        // Přidání tratě na mapu
+        var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+
+// Přidání zastávek na mapu
+track.stops.forEach(stop => {
+    var stopMarker = L.marker(stop.location).addTo(map);
+
+    // Vytvoření obsahu vyskakovacího okna
+    var popupContent = document.createElement('div');
+    popupContent.className = 'popup-content';
+    popupContent.innerHTML = `<p>${stop.name}</p>`;
+
+    // Přidání tlačítka pro odemčení stanice
+    if (!stop.unlocked) {
+        var unlockButton = document.createElement('button');
+        unlockButton.textContent = `Odemknout za $${stop.cost}`;
+        unlockButton.addEventListener('click', function() {
+            if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
+                if (playerMoney >= stop.cost) {
+                    // Odečti peníze a odemkni stanici
+                    playerMoney -= stop.cost;
+                    stop.unlocked = true;
+                    updatePlayerInfo();
+                    map.closePopup();
+
+                    // Pokud je to první odemčená stanice, spusť pohyb vlaku
+                    if (trainPositionIndex === 0) {
+                        moveTrain();
+                    }
+                } else {
+                    alert("Nemáte dostatek peněz na odemčení této stanice.");
+                }
+            }
+        });
+        popupContent.appendChild(unlockButton);
+    }
+
+    // Přidání vyskakovacího okna k zastávce
+    stopMarker.bindPopup(popupContent);
+});
+        // Aktualizace informací o hráči
+        function updatePlayerInfo() {
+            document.getElementById('player-money').textContent = playerMoney;
+            document.getElementById('player-train').textContent = playerTrain;
+        }
+
+        // Funkce pro pohyb vlaku mezi zastávkami
+        function moveTrain() {
+            var currentStop = track.stops[trainPositionIndex];
+            var nextStop = track.stops[trainPositionIndex + 1];
+
+            if (currentStop && nextStop) {
+                var distance = calculateDistance(currentStop.location, nextStop.location);
+                var timeToNextStop = (distance / trainSpeed) * 3600 * 1000; // převod na milisekundy
+
+                // Pohyb vlaku na mapě
+                trainMarker.setLatLng(currentStop.location);
+                trainPositionIndex++;
+
+                // Nastavení intervalu pro další pohyb
+                setTimeout(moveTrain, timeToNextStop);
+            }
+        }
+
+        // Funkce pro výpočet vzdálenosti mezi dvěma body na mapě
+        function calculateDistance(latlng1, latlng2) {
+            var R = 6371; // poloměr Země v km
+            var lat1 = latlng1[0];
+            var lon1 = latlng1[1];
+            var lat2 = latlng2[0];
+            var lon2 = latlng2[1];
+
+            var dLat = toRad(lat2 - lat1);
+            var dLon = toRad(lon2 - lon1);
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var distance = R * c;
+
+            return distance;
+        }
+
+        // Funkce pro převod stupňů na radiány
+        function toRad(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        // Spuštění pohybu vlaku po načtení stránky
+        moveTrain();
+    </script>
+</body>
+</html>
