@@ -28,6 +28,7 @@
         // Inicializace hráčových financí a vlaku
         var playerMoney = 2000;
         var playerTrain = 1;
+        var totalDistance = 0;
 
         // Inicializace hráčova vlaku
         var playerTrainMarker;
@@ -75,8 +76,7 @@
                 color: "blue",
                 stops: [
                     { name: "Strakonice", location: [49.2551575, 13.9163047], unlocked: false, cost: generateRandomCost() },
-                   
-      { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
+                          { name: "Radošovice", location: [49.2322158, 13.901812], unlocked: false, cost: generateRandomCost() },
                 { name: "Přední Zborovice", location: [49.2183647, 13.8940200], unlocked: false, cost: generateRandomCost() },
                 { name: "Strunkovice nad Volyňkou", location: [49.2100447, 13.8872928], unlocked: false, cost: generateRandomCost() },
                 { name: "Hoštice", location: [49.1873397, 13.8930731], unlocked: false, cost: generateRandomCost() },
@@ -97,15 +97,14 @@
                 { name: "Lenora", location: [48.9283675, 13.7969542], unlocked: false, cost: generateRandomCost() },
                 { name: "Lenora zastávka", location: [48.9233969, 13.8026581], unlocked: false, cost: generateRandomCost() },
                 { name: "Soumarský Most", location: [48.9080047, 13.8287611], unlocked: false, cost: generateRandomCost() },
-
-                    { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
+         { name: "Volary", location: [48.9070969, 13.8833131], unlocked: false, cost: generateRandomCost() },
                 ]
             },
             {
                 name: "Trať 199 Praha - Plzeň",
                 color: "green",
                 stops: [
-                   { name: "Plzeň hlavní nádraží", location: [49.7435456, 13.3880578], unlocked: false, cost: generateRandomCost() },
+                    { name: "Plzeň hlavní nádraží", location: [49.7435456, 13.3880578], unlocked: false, cost: generateRandomCost() },
                 { name: "Plzeň-Slovany", location: [49.7348519, 13.4078303], unlocked: false, cost: generateRandomCost() },
                 { name: "Starý Plzenec", location: [49.6953125, 13.4781703], unlocked: false, cost: generateRandomCost() },
                 { name: "Šťáhlavy", location: [49.6694031, 13.5035172], unlocked: false, cost: generateRandomCost() },
@@ -159,111 +158,108 @@
 
         // Přidání tratí na mapu
         tracks.forEach(track => {
-            if (track.stops && track.stops.length > 1) {  // Kontrola, zda trat obsahuje zastávky
-                var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
+            var trackPolyline = L.polyline(track.stops.map(stop => stop.location), { color: track.color }).addTo(map);
 
-                // Přidání zastávek na mapu
-                track.stops.forEach(stop => {
-                    var stopMarker = L.marker(stop.location).addTo(map);
+            // Přidání zastávek na mapu
+            track.stops.forEach(stop => {
+                var stopMarker = L.marker(stop.location).addTo(map);
 
-                    // Vytvoření obsahu vyskakovacího okna
-                    var popupContent = document.createElement('div');
-                    popupContent.className = 'popup-content';
-                    popupContent.innerHTML = `<p>${stop.name}</p>`;
+                // Vytvoření obsahu vyskakovacího okna
+                var popupContent = document.createElement('div');
+                popupContent.className = 'popup-content';
+                popupContent.innerHTML = `<p>${stop.name}</p>`;
 
-                    // Přidání tlačítka pro odemčení stanice
-                    if (!stop.unlocked) {
-                        var unlockButton = document.createElement('button');
-                        unlockButton.textContent = `Odemknout za $${stop.cost}`;
-                        unlockButton.addEventListener('click', function() {
-                            if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
-                                if (playerMoney >= stop.cost) {
-                                    // Odečti peníze a odemkni stanici
-                                    playerMoney -= stop.cost;
-                                    stop.unlocked = true;
-                                    updatePlayerInfo();
-                                    map.closePopup();
+                // Přidání tlačítka pro odemčení stanice
+                if (!stop.unlocked) {
+                    var unlockButton = document.createElement('button');
+                    unlockButton.textContent = `Odemknout za $${stop.cost}`;
+                    unlockButton.addEventListener('click', function() {
+                        if (confirm(`Opravdu chcete odemknout stanici ${stop.name} za $${stop.cost}?`)) {
+                            if (playerMoney >= stop.cost) {
+                                // Odečti peníze a odemkni stanici
+                                playerMoney -= stop.cost;
+                                stop.unlocked = true;
+                                updatePlayerInfo();
+                                map.closePopup();
 
-                                    // Umísti hráčův vlak na zakoupenou stanici
-                                    if (playerTrainMarker) {
-                                        map.removeLayer(playerTrainMarker);
-                                    }
-                                    playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
-
-                                    // Začni pohyb vlaku po trati
-                                    moveTrain(playerTrainMarker, tracks);
-                                } else {
-                                    alert("Nemáte dostatek peněz na odemčení této stanice.");
+                                // Umísti hráčův vlak na zakoupenou stanici
+                                if (playerTrainMarker) {
+                                    map.removeLayer(playerTrainMarker);
                                 }
-                            }
-                        });
-                        popupContent.appendChild(unlockButton);
-                    }
+                                playerTrainMarker = L.marker(stop.location, { icon: trainIcon }).addTo(map);
 
-                    // Přidání vyskakovacího okna k zastávce
-                    stopMarker.bindPopup(popupContent);
-                });
-            }
+                                // Začni pohyb vlaku po trati
+                                moveTrain(playerTrainMarker, track);
+                            } else {
+                                alert("Nemáte dostatek peněz na odemčení této stanice.");
+                            }
+                        }
+                    });
+                    popupContent.appendChild(unlockButton);
+                }
+
+                // Přidání vyskakovacího okna k zastávce
+                stopMarker.bindPopup(popupContent);
+            });
         });
 
-        // Funkce pro pohyb vlaku mezi odemčenými zastávkami na všech trasách
-function moveTrain(trainMarker, tracks) {
-    let currentTrackIndex = 0;
-    let currentStopIndex = 0;
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
+        // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
+         function moveTrain(trainMarker, line) {
+            let currentStopIndex = 0;
+            let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+            let startTime = new Date();
 
-    setInterval(() => {
-        const currentTrack = tracks[currentTrackIndex];
-        const currentStop = currentTrack.stops[currentStopIndex];
-        const nextStop = findNextUnlockedStop(currentStopIndex, direction, currentTrack.stops);
+            setInterval(() => {
+                const currentStop = line.stops[currentStopIndex];
+                const nextStop = findNextUnlockedStop(currentStopIndex, direction, line.stops);
 
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / 360; // Předpokládaná rychlost 60 km/h
+                if (nextStop) {
+                    const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                    const timeToNextStop = distanceToNextStop / 360; // Předpokládaná rychlost 60 km/h
 
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
+                    const currentTime = new Date();
+                    const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
 
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                trainMarker.setLatLng([lat, lon]);
-            } else {
-                currentStopIndex += direction;
-                startTime = new Date();
+                    if (elapsedTime <= timeToNextStop) {
+                        const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                        const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                        trainMarker.setLatLng([lat, lon]);
+                    } else {
+                        // Přidáno: Získání délky ujeté vzdálenosti a přidání peněz hráči
+                        const distanceTraveled = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                        const earnings = Math.floor(distanceTraveled * 5); // Za každý ujetý kilometr 5 dolarů
+                        playerMoney += earnings;
+                        updatePlayerInfo();
 
-                if (currentStopIndex === 0 || currentStopIndex === currentTrack.stops.length - 1) {
+                        currentStopIndex = line.stops.indexOf(nextStop);
+                        startTime = new Date();
+                    }
+                } else {
+                    // Vlak dojel na konec tratě
                     direction *= -1;
+                    currentStopIndex += direction;
                 }
-            }
-        } else {
-            // Vlak dojel na konec tratě, přesuň se na další trasu
-            direction *= -1;
-            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-            currentStopIndex = direction === 1 ? 0 : tracks[currentTrackIndex].stops.length - 1;
+            }, 1000); // Aktualizace každou sekundu
         }
-    }, 1000); // Aktualizace každou sekundu
-}
 
-// Funkce pro nalezení další odemčené zastávky
-function findNextUnlockedStop(currentIndex, direction, stops) {
-    let index = currentIndex + direction;
-    while (index >= 0 && index < stops.length) {
-        if (stops[index].unlocked) {
-            return stops[index];
+
+        // Funkce pro nalezení další odemčené zastávky
+        function findNextUnlockedStop(currentIndex, direction, stops) {
+            let index = currentIndex + direction;
+            while (index >= 0 && index < stops.length) {
+                if (stops[index].unlocked) {
+                    return stops[index];
+                }
+                index += direction;
+            }
+            return null;
         }
-        index += direction;
-    }
-    return null;
-}
 
         // Aktualizace informací o hráči
-        function updatePlayerInfo() {
+ function updatePlayerInfo() {
             document.getElementById('player-money').textContent = playerMoney;
             document.getElementById('player-train').textContent = playerTrain;
-        }
-
+}
         // Volání funkce pro aktualizaci informací o hráči
         updatePlayerInfo();
     </script>
