@@ -204,78 +204,91 @@
         });
 
 // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
-function moveTrain(trainMarker, line) {
-    let currentStopIndex = 0;
-    let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
-    let startTime = new Date();
+        // Funkce pro pohyb vlaku pouze mezi odemčenými zastávkami
+        function moveTrain(trainMarker, line) {
+            let currentStopIndex = 0;
+            let direction = 1; // Směr pohybu vlaku (1 = dopředu, -1 = zpět)
+            let startTime = new Date();
 
-    setInterval(() => {
-        const currentStop = line.stops[currentStopIndex];
-        const nextStop = findNextUnlockedStop(currentStopIndex, direction, line.stops);
+            setInterval(() => {
+                const currentStop = line.stops[currentStopIndex];
+                const nextStop = findNextUnlockedStop(currentStopIndex, direction, line.stops);
 
-        if (nextStop) {
-            const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-            const timeToNextStop = distanceToNextStop / 60; // Předpokládaná rychlost 60 km/h
+                if (nextStop) {
+                    const distanceToNextStop = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                    const timeToNextStop = distanceToNextStop / 60; // Předpokládaná rychlost 60 km/h
 
-            const currentTime = new Date();
-            const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
+                    const currentTime = new Date();
+                    const elapsedTime = (currentTime - startTime) / 1000 / 60 / 60;
 
-            if (elapsedTime <= timeToNextStop) {
-                const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
-                const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
-                trainMarker.setLatLng([lat, lon]);
-            } else {
-                // Přidáno: Získání délky ujeté vzdálenosti a přidání peněz hráči
-                const distanceTraveled = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
-                const earnings = Math.floor(distanceTraveled * 5); // Za každý ujetý kilometr 5 dolarů
-                playerMoney += earnings;
-                updatePlayerInfo();
-
-                currentStopIndex = line.stops.indexOf(nextStop);
-                startTime = new Date();
-
-                // Přidáno: Hledání další odemčené stanice v okolí 5 km
-                const nearbyUnlockedStop = findNearbyUnlockedStop(currentStop.location[0], currentStop.location[1], 5, line.stops);
-                if (nearbyUnlockedStop) {
-                    // Nastavení nového cíle vlaku
-                    const distanceToNextNearbyStop = getDistance(currentStop.location[0], currentStop.location[1], nearbyUnlockedStop.location[0], nearbyUnlockedStop.location[1]);
-                    const timeToNextNearbyStop = distanceToNextNearbyStop / 60; // Předpokládaná rychlost 60 km/h
-
-                    const newStartTime = new Date();
-                    const newElapsedTime = (newStartTime - startTime) / 1000 / 60 / 60;
-
-                    if (newElapsedTime <= timeToNextNearbyStop) {
-                        const newLat = currentStop.location[0] + (nearbyUnlockedStop.location[0] - currentStop.location[0]) * (newElapsedTime / timeToNextNearbyStop);
-                        const newLon = currentStop.location[1] + (nearbyUnlockedStop.location[1] - currentStop.location[1]) * (newElapsedTime / timeToNextNearbyStop);
-                        trainMarker.setLatLng([newLat, newLon]);
+                    if (elapsedTime <= timeToNextStop) {
+                        const lat = currentStop.location[0] + (nextStop.location[0] - currentStop.location[0]) * (elapsedTime / timeToNextStop);
+                        const lon = currentStop.location[1] + (nextStop.location[1] - currentStop.location[1]) * (elapsedTime / timeToNextStop);
+                        trainMarker.setLatLng([lat, lon]);
                     } else {
-                        currentStopIndex = line.stops.indexOf(nearbyUnlockedStop);
+                        // Přidáno: Získání délky ujeté vzdálenosti a přidání peněz hráči
+                        const distanceTraveled = getDistance(currentStop.location[0], currentStop.location[1], nextStop.location[0], nextStop.location[1]);
+                        const earnings = Math.floor(distanceTraveled * 5); // Za každý ujetý kilometr 5 dolarů
+                        playerMoney += earnings;
+                        updatePlayerInfo();
+
+                        currentStopIndex = line.stops.indexOf(nextStop);
                         startTime = new Date();
+
+                        // Přidáno: Hledání další odemčené stanice v okolí 5 km
+                        const nearbyUnlockedStop = findNearbyUnlockedStop(currentStop.location[0], currentStop.location[1], 5, line.stops);
+                        if (nearbyUnlockedStop) {
+                            // Nastavení nového cíle vlaku
+                            const distanceToNextNearbyStop = getDistance(currentStop.location[0], currentStop.location[1], nearbyUnlockedStop.location[0], nearbyUnlockedStop.location[1]);
+                            const timeToNextNearbyStop = distanceToNextNearbyStop / 60; // Předpokládaná rychlost 60 km/h
+
+                            const newStartTime = new Date();
+                            const newElapsedTime = (newStartTime - startTime) / 1000 / 60 / 60;
+
+                            if (newElapsedTime <= timeToNextNearbyStop) {
+                                const newLat = currentStop.location[0] + (nearbyUnlockedStop.location[0] - currentStop.location[0]) * (newElapsedTime / timeToNextNearbyStop);
+                                const newLon = currentStop.location[1] + (nearbyUnlockedStop.location[1] - currentStop.location[1]) * (newElapsedTime / timeToNextNearbyStop);
+                                trainMarker.setLatLng([newLat, newLon]);
+                            } else {
+                                currentStopIndex = line.stops.indexOf(nearbyUnlockedStop);
+                                startTime = new Date();
+                            }
+                        } else {
+                            // Přidáno: Pokud není žádná další odemčená stanice v okolí, změň směr vlaku
+                            direction *= -1;
+                            currentStopIndex += direction;
+                        }
                     }
                 } else {
-                    // Přidáno: Pokud není žádná další odemčená stanice v okolí, změň směr vlaku
+                    // Přidáno: Vlak dojel na konec tratě
                     direction *= -1;
                     currentStopIndex += direction;
                 }
-            }
-        } else {
-            // Přidáno: Vlak dojel na konec tratě
-            direction *= -1;
-            currentStopIndex += direction;
+            }, 1000); // Aktualizace každou sekundu
         }
-    }, 1000); // Aktualizace každou sekundu
-}
 
-// Funkce pro nalezení další odemčené zastávky v okolí
-function findNearbyUnlockedStop(lat, lon, radius, stops) {
-    for (let i = 0; i < stops.length; i++) {
-        const distance = getDistance(lat, lon, stops[i].location[0], stops[i].location[1]);
-        if (distance <= radius && stops[i].unlocked) {
-            return stops[i];
+        // Funkce pro nalezení další odemčené zastávky
+        function findNextUnlockedStop(currentIndex, direction, stops) {
+            let index = currentIndex + direction;
+            while (index >= 0 && index < stops.length) {
+                if (stops[index].unlocked) {
+                    return stops[index];
+                }
+                index += direction;
+            }
+            return null;
         }
-    }
-    return null;
-}
+
+        // Funkce pro nalezení další odemčené zastávky v okolí
+        function findNearbyUnlockedStop(lat, lon, radius, stops) {
+            for (let i = 0; i < stops.length; i++) {
+                const distance = getDistance(lat, lon, stops[i].location[0], stops[i].location[1]);
+                if (distance <= radius && stops[i].unlocked) {
+                    return stops[i];
+                }
+            }
+            return null;
+        }
 
         // Aktualizace informací o hráči
  function updatePlayerInfo() {
